@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body[data-theme="sites"] {
+  --background: #D9D9D9;
+  --foreground: #AFAFAF;
+  --white: white;
+  --button-light: white;
+  --button-dark: #D9D9D9;
+  --menu-slides-background: #D9D9D9;
+}
+
+body[data-theme="music"] {
+  --background: linear-gradient(0deg, rgba(1,1,1,0.82) 0%, #FFFFFF 100%);
+  --foreground: #D9D9D9;
+  --white: white;
+  --button-light: white;
+  --button-dark: white;
+  --menu-slides-background: #D9D9D9;
+}
+
+:root {
+  --min-border-radius: 12px;
+  --max-border-radius: 26px;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-LightItalic.woff2') format('woff2');
+  font-weight: light;
+  font-style: italic;
+}
+
+
+
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+}
+html {
+  font-size: 16px;
+}

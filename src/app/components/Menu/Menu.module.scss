@@ -1,0 +1,86 @@
+.container {
+    padding-left: 16px;
+
+    z-index: 5;
+
+    &__sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--menu-slides-background);
+
+        z-index: 1;
+        
+        filter:  drop-shadow( 5px 7.5px 5px rgba(0, 0, 0, 0.25));
+        border-radius: var(--min-border-radius);
+
+        height: 500px;
+        width: 365px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+
+        gap: 30px;
+
+        &__option {
+            background: var(--button-light);
+            width: 100%;
+            height: 100%;
+            max-width: 300px;
+            max-height: 75px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 2rem;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease-in-out;
+
+            &__sites {
+
+            }
+            &_music {
+                border-radius: var(--min-border-radius);
+            }
+
+            &_active:hover {
+                box-shadow: none;
+            }
+            &_active:active {
+                box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+            }
+            &_disactive {
+                box-shadow: none;
+            }
+        }
+
+
+    }
+    
+    &__navButton {
+        width: 100px;
+        height: 100px;
+
+        z-index: 2;
+
+        position: relative;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: var(--button-dark);
+        border-radius: 50%;
+
+
+        &__image {
+            width: 50%;
+            height: 50%;
+            pointer-events: none;
+        }
+    }
+}

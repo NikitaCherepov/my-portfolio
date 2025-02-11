@@ -1,0 +1,59 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 8px;
+    justify-content: center;
+
+    width: 220px;
+
+
+    background: var(--button-dark);
+
+    position:relative;
+
+    &__option {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    
+        gap: 8px;
+        justify-content: flex-start;
+    
+        width: 100%;
+
+        padding: 0 10px;
+
+        p {
+            white-space: nowrap;
+        }
+
+        background: var(--button-dark);
+    }
+
+    &__option:hover {
+        cursor: pointer;
+        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
+    }
+
+    &__modal {
+        display: flex;
+        flex-direction: column;
+
+        gap: 13px;
+        padding: 0px 8px;
+
+        width: 110%;
+        height: 0;
+        background: white;
+        position: absolute;
+        top: 0;
+        left: auto;
+
+        overflow: hidden;
+
+        background: var(--foreground);
+
+    }
+}
