@@ -20,6 +20,9 @@ body[data-theme="sites"] {
   --button-light: white;
   --button-dark: #D9D9D9;
   --menu-slides-background: #D9D9D9;
+  --default-border-radius-small: 0px;
+  --default-border-radius-big: 0px;
+  --header-name-color: black;
 }
 
 body[data-theme="music"] {
@@ -29,11 +32,15 @@ body[data-theme="music"] {
   --button-light: white;
   --button-dark: white;
   --menu-slides-background: #D9D9D9;
+  --default-border-radius-small: 12px;
+  --default-border-radius-big: 26px;
+  --header-name-color: white;
 }
 
 :root {
   --min-border-radius: 12px;
   --max-border-radius: 26px;
+  --header-height: 146px;
 }
 
 @font-face {
@@ -62,7 +69,12 @@ body[data-theme="music"] {
 
 body {
   font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
 }
 html {
   font-size: 16px;
+}
+.mainContainer {
+  background: var(--background);
+  min-height: calc(100vh - var(--header-height));
 }

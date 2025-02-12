@@ -9,7 +9,6 @@
     width: 220px;
 
 
-    background: var(--button-dark);
 
     position:relative;
 
@@ -30,6 +29,9 @@
         }
 
         background: var(--button-dark);
+
+        user-select: none;
+        border-radius: var(--default-border-radius-big);
     }
 
     &__option:hover {
@@ -43,6 +45,7 @@
 
         gap: 13px;
         padding: 0px 8px;
+        padding: 0;
 
         width: 110%;
         height: 0;
@@ -55,5 +58,6 @@
 
         background: var(--foreground);
 
+        border-radius: var(--default-border-radius-big);
     }
 }

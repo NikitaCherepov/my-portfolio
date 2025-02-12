@@ -1,10 +1,15 @@
 import styles from './Switcher.module.scss'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useLayoutEffect} from 'react'
 import {motion, useAnimate} from 'framer-motion'
-import { useViewStore } from '@/app/store/useExitStore';
+import { useViewStore } from '../../store/useExitStore';
+import { useHasHydrated } from '@/app/hooks/useHasHydrated';
+import { usePathname } from 'next/navigation';
 
 export default function Switcher() {
     const [position, setPosition] = useState('list');
+    const hasHydrated = useHasHydrated(useViewStore);
+
+    const pathname = usePathname();
 
     const {view, toggleView} = useViewStore();
 
@@ -27,6 +32,10 @@ export default function Switcher() {
     // }, [])
 
     const [scope, animate] = useAnimate();
+
+    // useLayoutEffect(() => {
+    //     handleAnimation();
+    // }, [hasHydrated, pathname])
 
     const handleRight = async () => {
         await animate(scope.current, {x: 0, width: '45px', height: '45px'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0.1});

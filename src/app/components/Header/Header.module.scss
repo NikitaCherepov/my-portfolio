@@ -1,5 +1,5 @@
 .container {
-    height: 146px;
+    height: var(--header-height);
 
     display: flex;
     align-items: center;
@@ -20,6 +20,10 @@
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
+
+        &__name {
+            color: var( --header-name-color);
+        }
 
         font-size: 1.5rem;
 

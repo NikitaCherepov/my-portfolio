@@ -9,7 +9,7 @@ import {motion, AnimatePresence, useCycle} from 'framer-motion'
 import {usePathname, useRouter} from 'next/navigation'
 
 import { useDimensions } from '@/app/hooks/useDimensions'
-import {useExitStore} from '@/app/store/useExitStore'
+import {useExitStore} from '../../store/useExitStore'
 
 export default function Menu() {
     const [isOpen, toggleOpen] = useCycle(false, true);

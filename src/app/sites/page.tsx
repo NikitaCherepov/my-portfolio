@@ -1,8 +1,9 @@
 'use client'
 import Header from "../components/Header"
+import styles from './sites.module.scss'
 export default function SitesPage() {
     return (
-        <div style={{height: '200vh'}}>
+        <div className={`mainContainer`}>
             💻 Портфолио сайтов
         </div>
     )
