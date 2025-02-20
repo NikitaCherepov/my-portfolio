@@ -138,11 +138,6 @@ export default function SortingComponent() {
         setAnimationOn(true);
     }, [hasHydrated])
 
-    useEffect(() => {
-        console.log(sortingOptions[pageKey]);
-        console.log(animationOn)
-    }, [sortingOptions, animationOn])
-
     const hide = async () => {
         animate(scope.current, {height: '36px'}, {type: 'tween', stiffness: 150, damping: 20, duration: 0.3});
         animate(scope.current, {padding: 0}, {type: 'tween', stiffness: 150, damping: 20, duration: 0.3});
@@ -178,7 +173,7 @@ export default function SortingComponent() {
                     layout
                     onClick={() => handleChange(object)} 
                     key={object.type} 
-                    className={`${styles.container__option} ${object.position === 6 ? 'mb-[13px]' : ''}`}>
+                    className={`${styles.container__option} hoverEffect ${object.position === 6 ? 'mb-[13px]' : ''}`}>
                         <img className={`${object.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
                         <p>{object.name}</p>
                     </motion.div>

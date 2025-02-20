@@ -34,11 +34,6 @@
         border-radius: var(--default-border-radius-big);
     }
 
-    &__option:hover {
-        cursor: pointer;
-        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
-    }
-
     &__modal {
         display: flex;
         flex-direction: column;
@@ -59,5 +54,7 @@
         background: var(--foreground);
 
         border-radius: var(--default-border-radius-big);
+
+        z-index: 2;
     }
 }

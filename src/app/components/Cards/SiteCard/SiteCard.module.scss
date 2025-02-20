@@ -1,0 +1,168 @@
+.container {
+    background: var(--foreground);
+
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 44px 34px;
+
+    &_list {
+        padding: 6px 22px 6px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &_grid {
+        padding: 44px 34px;
+    }
+
+    &__fullButton {
+        background: var(--background);
+        position:absolute;
+
+        top: 5px;
+        right: 5px;
+
+        width: 23px;
+        height: 23px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 13px;
+            height: 13px;
+        }
+    }
+    &__fullButton:hover {
+        cursor: pointer;
+        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
+    }
+
+
+    &__mainInfo {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        height: 100%;
+        justify-content: space-between;
+
+        overflow: hidden;
+        flex-shrink: 0;
+
+
+        &_list {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        &_grid {
+            flex-direction: column-reverse;
+        }
+
+        &__header {
+    
+
+            &_grid {
+                font-size: 2rem;
+                text-wrap: nowrap;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                max-width: 100%;
+            }
+            &_list {
+                font-size: 1.875rem;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                max-width: 300px;
+            }
+        }
+    
+        &__hoverMaterial {
+            position: relative;
+
+            &_grid {
+                height: 100%;
+                width: 100%;
+            }
+            &_list {
+                height: 94px;
+                width: 94px;
+            }
+
+            &__mainImage {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+    
+                position: absolute;
+                z-index: 0;
+
+                &_list {
+                    width: 94px;
+                    height: 94px;
+                }
+            }
+    
+            &__hoveredButtons {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 23px;
+                align-items: center;
+                justify-content: flex-end;
+                position: absolute;
+                bottom: 0;
+                z-index: 1;
+            }
+        }
+    }
+    &__mainContent {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 46px;
+        width: 100%;
+        height: 100%;
+
+        &__stack {
+            font-weight: light;
+            font-style: italic;
+            font-size: 1.875rem;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 200px;
+        }
+        &__date {
+            font-size: 1.875rem;
+        }
+    }
+}
+
+
+@media (max-width: 1285px) {
+    .container {
+        &_list {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &__mainInfo {
+            height: 50%;
+        }
+        &__mainContent {
+            justify-content: center;
+            height: 50%;
+        }
+    }
+}

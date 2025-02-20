@@ -51,7 +51,7 @@ export default function Switcher() {
     }
 
     return (
-        <div onClick ={() => handleAnimation()} className={styles.container}>
+        <div onClick ={() => handleAnimation()} className={`${styles.container} hoverEffect`}>
             <motion.img 
                 src={'/images/menu/list.svg'}
                 animate={{

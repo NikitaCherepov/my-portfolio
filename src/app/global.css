@@ -70,6 +70,8 @@ body[data-theme="music"] {
 body {
   font-family: 'JetBrains Mono', monospace;
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 html {
   font-size: 16px;
@@ -77,4 +79,13 @@ html {
 .mainContainer {
   background: var(--background);
   min-height: calc(100vh - var(--header-height));
+}
+
+.dropShadow {
+  filter:  drop-shadow( 5px 7.5px 5px rgba(0, 0, 0, 0.25));
+}
+
+.hoverEffect:hover {
+  cursor: pointer;
+  box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
 }

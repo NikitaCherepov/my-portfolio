@@ -13,7 +13,7 @@ import Header from './components/Header'
 export default function RootLayout({children} : {children: React.ReactNode}) {
   const pathname = usePathname();
   const router = useRouter();
-  const {isLeaving, turnOffLeaving} = useExitStore();
+  const {isLeaving, turnOffLeaving, turnOffAnimating} = useExitStore();
   const hasHydrated = useHasHydrated(useSortSitesStore);
 
   const [firstLoad, setFirstLoad] = useState(true);
@@ -37,6 +37,15 @@ export default function RootLayout({children} : {children: React.ReactNode}) {
   useEffect(() => {
     console.log(isLeaving);
   }, [isLeaving])
+
+  useEffect(() => {
+    if (pathname) {
+      setTimeout(() => {
+        turnOffAnimating();
+        console.log('Выключил')
+      }, 500)
+    }
+  }, [pathname])
 
 
 

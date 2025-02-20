@@ -16,10 +16,17 @@ export default function Menu() {
     const containerRef = useRef(null);
     const {height} = useDimensions(containerRef);
 
-    const {handleExit} = useExitStore();
+    const {handleExit, turnOnAnimating, turnOffAnimating} = useExitStore();
 
     const router = useRouter();
     const pathname = usePathname();
+
+    const handleAnimationExit = (path: string, rout:any, address:string) => {
+        toggleOpen();
+        handleExit(path, rout, address);
+        turnOnAnimating();
+        console.log('Включил')
+    }
 
 
     const sidebarVariants = {
@@ -82,11 +89,11 @@ export default function Menu() {
         ref={containerRef}
         custom={height}
         className={styles.container}>
-            <motion.div className={styles.container__sidebar} variants={sidebarVariants}>
-                <button onClick={() => {if (pathname!= '/sites') {toggleOpen(); handleExit(pathname, router, "/sites")}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/sites' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
+            <motion.div className={`${styles.container__sidebar} dropShadow`} variants={sidebarVariants}>
+                <button onClick={() => {if (pathname!= '/sites') {handleAnimationExit(pathname, router, "/sites")}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/sites' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
                     Сайты
                 </button>
-                <button onClick={() => {if (pathname !='/music') {toggleOpen(); handleExit(pathname, router, "/music")}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_music} ${pathname != '/music' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
+                <button onClick={() => {if (pathname !='/music') {handleAnimationExit(pathname, router, "/music")}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_music} ${pathname != '/music' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
                     Музыка
                 </button>
             </motion.div>

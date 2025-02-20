@@ -5,10 +5,12 @@ import {createJSONStorage, persist} from 'zustand/middleware'
 //Для переключения между страниц
 interface ExitStore {
     isLeaving: boolean;
+    isAnimating: boolean;
     handleExit: (currentPath: string, router: any, path: string) => void;
-    turnOffLeaving: () => void
+    turnOffLeaving: () => void;
+    turnOnAnimating: () => void;
+    turnOffAnimating: () => void;
 }
-
 export const useExitStore = create<ExitStore>((set) => {
 
     return {
@@ -23,11 +25,19 @@ export const useExitStore = create<ExitStore>((set) => {
         },
         turnOffLeaving: () => {
             set({isLeaving: false})
+        },
+        isAnimating: false,
+        turnOnAnimating: () => {
+            set({isAnimating: true})
+        },
+        turnOffAnimating: () => {
+            set({isAnimating: false})
         }
     }
 })
 
 //Для сортировки
+
 
 interface SortingOption {
     name: string;
@@ -38,7 +48,7 @@ interface SortingOption {
     active: boolean;
   }
 
-interface SortSitesStore {
+export interface SortSitesStore {
     sortBy: Record<string, string>;
     setSortBy: (page: string, sort: string) => void;
     sortingOptions: Record<string, SortingOption[]>;
@@ -76,7 +86,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 2,
                     initialPosition:2,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По названию',
@@ -84,7 +94,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: true,
                     position: 3,
                     initialPosition:3,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По названию',
@@ -92,7 +102,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 4,
                     initialPosition:4,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По стеку',
@@ -100,7 +110,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: true,
                     position: 5,
                     initialPosition:5,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По стеку',
@@ -108,7 +118,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 6,
                     initialPosition:6,
-                    active: false
+                    active: false,
                 }
             ],
             music: [
@@ -118,7 +128,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: true,
                     position: 1,
                     initialPosition:1,
-                    active: true
+                    active: true,
                 },
                 {
                     name: 'По дате',
@@ -126,7 +136,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 2,
                     initialPosition:2,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По названию',
@@ -134,7 +144,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: true,
                     position: 3,
                     initialPosition:3,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По названию',
@@ -142,7 +152,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 4,
                     initialPosition:4,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По жанру',
@@ -150,7 +160,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: true,
                     position: 5,
                     initialPosition:5,
-                    active: false
+                    active: false,
                 },
                 {
                     name: 'По жанру',
@@ -158,7 +168,7 @@ export const useSortSitesStore = create<SortSitesStore>()(
                     rotate: false,
                     position: 6,
                     initialPosition:6,
-                    active: false
+                    active: false,
                 }
             ]
         },
@@ -184,9 +194,6 @@ interface ViewGridStore {
     view: 'list' | 'grid';
     toggleView: () => void;
 } 
-
-
-
 export const useViewStore = create<ViewGridStore>()(
     persist<ViewGridStore>(
     (set) => {
@@ -200,3 +207,77 @@ export const useViewStore = create<ViewGridStore>()(
         storage: createJSONStorage(() => localStorage),
     }
 ))
+
+
+export interface SiteWork {
+    name: string,
+    mainImage: string,
+    stack: string[],
+    directLink: string,
+    github: string,
+    description: string,
+    features: string[],
+    date: string,
+}
+
+export interface MusicWork {
+    name: string,
+    mainImage: string,
+    genre: string,
+    youtube: string,
+    spotify: string,
+    vkmusic: string,
+    ymusic: string,
+    date: string
+}
+
+interface WorkStore {
+    sites: SiteWork[],
+    music: MusicWork[]
+}
+
+export const useWorkStore = create<WorkStore>(() => ({
+        sites: [
+            {
+                name: 'Лендинг страницы',
+                mainImage: '/cards/sites/LandingFirst/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Лэндинговая страница',
+                features: ['Дизайн'],
+                date: "2012-10-22"
+            },
+            {
+                name: 'Слайдер',
+                mainImage: '/cards/sites/Slider/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-10-23"
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22"
+            },
+            {
+                name: 'Игра про гуся',
+                mainImage: '/cards/sites/Goose/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-05-22"
+            }
+        ],
+        music: []
+}))
