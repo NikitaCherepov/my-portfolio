@@ -6,15 +6,23 @@ import SiteCard from "../components/Cards/SiteCard"
 import { usePathname } from "next/navigation"
 import { useViewStore } from "../store/useExitStore"
 import { useSortSitesStore } from "../store/useExitStore"
-import {motion} from 'framer-motion'
+import {AnimatePresence, motion} from 'framer-motion'
 import { SiteWork, MusicWork } from "../store/useExitStore"
 import { SortSitesStore } from "../store/useExitStore"
 import {useState, useEffect} from 'react'
+import ModalSites from "../components/ModalSites"
 
 export default function SitesPage() {
     const {view} = useViewStore();
     const pathname = usePathname();
     const pageKey = pathname.slice(1) as keyof typeof sortingOptions;
+
+    const [showModal, setShowModal] = useState(false);
+    const [idModal, setIdModal] = useState<string | null>(null);
+    const toggleModal = (id: string | null) => {
+        id ? setIdModal(id) : setIdModal(null);
+        setShowModal((prev) => !prev);
+    }
 
     const {sortingOptions, sortBy} = useSortSitesStore();
     const {sites} = useWorkStore();
@@ -44,6 +52,20 @@ export default function SitesPage() {
 
     return (
         <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} layout className={`mainContainer  ${styles.container}`}>
+            <AnimatePresence>
+                {showModal && 
+                    <motion.div
+                    initial={{opacity:0, scale:0}}
+                    animate={{opacity: 1, scale: 1}}
+                    exit={{opacity:0, scale: 0}}
+                    transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
+                    className={styles.modal}
+                    onClick={() => toggleModal(null)}
+                    >
+                        <ModalSites id={idModal} toggleModal={(id: string) => toggleModal(id)}/>
+                    </motion.div>
+                }
+            </AnimatePresence>
             <motion.div
             layout
             
@@ -51,7 +73,7 @@ export default function SitesPage() {
             className={`${styles.container__cards} ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}`}>
                 {sortedSites.map((object) => (
                     <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} className={`${styles.container__cards__card} ${view === 'grid' ? styles.container__cards__card_grid : styles.container__cards__card_list}`} key={object.name} layout>
-                        <SiteCard object={object}/>
+                        <SiteCard toggleModal={(id:string) => toggleModal(id)} object={object}/>
                     </motion.div>
                 ))}
             </motion.div>

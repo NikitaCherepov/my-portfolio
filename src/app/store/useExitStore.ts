@@ -1,6 +1,7 @@
 "use client";
 import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
+import { useId } from 'react';
 
 //Для переключения между страниц
 interface ExitStore {
@@ -218,6 +219,7 @@ export interface SiteWork {
     description: string,
     features: string[],
     date: string,
+    id: string
 }
 
 export interface MusicWork {
@@ -246,7 +248,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 github: 'github.com',
                 description: 'Лэндинговая страница',
                 features: ['Дизайн'],
-                date: "2012-10-22"
+                date: "2012-10-22",
+                id: crypto.randomUUID()
             },
             {
                 name: 'Слайдер',
@@ -256,7 +259,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 github: 'github.com',
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
-                date: "2012-10-23"
+                date: "2012-10-23",
+                id: crypto.randomUUID()
             },
             {
                 name: 'Игра про вамffffsdfsdfsdfsпира',
@@ -266,7 +270,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 github: 'github.com',
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
-                date: "2012-09-22"
+                date: "2012-09-22",
+                id: crypto.randomUUID()
             },
             {
                 name: 'Игра про гуся',
@@ -276,7 +281,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 github: 'github.com',
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
-                date: "2012-05-22"
+                date: "2012-05-22",
+                id: crypto.randomUUID()
             }
         ],
         music: []

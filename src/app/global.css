@@ -79,6 +79,8 @@ html {
 .mainContainer {
   background: var(--background);
   min-height: calc(100vh - var(--header-height));
+  height: 100%;
+  width: 100%;
 }
 
 .dropShadow {

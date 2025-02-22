@@ -7,7 +7,7 @@ import { useViewStore } from '@/app/store/useExitStore'
 
 import {AnimatePresence, hover, motion} from 'framer-motion'
 
-export default function SiteCard({object} : any) {
+export default function SiteCard({object, toggleModal} : any) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
 
@@ -22,7 +22,7 @@ export default function SiteCard({object} : any) {
         layout
         transition={transitionSettings}
         >
-                <motion.button className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
+                <motion.button onClick={() => toggleModal(object.id)} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
                     <motion.img transition={transitionSettings} layout src='/images/icons/square.svg'></motion.img>
                 </motion.button>
                 
@@ -64,7 +64,7 @@ export default function SiteCard({object} : any) {
                                         key='hover'
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                         >
-                                            <Button text={"Подробнее"}></Button>
+                                            <Button onClick={() => toggleModal(object.id)} text={"Подробнее"}></Button>
                                             <Button icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
                                             <Button icon={'/images/icons/link.svg'}  text={"Перейти"}></Button>
                                         </motion.div>

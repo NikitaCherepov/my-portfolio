@@ -52,3 +52,14 @@
         flex-grow:0;
     }
 }
+
+.modal {
+    position: absolute;
+    inset: 0;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,8 +1,10 @@
 import styles from './Button.module.scss'
 
-export default function Button({onClick, text, color, icon} : any) {
+export default function Button({onClick, text, color, icon, background} : any) {
     if (text && icon || text) return (
-        <button className={`${styles.container} hoverEffect`}>
+        <button 
+        style={background ? {background: background} : undefined}
+        onClick={onClick ? () => onClick() : undefined} className={`${styles.container} hoverEffect`}>
             {icon ? (<img src={icon}></img>) : ''}
             {text ? (
                 <p>
@@ -15,7 +17,9 @@ export default function Button({onClick, text, color, icon} : any) {
     )
     else if (icon && !text) {
         return (
-        <button className={`${styles.container_onlyIcon}`}>
+        <button
+        style={background ? {background: background} : undefined}
+        onClick={onClick ? () => onClick() : undefined} className={`${styles.container_onlyIcon}`}>
             <img src={icon}></img>
         </button>
         )
