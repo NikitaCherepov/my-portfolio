@@ -283,7 +283,73 @@ export const useWorkStore = create<WorkStore>(() => ({
                 features: ['Удобство'],
                 date: "2012-05-22",
                 id: crypto.randomUUID()
-            }
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
+            {
+                name: 'Игра про вамffffsdfsdfsdfsпира',
+                mainImage: '/cards/sites/Vampire/mainImage.png',
+                stack: ['HTML', 'CSS'],
+                directLink: 'google.com',
+                github: 'github.com',
+                description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
+                features: ['Удобство'],
+                date: "2012-09-22",
+                id: crypto.randomUUID()
+            },
         ],
         music: []
 }))

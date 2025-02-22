@@ -46,14 +46,13 @@
             text-align: center;
         }
         &__mainImage {
-            max-width: 483px;
-            min-width: 320px;
             width: 100%;
             height: auto;
 
             aspect-ratio: 483 / 264;
 
             object-fit: cover;
+            flex: 1;
         }
         &__buttons {
             display: flex;

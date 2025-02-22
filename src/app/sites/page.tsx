@@ -20,6 +20,7 @@ export default function SitesPage() {
     const [showModal, setShowModal] = useState(false);
     const [idModal, setIdModal] = useState<string | null>(null);
     const toggleModal = (id: string | null) => {
+        !showModal ? document.body.classList.add("no-scroll") : document.body.classList.remove("no-scroll");
         id ? setIdModal(id) : setIdModal(null);
         setShowModal((prev) => !prev);
     }
@@ -55,14 +56,20 @@ export default function SitesPage() {
             <AnimatePresence>
                 {showModal && 
                     <motion.div
-                    initial={{opacity:0, scale:0}}
-                    animate={{opacity: 1, scale: 1}}
-                    exit={{opacity:0, scale: 0}}
+                    initial={{opacity:0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity:0}}
                     transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
                     className={styles.modal}
                     onClick={() => toggleModal(null)}
                     >
+                        <motion.div
+                        initial={{opacity:0, scale:0}}
+                        animate={{opacity: 1, scale: 1}}
+                        exit={{opacity:0, scale: 0}}
+                        transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}>
                         <ModalSites id={idModal} toggleModal={(id: string) => toggleModal(id)}/>
+                        </motion.div>
                     </motion.div>
                 }
             </AnimatePresence>
@@ -72,7 +79,7 @@ export default function SitesPage() {
             transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} 
             className={`${styles.container__cards} ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}`}>
                 {sortedSites.map((object) => (
-                    <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} className={`${styles.container__cards__card} ${view === 'grid' ? styles.container__cards__card_grid : styles.container__cards__card_list}`} key={object.name} layout>
+                    <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} className={`${styles.container__cards__card} ${view === 'grid' ? styles.container__cards__card_grid : styles.container__cards__card_list}`} key={object.id} layout>
                         <SiteCard toggleModal={(id:string) => toggleModal(id)} object={object}/>
                     </motion.div>
                 ))}
