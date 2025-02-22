@@ -6,7 +6,7 @@ export default function ModalSites({toggleModal, id}: any) {
     const {sites} = useWorkStore();
     const object = sites.find((el) => el.id === id);
     return (
-        <div className={`${styles.container} dropShadow`} onClick={(e) => e.stopPropagation()}>
+        <div className={`${styles.container}`} onClick={(e) => e.stopPropagation()}>
             <div onClick={() => toggleModal(null)} className={`${styles.closeButton} hoverEffect`}>
                 <img src='images/icons/close.svg'></img>
             </div>

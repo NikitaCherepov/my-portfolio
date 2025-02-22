@@ -13,7 +13,8 @@ export default function SiteCard({object, toggleModal} : any) {
 
     const MotionImage = motion(Image);
 
-    const transitionSettings = { type: "spring", stiffness: 150, damping: 20 };
+    const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
+    const transitionHoverSettings = {duration: 0.2}
 
     return (
         <motion.div
@@ -45,11 +46,11 @@ export default function SiteCard({object, toggleModal} : any) {
                                         initial={{opacity: 0}}
                                         animate={{opacity: 1}}
                                         exit={{opacity:0}}
-                                        transition={transitionSettings}
+                                        transition={transitionHoverSettings}
                                         key='mainContent'
                                         className={styles.container__mainInfo__hoverMaterial__mainImage}
                                         >
-                                            <motion.img transition={transitionSettings} layout className={styles.container__mainInfo__hoverMaterial__mainImage} src={object.mainImage} alt={object.name} width={100} height={100}/>
+                                            <motion.img transition={transitionHoverSettings} layout className={styles.container__mainInfo__hoverMaterial__mainImage} src={object.mainImage} alt={object.name} width={100} height={100}/>
                                         </motion.div>
                                     )
                                     :
@@ -60,7 +61,7 @@ export default function SiteCard({object, toggleModal} : any) {
                                         initial={{opacity: 0}}
                                         animate={{opacity: 1}}
                                         exit={{opacity:0}}
-                                        transition={transitionSettings}
+                                        transition={transitionHoverSettings}
                                         key='hover'
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                         >
@@ -101,7 +102,7 @@ export default function SiteCard({object, toggleModal} : any) {
                             </div>
                             <Button icon={'/images/icons/github.svg'}/>
                             <Button icon={'/images/icons/link.svg'}/>
-                            <Button text={'Подробнее'}/>
+                            <Button onClick={() => toggleModal(object.id)} text={'Подробнее'}/>
 
                             <p className={styles.container__mainContent__date}>
                                 {object.date}

@@ -9,10 +9,54 @@ import { useSortSitesStore } from "../store/useExitStore"
 import {AnimatePresence, motion} from 'framer-motion'
 import { SiteWork, MusicWork } from "../store/useExitStore"
 import { SortSitesStore } from "../store/useExitStore"
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import ModalSites from "../components/ModalSites"
 
 export default function SitesPage() {
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+    const [scrollDir, setScrollDir] = useState<"up" | "down" | 'idle'>('idle');
+    const scrollVariants = {
+        idle: { rotateX: 0, boxShadow: 'none' },
+        down: { rotateX: '10deg', boxShadow: '0 5px 0px rgb(94, 94, 94)'},
+        up: { rotateX: '-10deg', boxShadow: '0 -5px 0px rgb(94, 94, 94)' },
+      };
+
+    let lastScrollTop = 0;
+    let scrollTimeout: NodeJS.Timeout | null = null;
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!scrollRef.current) return;
+
+            const scrollTop = scrollRef.current.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                setScrollDir("down");
+            } else if (scrollTop < lastScrollTop) {
+                setScrollDir("up");
+            }
+            lastScrollTop = scrollTop;
+
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => setScrollDir('idle'), 100);
+        };
+
+        const scrollContainer = scrollRef.current;
+        if (scrollContainer) {
+            scrollContainer.addEventListener("scroll", handleScroll);
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener("scroll", handleScroll);
+            }
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+        };
+    }, []);
+
+    useEffect(() => {
+        console.log(scrollDir);
+    }, [scrollDir])
+
     const {view} = useViewStore();
     const pathname = usePathname();
     const pageKey = pathname.slice(1) as keyof typeof sortingOptions;
@@ -75,12 +119,27 @@ export default function SitesPage() {
             </AnimatePresence>
             <motion.div
             layout
-            
+            ref={scrollRef}
             transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} 
-            className={`${styles.container__cards} ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}`}>
+            className={`${styles.container__cards} 
+            ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}
+            `}>
                 {sortedSites.map((object) => (
-                    <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} className={`${styles.container__cards__card} ${view === 'grid' ? styles.container__cards__card_grid : styles.container__cards__card_list}`} key={object.id} layout>
+                    <motion.div
+                    key={object.id}
+                    transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
+                    className={`
+                    ${styles.container__cards__card}
+                    ${view === 'grid' ? styles.container__cards__card_grid : styles.container__cards__card_list}`}
+                    layout>
+                        <motion.div
+                            animate={scrollDir}
+                            variants={scrollVariants}
+                            className={`${styles.container__cards__card}`}
+                            transition={{type: 'tween', duration: 0.3, ease: 'easeInOut'}}
+                            >
                         <SiteCard toggleModal={(id:string) => toggleModal(id)} object={object}/>
+                        </motion.div>
                     </motion.div>
                 ))}
             </motion.div>

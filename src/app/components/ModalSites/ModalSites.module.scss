@@ -11,10 +11,12 @@
     flex-direction: column;
     align-items: center;
     flex: 1;
+    position: relative;
 
     padding: 30px;
     gap: 54px;
 
+    box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.509);
     &__header {
         font-size: 2.5rem;
         text-align: center;
