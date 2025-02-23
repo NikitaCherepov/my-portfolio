@@ -47,7 +47,6 @@
             backface-visibility: hidden;
         
             min-width: 300px;
-            max-width: 413px;
         
             aspect-ratio: 1 / 1;
         
@@ -58,6 +57,7 @@
 
             &_grid {
                 max-height: 391px;
+                max-width: 413px;
             }
             &_list {
                 max-height: 100px;
