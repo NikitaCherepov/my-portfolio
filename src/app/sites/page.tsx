@@ -14,6 +14,23 @@ import ModalSites from "../components/ModalSites"
 
 export default function SitesPage() {
     const scrollRef = useRef<HTMLDivElement | null>(null);
+    const cardRef = useRef<HTMLDivElement | null>(null);
+    const [maxHeight, setMaxHeight] = useState(0);
+    useEffect(() => {
+        const observer = new ResizeObserver(entries => {
+            if (entries.length > 0) {
+                const {width,height} = entries[0].contentRect;
+                setMaxHeight(height);
+            }
+        })
+        if (cardRef.current) {
+            observer.observe(cardRef.current);
+        }
+        return () => {
+            observer.disconnect();
+        };
+    })
+
     const [scrollDir, setScrollDir] = useState<"up" | "down" | 'idle'>('idle');
     const scrollVariants = {
         idle: { rotateX: 0, boxShadow: 'none' },
@@ -123,7 +140,9 @@ export default function SitesPage() {
             transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} 
             className={`${styles.container__cards} 
             ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}
-            `}>
+            `}
+            style={view === 'grid' ? {maxHeight: maxHeight* 6 + 40} : {maxHeight: maxHeight* 5 + 60}}
+            >
                 {sortedSites.map((object) => (
                     <motion.div
                     key={object.id}
@@ -137,6 +156,7 @@ export default function SitesPage() {
                             variants={scrollVariants}
                             className={`${styles.container__cards__card}`}
                             transition={{type: 'tween', duration: 0.3, ease: 'easeInOut'}}
+                            ref={cardRef}
                             >
                         <SiteCard toggleModal={(id:string) => toggleModal(id)} object={object}/>
                         </motion.div>
