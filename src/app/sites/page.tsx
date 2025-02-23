@@ -9,6 +9,7 @@ import { useSortSitesStore } from "../store/useExitStore"
 import {AnimatePresence, motion} from 'framer-motion'
 import { SiteWork, MusicWork } from "../store/useExitStore"
 import { SortSitesStore } from "../store/useExitStore"
+import { usePagination } from "../store/useExitStore"
 import {useState, useEffect, useRef} from 'react'
 import ModalSites from "../components/ModalSites"
 
@@ -30,6 +31,8 @@ export default function SitesPage() {
             observer.disconnect();
         };
     })
+
+    const {pagination, setCurrentPage} = usePagination();
 
     const [scrollDir, setScrollDir] = useState<"up" | "down" | 'idle'>('idle');
     const scrollVariants = {
@@ -110,7 +113,11 @@ export default function SitesPage() {
       };
       
 
-    const sortedSites = [...sites].sort(sortingMethods[pageKey][sortBy[pageKey]]);
+    const sortedSites = [...sites]
+    .sort(sortingMethods[pageKey][sortBy[pageKey]])
+    .slice((pagination[pageKey].currentPage - 1) * pagination[pageKey].cardsPerPage, pagination[pageKey].currentPage * pagination[pageKey].cardsPerPage);
+    const totalPages = Math.ceil(sites.length / pagination[pageKey].cardsPerPage);
+    const delta = 2;
 
     return (
         <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} layout className={`mainContainer  ${styles.container}`}>
@@ -141,9 +148,10 @@ export default function SitesPage() {
             className={`${styles.container__cards} 
             ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}
             `}
-            style={view === 'grid' ? {maxHeight: maxHeight* 6 + 40} : {maxHeight: maxHeight* 5 + 60}}
+            style={view === 'grid' ? {maxHeight: maxHeight* 2 + 60} : {maxHeight: maxHeight* 5 + 60}}
             >
-                {sortedSites.map((object) => (
+                {sortedSites
+                .map((object) => (
                     <motion.div
                     key={object.id}
                     transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
@@ -163,6 +171,36 @@ export default function SitesPage() {
                     </motion.div>
                 ))}
             </motion.div>
+
+            <motion.div className={styles.pagination}>
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((page) => {
+                        if (page === 1 || page === totalPages) return true;
+
+                        if (pagination[pageKey].currentPage <= 1 + delta-1) return page <= 1 + delta;
+
+                        if (pagination[pageKey].currentPage >= totalPages - delta) return page >= totalPages - delta - 1;
+
+                        return Math.abs(pagination[pageKey].currentPage - page) <= delta / 2;
+                    })
+                    //@ts-ignore
+                    .reduce<JSX.Element[]>((acc, page, index, arr) => {
+
+                        if (index > 0 && page - arr[index - 1] > 1) {
+                            acc.push(<span key={`dots-${index}`}>...</span>);
+                        }
+
+                        acc.push(
+                            <button className={`hoverEffect`} key={page} onClick={() => setCurrentPage(pageKey, page)} disabled={page === pagination[pageKey].currentPage}>
+                                {page}
+                            </button>
+                        );
+
+                        return acc;
+                    }, [])
+                }
+            </motion.div>
+
         </motion.div>
     )
 }

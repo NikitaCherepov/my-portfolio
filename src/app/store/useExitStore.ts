@@ -353,3 +353,35 @@ export const useWorkStore = create<WorkStore>(() => ({
         ],
         music: []
 }))
+
+export interface PaginationObject {
+    currentPage: number,
+    cardsPerPage: number
+}
+
+interface PaginationStore {
+    pagination: Record<string, PaginationObject>,
+    setCurrentPage: (key: string, page: number) => void
+}
+
+export const usePagination = create<PaginationStore>((set) => ({
+    pagination: {
+        sites: {
+            currentPage: 1,
+            cardsPerPage: 9
+        },
+        music: {
+            currentPage: 1,
+            cardsPerPage: 9
+        }
+    },
+    setCurrentPage: (key, page) => set((state) => ({
+        pagination: {
+            ...state.pagination,
+            [key]: {
+                ...state.pagination[key],
+                currentPage: page
+            }
+        }
+    }))
+}))

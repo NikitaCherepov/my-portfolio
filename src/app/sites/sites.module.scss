@@ -4,6 +4,7 @@
     align-items: center;
 
     padding: 22px 0px 22px 0px;
+    gap: 26px;
 
     &__cards {
         display: grid;
@@ -33,8 +34,8 @@
             padding-right: 25px;
         }
         &_grid {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            max-width: 1500px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            max-width: 1400px;
             padding: 0 50px;
             gap: 40px 80px;
         }
@@ -46,6 +47,7 @@
             backface-visibility: hidden;
         
             min-width: 300px;
+            max-width: 413px;
         
             aspect-ratio: 1 / 1;
         
@@ -104,4 +106,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 31px;
+
+    button {
+        padding: 5px;
+        background: var(--white);
+        min-width: 44px;
+        min-height: 41px;
+        width: fit-content;
+    }
+    button:disabled {
+        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
+        cursor:auto;
+    }
 }
