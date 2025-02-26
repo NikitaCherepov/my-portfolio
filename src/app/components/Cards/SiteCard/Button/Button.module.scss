@@ -50,12 +50,15 @@
             width: 60px;
             height: 60px;
             left: 0;
+            margin-right: auto;
         }
         font-size: 2rem;
 
         max-width: none;
         max-height: none;
 
-        justify-content: center;
+        p {
+            margin-right: auto;
+        }
     }
 }

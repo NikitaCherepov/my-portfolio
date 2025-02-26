@@ -11,6 +11,8 @@ interface ExitStore {
     turnOffLeaving: () => void;
     turnOnAnimating: () => void;
     turnOffAnimating: () => void;
+    nextPage: string;
+    setNextPage: (value: string) => void
 }
 export const useExitStore = create<ExitStore>((set) => {
 
@@ -18,10 +20,10 @@ export const useExitStore = create<ExitStore>((set) => {
         isLeaving: false,
         handleExit: (currentPath, router, newPath: string) => {
             if (currentPath != newPath) {
-                set({isLeaving: true});
-                setTimeout(() => {
-                    router.push(newPath);
-                }, 500)
+                set({isLeaving: true, nextPage: newPath});
+                // setTimeout(() => {
+                //     router.push(newPath);
+                // }, 500)
             }
         },
         turnOffLeaving: () => {
@@ -33,6 +35,10 @@ export const useExitStore = create<ExitStore>((set) => {
         },
         turnOffAnimating: () => {
             set({isAnimating: false})
+        },
+        nextPage: '',
+        setNextPage: (value: string) => {
+            set({nextPage: value})
         }
     }
 })

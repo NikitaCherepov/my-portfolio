@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    width: 100%;
+    color: var(--sorting-component-list-color);
+    justify-content: space-between;
+
+    max-width: 1500px;
+
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        img {
+            width: 26px;
+            height: 26px;
+
+            filter: drop-shadow(0 0px 1px white);
+        }
+        p {
+            font-size: 1.5rem;
+            filter: var(--sorting-component-list-dropshadow);
+            font-weight: 400;
+            transition: all 0.3s linear;
+            user-select: none;
+            position: relative;
+        }
+
+        p::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: var(--sorting-component-list-color);
+            width: 0;
+
+            transition: width 0.1s linear;
+        }
+    }
+    div:hover {
+        cursor: pointer;
+    }
+    div:hover p::after {
+        width: 100%;
+    }
+}
+
+.chosen {
+    p::after {
+        width: 100% !important;
+    }
+}

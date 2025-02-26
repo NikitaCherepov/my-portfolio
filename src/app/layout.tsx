@@ -1,6 +1,6 @@
 'use client'
 import {usePathname, useRouter} from 'next/navigation'
-import {motion, AnimatePresence} from 'framer-motion'
+import {motion, AnimatePresence, useAnimate} from 'framer-motion'
 import {useState, useEffect} from 'react'
 import { useExitStore } from './store/useExitStore'
 import { useHasHydrated } from './hooks/useHasHydrated'
@@ -14,7 +14,7 @@ import Footer from './components/Footer'
 export default function RootLayout({children} : {children: React.ReactNode}) {
   const pathname = usePathname();
   const router = useRouter();
-  const {isLeaving, turnOffLeaving, turnOffAnimating} = useExitStore();
+  const {isLeaving, turnOffLeaving, turnOffAnimating, nextPage, setNextPage} = useExitStore();
   const hasHydrated = useHasHydrated(useSortSitesStore);
 
   const [firstLoad, setFirstLoad] = useState(true);
@@ -36,17 +36,39 @@ export default function RootLayout({children} : {children: React.ReactNode}) {
   }, [turnOffLeaving, pathname, hasHydrated])
 
   useEffect(() => {
+    if (nextPage != pathname && isLeaving && nextPage != '') {
+      hide();
+    }
+  })
+
+  useEffect(() => {
     console.log(isLeaving);
   }, [isLeaving])
 
   useEffect(() => {
-    if (pathname) {
-      setTimeout(() => {
-        turnOffAnimating();
-        console.log('Выключил')
-      }, 500)
+    // if (pathname) {
+    //   setTimeout(() => {
+    //     turnOffAnimating();
+    //     console.log('Выключил')
+    //   }, 500)
+    // }
+    if (pathname === nextPage && isLeaving) {
+      setNextPage('');
+      turnOffLeaving();
+      show();
     }
   }, [pathname])
+
+  const [scope, animate] = useAnimate();
+
+  const hide = async () => {
+      await animate(scope.current, {x: '100vw'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0.5});
+      router.push(nextPage);
+      animate(scope.current, {x: '-100vw'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0});
+  }
+  const show = async () => {
+    await animate(scope.current, {x: '0'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0.5});
+  }
 
 
 
@@ -60,20 +82,13 @@ export default function RootLayout({children} : {children: React.ReactNode}) {
             <img className={styles.container__loader} src='/images/loaders/loader.svg'></img>
           </div>
           ) : (
-          <AnimatePresence mode="wait">
-          {!isLeaving  &&(
-            <motion.div
-            key={pathname}
-            initial ={firstLoad ? {} : {opacity: 0, x:'-100vw'}}
-            animate ={{opacity: 1, x:0}}
-            exit={{opacity:0, x:'100vw'}}
-            transition={{duration: 0.5}}>
+
+            <motion.div ref={scope}>
               <Header/>
               {children}
               <Footer/>
             </motion.div>
-          )}
-        </AnimatePresence>
+
         )}
 
       </body>

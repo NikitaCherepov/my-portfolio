@@ -15,6 +15,7 @@ import ModalSites from "../components/ModalSites"
 import MusicCard from "../components/Cards/MusicCard"
 import Image from 'next/image'
 import Button from "../components/Cards/SiteCard/Button"
+import SortingComponentForList from "../components/SortingComponentForList"
 
 
 export default function MusicPage() {
@@ -146,6 +147,11 @@ export default function MusicPage() {
                     </motion.div>
                 }
             </AnimatePresence>
+
+            {view === 'list' && (
+                <SortingComponentForList/>
+                )}
+
             <motion.div
             layout
 
@@ -156,6 +162,7 @@ export default function MusicPage() {
             `}
             // style={view === 'grid' ? {maxHeight: maxHeight* 2 + 60} : {maxHeight: maxHeight* 6 + 60}}
             >
+
                 {sortedMusic
                 .map((object) => (
                     <motion.div
@@ -248,7 +255,7 @@ export default function MusicPage() {
 
                 <Button size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
                 <Button size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
-                <Button size="big"  background={'#fff'} text={'Вконтакте'} icon={'/images/icons/vk.svg'}/>
+                <Button size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
                 <p>Псс... саундтрек нужен?</p>
 
             </div>

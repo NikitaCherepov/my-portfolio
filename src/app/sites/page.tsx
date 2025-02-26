@@ -12,6 +12,7 @@ import { SortSitesStore } from "../store/useExitStore"
 import { usePagination } from "../store/useExitStore"
 import {useState, useEffect, useRef} from 'react'
 import ModalSites from "../components/ModalSites"
+import SortingComponentForList from "../components/SortingComponentForList"
 
 
 export default function SitesPage() {
@@ -142,6 +143,9 @@ export default function SitesPage() {
                     </motion.div>
                 }
             </AnimatePresence>
+            {view === 'list' && (
+                <SortingComponentForList/>
+                )}
             <motion.div
             layout
 

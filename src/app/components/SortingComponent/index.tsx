@@ -152,7 +152,7 @@ export default function SortingComponent() {
         return;
     }
     else return (
-        <div className={styles.container}>
+        <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.3}} className={styles.container}>
             <div ref={firstOptionRef} style={{opacity: 0}} className={styles.container__option}>
                 <img className={`${sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
                 <p>{sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.name}</p>
@@ -179,6 +179,6 @@ export default function SortingComponent() {
                     </motion.div>
                 ))}
             </motion.div>
-        </div>
+        </motion.div>
     )
 }
