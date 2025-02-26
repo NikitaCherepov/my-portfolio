@@ -4,12 +4,14 @@ import styles from './SiteCard.module.scss'
 import Image from 'next/image'
 import Button from './Button'
 import { useViewStore } from '@/app/store/useExitStore'
+import { usePathname } from 'next/navigation'
 
 import {AnimatePresence, hover, motion} from 'framer-motion'
 
 export default function SiteCard({object, toggleModal} : any) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
+    const pathname = usePathname();
 
     const MotionImage = motion(Image);
 
@@ -23,9 +25,10 @@ export default function SiteCard({object, toggleModal} : any) {
         layout
         transition={transitionSettings}
         >
-                <motion.button onClick={() => toggleModal(object.id)} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
-                    <motion.img transition={transitionSettings} layout src='/images/icons/square.svg'></motion.img>
-                </motion.button>
+                                <motion.button onClick={() => toggleModal(object.id)} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
+                                <motion.img transition={transitionSettings} layout src='/images/icons/square.svg'></motion.img>
+                            </motion.button>
+
                 
                 <motion.div
                 layout
@@ -98,7 +101,7 @@ export default function SiteCard({object, toggleModal} : any) {
                     (
                         <div className={styles.container__mainContent}>
                             <div className={styles.container__mainContent__stack}>
-                                {object.stack.join(", ")}
+                                {object?.stack?.join(", ") || object.genre}
                             </div>
                             <Button icon={'/images/icons/github.svg'}/>
                             <Button icon={'/images/icons/link.svg'}/>

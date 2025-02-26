@@ -9,6 +9,7 @@ import './global.css'
 import styles from './layout.module.scss'
 
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 export default function RootLayout({children} : {children: React.ReactNode}) {
   const pathname = usePathname();
@@ -69,6 +70,7 @@ export default function RootLayout({children} : {children: React.ReactNode}) {
             transition={{duration: 0.5}}>
               <Header/>
               {children}
+              <Footer/>
             </motion.div>
           )}
         </AnimatePresence>

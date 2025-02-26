@@ -15,7 +15,7 @@ export default function Header() {
             <Menu/>
             <Switcher/>
             <div className={styles.container__logoNSort}>
-                <p className={styles.container__logoNSort__name}>ncherepov.com</p>
+                {/* <p className={styles.container__logoNSort__name}>ncherepov.com</p> */}
                 <SortingComponent/>
             </div>
         </div>

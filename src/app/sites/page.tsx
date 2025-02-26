@@ -13,6 +13,7 @@ import { usePagination } from "../store/useExitStore"
 import {useState, useEffect, useRef} from 'react'
 import ModalSites from "../components/ModalSites"
 
+
 export default function SitesPage() {
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
@@ -30,7 +31,7 @@ export default function SitesPage() {
         return () => {
             observer.disconnect();
         };
-    })
+    }, [])
 
     const {pagination, setCurrentPage} = usePagination();
 
@@ -143,12 +144,13 @@ export default function SitesPage() {
             </AnimatePresence>
             <motion.div
             layout
+
             ref={scrollRef}
             transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} 
             className={`${styles.container__cards} 
             ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}
             `}
-            style={view === 'grid' ? {maxHeight: maxHeight* 2 + 60} : {maxHeight: maxHeight* 5 + 60}}
+            // style={view === 'grid' ? {maxHeight: maxHeight* 2 + 60} : {maxHeight: maxHeight* 6 + 60}}
             >
                 {sortedSites
                 .map((object) => (
@@ -173,7 +175,7 @@ export default function SitesPage() {
             </motion.div>
 
             <motion.div className={styles.pagination}>
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                {totalPages > 1 && Array.from({ length: totalPages }, (_, i) => i + 1)
                     .filter((page) => {
                         if (page === 1 || page === totalPages) return true;
 

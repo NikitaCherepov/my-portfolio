@@ -24,7 +24,6 @@ export default function Menu() {
     const handleAnimationExit = (path: string, rout:any, address:string) => {
         toggleOpen();
         handleExit(path, rout, address);
-        turnOnAnimating();
         console.log('Включил')
     }
 

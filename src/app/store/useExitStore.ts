@@ -225,12 +225,13 @@ export interface SiteWork {
 export interface MusicWork {
     name: string,
     mainImage: string,
-    genre: string,
+    genre: string[],
     youtube: string,
     spotify: string,
     vkmusic: string,
     ymusic: string,
-    date: string
+    date: string,
+    id: string
 }
 
 interface WorkStore {
@@ -351,7 +352,90 @@ export const useWorkStore = create<WorkStore>(() => ({
                 id: crypto.randomUUID()
             },
         ],
-        music: []
+        music: [
+            {   name: 'Deep Rain',
+                mainImage: '/cards/music/Deep Rain.png',
+                genre: ['jazz'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-21",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Flow Time',
+                mainImage: '/cards/music/Flow Time.png',
+                genre: ['lo-fi, chillout'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-22",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Meeting The Sunset',
+                mainImage: '/cards/music/meeting the sunset.png',
+                genre: ['chillout'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-24",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Metal Rogue',
+                mainImage: '/cards/music/Metal Rogue.png',
+                genre: ['electronic, blues, rock'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-22",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Fairytale',
+                mainImage: '/cards/music/Fairytale.png',
+                genre: ['soundtrack'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-12-22",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Childish Dream',
+                mainImage: '/cards/music/Childish Dream.png',
+                genre: ['classic'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-22",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Dark Disco',
+                mainImage: '/cards/music/Dark Disco.png',
+                genre: ['electronic'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-11-22",
+                id: crypto.randomUUID()
+            },
+            {   name: 'Morning Breakfast',
+                mainImage: '/cards/music/Morning Breakfast.png',
+                genre: ['jazz'],
+                youtube: 'link',
+                spotify: 'link',
+                vkmusic: 'link',
+                ymusic: 'link',
+                date: "2012-10-22",
+                id: crypto.randomUUID()
+            },
+
+
+        ]
 }))
 
 export interface PaginationObject {

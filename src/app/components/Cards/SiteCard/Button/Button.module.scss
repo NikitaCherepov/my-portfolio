@@ -1,5 +1,5 @@
 .container {
-    background: var(--background);
+    background: var(--button-dark);
 
     width: 100%;
     height: 100%;
@@ -12,6 +12,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
+
+    border-radius: var(--default-border-radius-small);
 
     gap: 10px;
 
@@ -28,5 +31,31 @@
     }
     &_onlyIcon:hover {
         filter: drop-shadow(0px 0px 4px rgb(255, 255, 255));
+    }
+
+    &_small {
+        img {
+            width: 25px;
+            height: 25px;
+        }
+        font-size: 1rem;
+        padding: 2px 6px;
+        gap: 6px;
+
+        width: fit-content;
+    }
+
+    &_big {
+        img {
+            width: 60px;
+            height: 60px;
+            left: 0;
+        }
+        font-size: 2rem;
+
+        max-width: none;
+        max-height: none;
+
+        justify-content: center;
     }
 }
