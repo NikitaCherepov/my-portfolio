@@ -1,10 +1,13 @@
 import styles from './ModalSites.module.scss'
 import { useWorkStore } from '@/app/store/useExitStore'
 import Button from '../Cards/SiteCard/Button';
+import {useRouter} from 'next/navigation'
+import getEmoji from '@/app/utilities/getEmoji';
 
 export default function ModalSites({toggleModal, id}: any) {
     const {sites} = useWorkStore();
     const object = sites.find((el) => el.id === id);
+    const router = useRouter();
     return (
         <div className={`${styles.container}`} onClick={(e) => e.stopPropagation()}>
             <div onClick={() => toggleModal(null)} className={`${styles.closeButton} hoverEffect`}>
@@ -18,12 +21,17 @@ export default function ModalSites({toggleModal, id}: any) {
             <div className={styles.content}>
                 <div className={styles.content__description}>
                     <p className={styles.content__description__text}>
-                        {object?.description}
+                        {object?.description.split("\n").map((line, index) => (
+                            <span key={index}>
+                            {line}
+                            <br />
+                            </span>
+                        ))}
                     </p>
                     <img className={styles.content__description__mainImage} src={object?.mainImage}></img>
                     <div className={styles.content__description__buttons}>
-                        <Button background={'white'} text={'GitHub'} icon={'images/icons/github.svg'}></Button>
-                        <Button background={'white'} text='Перейти' icon='images/icons/link.svg'></Button>
+                        <Button link={object?.github} className={styles.link} background={'white'} text={'GitHub'} icon={'images/icons/github.svg'}></Button>
+                        <Button className={styles.link} background={'white'} text='Перейти' icon='images/icons/link.svg'></Button>
                     </div>
                 </div>
 
@@ -33,7 +41,7 @@ export default function ModalSites({toggleModal, id}: any) {
                         <div className={styles.content__traits__stack__list}>
                         {object?.stack.map((el, index) => (
                             <div key={index}>
-                                {el}
+                                {getEmoji(el)}
                             </div>
                         ))}
                         </div>

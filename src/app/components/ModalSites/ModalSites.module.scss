@@ -1,8 +1,7 @@
 .container {
     height: fit-content;
 
-    max-width: 1000px;
-    max-height: 672px;
+    max-width: 1200px;
     min-width: 320px;
 
     background: var(--background);
@@ -14,7 +13,7 @@
     position: relative;
 
     padding: 30px;
-    gap: 54px;
+    gap: 20px;
 
     box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.509);
     &__header {
@@ -32,13 +31,14 @@
     flex-wrap: wrap;
 
     height: 100%;
-    gap: clamp(20px, 15%, 150px);
+    gap: clamp(20px, 15%, 100px);
     flex: 1;
 
     &__description {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         flex: 1;
         flex-shrink: 1;
 
@@ -48,13 +48,15 @@
             text-align: center;
         }
         &__mainImage {
-            width: 100%;
-            height: auto;
+
 
             aspect-ratio: 483 / 264;
 
             object-fit: cover;
+            object-position: center;
             flex: 1;
+            min-width: 300px;
+
         }
         &__buttons {
             display: flex;
@@ -78,22 +80,36 @@
         padding: 5px 25px 5px 25px;
 
         box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.309);
+        gap: 20px;
+
+        max-width: 350px;
+        max-height: 100%;
+        overflow-y: auto;
+        flex: 1;
 
         &__stack {
+            text-align: center;
             &__list {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: flex;
             }
         }
 
         &__features {
+
             display: flex;
             flex-direction: column;
             align-items: center;
             font-size: 1.5rem;
+            width: fit-content;
             &__list {
                 list-style:disc;
+                margin-left: 25px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: fit-content;
             }
         }
     }
@@ -115,4 +131,8 @@
     img {
         width: 80%;
     }
+}
+
+.link {
+    box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.309);
 }

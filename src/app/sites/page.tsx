@@ -13,6 +13,7 @@ import { usePagination } from "../store/useExitStore"
 import {useState, useEffect, useRef} from 'react'
 import ModalSites from "../components/ModalSites"
 import SortingComponentForList from "../components/SortingComponentForList"
+import Button from "../components/Cards/SiteCard/Button"
 
 
 export default function SitesPage() {
@@ -137,7 +138,9 @@ export default function SitesPage() {
                         initial={{opacity:0, scale:0}}
                         animate={{opacity: 1, scale: 1}}
                         exit={{opacity:0, scale: 0}}
-                        transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}>
+                        transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
+                        className={styles.modal_container}
+                        >
                         <ModalSites id={idModal} toggleModal={(id: string) => toggleModal(id)}/>
                         </motion.div>
                     </motion.div>
@@ -206,6 +209,10 @@ export default function SitesPage() {
                     }, [])
                 }
             </motion.div>
+            
+            
+            <Button onClick={() => toggleModal(sites?.find((el) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
+
 
         </motion.div>
     )

@@ -69,7 +69,7 @@ export default function SiteCard({object, toggleModal} : any) {
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                         >
                                             <Button onClick={() => toggleModal(object.id)} text={"Подробнее"}></Button>
-                                            <Button icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
+                                            <Button link={object.github} icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
                                             <Button icon={'/images/icons/link.svg'}  text={"Перейти"}></Button>
                                         </motion.div>
                                     )
@@ -103,7 +103,7 @@ export default function SiteCard({object, toggleModal} : any) {
                             <div className={styles.container__mainContent__stack}>
                                 {object?.stack?.join(", ") || object.genre}
                             </div>
-                            <Button icon={'/images/icons/github.svg'}/>
+                            <Button link={object.github} icon={'/images/icons/github.svg'}/>
                             <Button icon={'/images/icons/link.svg'}/>
                             <Button onClick={() => toggleModal(object.id)} text={'Подробнее'}/>
 
