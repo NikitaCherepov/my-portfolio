@@ -2,6 +2,7 @@
 import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {v4 as uuidv4} from 'uuid'
 
 //Для переключения между страниц
 interface ExitStore {
@@ -257,7 +258,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Лэндинговая страница',
                 features: ['Дизайн'],
                 date: "2012-10-22",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -268,7 +269,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Портфолио',
@@ -286,7 +287,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: "Сайт-портфолио на React и Next.js с анимациями на Framer Motion.\n Плавные переходы между страницами, интерактивные списки и переключатели. Вид карточки при выборе списка/блока динамически анимирован в одном компоненте. Выбранный тип сортировки сохраняется в LocalStorage через Zustand. \n В процессе работы также освоил TypeScript и частично внедрил типизацию.",
                 features: ['Анимированные переходы', 'Сохранение типа сортировки', 'Частичная типизация'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -297,7 +298,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -308,7 +309,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -319,7 +320,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
 
                         {
@@ -331,7 +332,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -342,7 +343,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -353,7 +354,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
             {
                 name: 'Слайдер',
@@ -364,7 +365,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
 
             {
@@ -376,7 +377,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 description: 'Компонент: слайдер с двумя переключателями на чистом html/css',
                 features: ['Удобство'],
                 date: "2012-10-23",
-                id: crypto.randomUUID()
+                id: uuidv4()
             },
         ],
         music: [
@@ -388,7 +389,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-21",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Flow Time',
@@ -399,7 +400,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Meeting The Sunset',
@@ -410,7 +411,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-24",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Metal Rogue',
@@ -421,7 +422,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/metalrogue.mp3'
             },
             {   name: 'Fairytale',
@@ -432,7 +433,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-12-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Childish Dream',
@@ -443,7 +444,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Dark Disco',
@@ -454,7 +455,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-11-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
             {   name: 'Morning Breakfast',
@@ -465,7 +466,7 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID(),
+                id: uuidv4(),
                 preview: '/music/fairytale.mp3'
             },
 
