@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Button from '../SiteCard/Button'
 import { useViewStore } from '@/app/store/useExitStore'
 import { usePathname } from 'next/navigation'
+import PreviewMusicButton from '../../PreviewMusicButton'
 
 import {AnimatePresence, hover, motion} from 'framer-motion'
 
@@ -67,7 +68,8 @@ export default function MusicCard({object, toggleModal} : any) {
                                                                 <Button style={"margin-top: 'auto'"} icon={'/images/icons/spotify.svg'}/>
                                                                 <Button style={"margin-top: 'auto'"} icon={'/images/icons/ym.svg'}/>
                                                             </div>
-                                                            <Button style={"margin-top: 'auto'"} text={'Preview'} icon={'/images/icons/play.svg'}/>
+                                                            {/* <Button style={"margin-top: 'auto'"} text={'Preview'} icon={'/images/icons/play.svg'}/> */}
+                                                            <PreviewMusicButton name={object.name} src={object.preview}/>
                                                         </motion.div>
                                                     )
 
@@ -94,7 +96,8 @@ export default function MusicCard({object, toggleModal} : any) {
                             <Button icon={'/images/icons/spotify.svg'}/>
                             <Button icon={'/images/icons/vkmusic.svg'}/>
                             <Button icon={'/images/icons/ym.svg'}/>
-                            <Button background={'white'} onClick={() => toggleModal(object.id)} text={'Preview'} icon={'/images/icons/play.svg'}/>
+                            {/* <Button background={'white'} onClick={() => toggleModal(object.id)} text={'Preview'} icon={'/images/icons/play.svg'}/> */}
+                            <PreviewMusicButton name={object.name} src={object?.preview}/>
 
                             <p className={styles.container__mainContent__date}>
                                 {object.date}

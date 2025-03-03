@@ -16,6 +16,8 @@ import MusicCard from "../components/Cards/MusicCard"
 import Image from 'next/image'
 import Button from "../components/Cards/SiteCard/Button"
 import SortingComponentForList from "../components/SortingComponentForList"
+import PlayerWatcher from "../components/PlayerWatcher"
+import MusicPlayer from "../components/MusicPlayer"
 
 
 export default function MusicPage() {
@@ -126,6 +128,8 @@ export default function MusicPage() {
 
     return (
         <>
+        <PlayerWatcher/>
+        <MusicPlayer/>
         <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} layout className={`mainContainer  ${styles.container}`}>
             <AnimatePresence>
                 {showModal && 

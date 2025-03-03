@@ -1,0 +1,92 @@
+.container {
+    background: white;
+    cursor:auto;
+    width: 100%;
+    height: 100%;
+    max-width: 180px;
+    max-height: 53px;
+
+    padding: 8px 15px;
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+
+    border-radius: var(--default-border-radius-small);
+
+    gap: 10px;
+
+    font-size: 1.5rem;
+
+    img {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+    img:hover {
+        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.402));
+        transform: scale(1.05);
+    }
+    img:active {
+        transform: none;
+    }
+}
+
+.sound {
+    position: relative;
+    &__edit {
+        display: flex;
+        position: absolute;
+        width: 100px;
+        height: 200px;
+        bottom: -10px;
+        left: -35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    input {
+        position: relative;
+        writing-mode:vertical-rl;
+        direction: rtl;
+    }
+
+    input {
+        appearance: none;
+        width: 20px; /* Толщина ползунка */
+        height: 120px; /* Высота */
+        writing-mode:vertical-rl; /* Вертикальное направление */
+        direction:rtl; /* Чтоб минимальное значение было снизу */
+        background: transparent;
+        cursor: pointer;
+    }
+    
+    /* 🔥 Линия (треки) */
+    input::-webkit-slider-runnable-track {
+        background-image: url("/images/icons/input-slider-track.png");
+        background-repeat: repeat-y;
+        background-position:  center center;
+        background-size: 5px;
+    }
+    
+    /* 🔥 Ползунок (бегунок) */
+    input::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #ffffff;
+        margin-top: -5px; /* Чтобы бегунок был по центру */
+        transition: transform 0.2s ease;
+        border-radius: 50%;
+    }
+    
+    input::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        background: var(--foreground);
+    }
+
+    
+}

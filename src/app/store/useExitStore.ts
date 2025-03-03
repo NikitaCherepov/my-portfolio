@@ -237,7 +237,8 @@ export interface MusicWork {
     vkmusic: string,
     ymusic: string,
     date: string,
-    id: string
+    id: string,
+    preview: string
 }
 
 interface WorkStore {
@@ -387,7 +388,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-21",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Flow Time',
                 mainImage: '/cards/music/Flow Time.png',
@@ -397,7 +399,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Meeting The Sunset',
                 mainImage: '/cards/music/meeting the sunset.png',
@@ -407,7 +410,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-24",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Metal Rogue',
                 mainImage: '/cards/music/Metal Rogue.png',
@@ -417,7 +421,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/metalrogue.mp3'
             },
             {   name: 'Fairytale',
                 mainImage: '/cards/music/Fairytale.png',
@@ -427,7 +432,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-12-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Childish Dream',
                 mainImage: '/cards/music/Childish Dream.png',
@@ -437,7 +443,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Dark Disco',
                 mainImage: '/cards/music/Dark Disco.png',
@@ -447,7 +454,8 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-11-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
             {   name: 'Morning Breakfast',
                 mainImage: '/cards/music/Morning Breakfast.png',
@@ -457,59 +465,9 @@ export const useWorkStore = create<WorkStore>(() => ({
                 vkmusic: 'link',
                 ymusic: 'link',
                 date: "2012-10-22",
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                preview: '/music/fairytale.mp3'
             },
-            {   name: 'Morning Breakfast',
-                mainImage: '/cards/music/Morning Breakfast.png',
-                genre: ['jazz'],
-                youtube: 'link',
-                spotify: 'link',
-                vkmusic: 'link',
-                ymusic: 'link',
-                date: "2012-10-22",
-                id: crypto.randomUUID()
-            },
-            {   name: 'Morning Breakfast',
-                mainImage: '/cards/music/Morning Breakfast.png',
-                genre: ['jazz'],
-                youtube: 'link',
-                spotify: 'link',
-                vkmusic: 'link',
-                ymusic: 'link',
-                date: "2012-10-22",
-                id: crypto.randomUUID()
-            },
-            {   name: 'Morning Breakfast',
-                mainImage: '/cards/music/Morning Breakfast.png',
-                genre: ['jazz'],
-                youtube: 'link',
-                spotify: 'link',
-                vkmusic: 'link',
-                ymusic: 'link',
-                date: "2012-10-22",
-                id: crypto.randomUUID()
-            },
-            {   name: 'Morning Breakfast',
-                mainImage: '/cards/music/Morning Breakfast.png',
-                genre: ['jazz'],
-                youtube: 'link',
-                spotify: 'link',
-                vkmusic: 'link',
-                ymusic: 'link',
-                date: "2012-10-22",
-                id: crypto.randomUUID()
-            },
-            {   name: 'Morning Breakfast',
-                mainImage: '/cards/music/Morning Breakfast.png',
-                genre: ['jazz'],
-                youtube: 'link',
-                spotify: 'link',
-                vkmusic: 'link',
-                ymusic: 'link',
-                date: "2012-10-22",
-                id: crypto.randomUUID()
-            },
-
 
         ]
 }))
@@ -545,3 +503,74 @@ export const usePagination = create<PaginationStore>((set) => ({
         }
     }))
 }))
+
+
+interface PlayerSettings {
+    volume: number,
+    setVolume: (volume: number) => void
+}
+export const usePlayerStore = create<PlayerSettings>()(
+    persist(
+        (set) => ({
+            volume: 0.05,
+            setVolume: (volume) => set({ volume }),
+        }),
+        {
+            name: "player-settings",
+            storage: createJSONStorage(() => localStorage),
+        }
+    )
+);
+interface PlayerState {
+    audio: any,
+    setAudio: (music: any) => void,
+    currentTime: number,
+    setCurrentTime:(currentTime: number) => void,
+    currentSrc: string,
+    isPlaying: boolean,
+    play: () => void,
+    pause: () => void,
+    duration: number,
+    setDuration: (duration: number) => void,
+    name: string,
+    setName: (name: string) => void
+}
+export const usePlayerStateStore = create<PlayerState>((set, get) => {
+    return {
+        audio: null,
+        currentSrc: '',
+        setAudio: (src) => {
+            set({audio: new Audio(src), currentSrc: src});
+        },
+        currentTime: 0,
+        setCurrentTime: (currentTime) => {
+            set({currentTime: currentTime});
+        },
+        isPlaying: false,
+        play: () => {
+            const state = get();
+            if (state.audio && !state.isPlaying) {
+                set({ isPlaying: true });
+                state.audio.play();
+            }
+            else if (state.isPlaying && state.duration === state.currentTime) {
+                state.audio.play();
+            }
+        },
+        pause: () => {
+            const state = get();
+            if (state.audio && state.isPlaying) {
+                set({ isPlaying: false });
+                state.audio.pause();
+            }
+        },
+        duration: 0,
+        setDuration: (duration) => {
+            set({duration: duration});
+        },
+        name: '',
+        setName: (name) => {
+            set({name: name});
+        }
+    }
+})
