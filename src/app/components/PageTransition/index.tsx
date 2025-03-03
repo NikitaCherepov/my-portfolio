@@ -51,7 +51,11 @@ export default function PageTransition({children} : {children: React.ReactNode})
         <html>
           
           <body data-theme={pathname === "/music" ? "music" : "sites" }>
-
+            {!hasHydrated ? (
+              <div className={styles.container}>
+                <img alt='Загрузка' className={styles.container__loader} src='/images/loaders/loader.svg'></img>
+              </div>
+              ) : (
     
                 <motion.div ref={scope}>
                     {pathname==='/sites' || pathname === '/music' ? (
@@ -62,6 +66,8 @@ export default function PageTransition({children} : {children: React.ReactNode})
                                           </>
                     ) : children}
                 </motion.div>
+              )
+        }
     
           </body>
         </html>
