@@ -1,58 +1,72 @@
 'use client'
 
 import styles from './MusicPlayer.module.scss'
-import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core'
-import {useState, useEffect, useRef} from 'react'
+import { DndContext, useDraggable } from '@dnd-kit/core'
+import {useState, useEffect} from 'react'
 import {motion, AnimatePresence} from 'framer-motion'
-import { usePlayerStateStore } from '@/app/store/useExitStore'
+import { usePlayerStateStore, usePlayerStore } from '@/app/store/useExitStore'
+import { useHasHydrated } from '@/app/hooks/useHasHydrated'
+
+interface DraggableProps {
+  soundHovering: boolean;
+  setSoundHovering: React.Dispatch<React.SetStateAction<boolean>>;
+  hovering: boolean;
+  setHovering: React.Dispatch<React.SetStateAction<boolean>>;
+  position: { x: number; y: number };
+  onDragging: boolean;
+  show: boolean;
+  setShow: () => void;
+}
 
 export default function MusicPlayer() {
-
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0
-    });
     const [onDragging, setOnDragging] = useState(false);
-    const [show, setShow] = useState(true);
     const [hovering, setHovering] = useState(false);
     const [soundHovering, setSoundHovering] = useState(false);
 
-    return (
+    const {position, setPosition, showPlayer, setShowPlayer} = usePlayerStore();
+    const hasHydrated = useHasHydrated(usePlayerStore);
+
+    useEffect(() => {
+      if (position.x < 0) {
+        setPosition({x: 0, y: position.y})
+      }
+      if ((position.x < +window.innerWidth + 100 && position.x > +window.innerWidth - 100) || position.x > window.innerWidth) {
+        setPosition({x: +window.innerWidth - 500, y: position.y})
+      }
+      if (position.y > window.innerHeight/2 - 100) {
+        setPosition({x: position.x, y: window.innerHeight/2 - 150})
+      }
+      else if (-position.y > window.innerHeight/2) {
+        setPosition({x: position.x, y: -window.innerHeight/2})
+      }
+      console.log(position.y)
+      console.log(window.innerHeight)
+    }, [position, setPosition])
+
+    if (hasHydrated) return (
         <DndContext
         onDragStart={() => setOnDragging(true)}
         onDragEnd={(e) => {
             if (!e.delta) return;
-            setPosition((prev) => ({
-                x: prev.x + e.delta.x,
-                y: prev.y + e.delta.y
-            }));
+            const newX = position.x + e.delta.x;
+            const newY = position.y + e.delta.y;
+            setPosition({x: newX, y: newY});
             setOnDragging(false);
         }}>
-            <Draggable soundHovering={soundHovering} setSoundHovering={setSoundHovering} hovering={hovering} setHovering={setHovering} show={show} setShow={setShow} onDragging={onDragging} position={position}/>
+            <Draggable soundHovering={soundHovering} setSoundHovering={setSoundHovering} hovering={hovering} setHovering={setHovering} show={showPlayer} setShow={setShowPlayer} onDragging={onDragging} position={position}/>
         </DndContext>
     )
 }
 
-function Droppable() {
-    const {isOver, setNodeRef} = useDroppable({
-        id: 'droppable',
-      });
-      const style = {
-        color: isOver ? 'green' : undefined,
-      };
-
-      return (
-        <div ref={setNodeRef} className={styles.big}>
-        </div>
-      );
-}
-
-function Draggable({soundHovering, setSoundHovering, hovering, setHovering, position, onDragging, show, setShow}: any) {
-  const {name, audio, duration, currentTime, setCurrentTime, isPlaying, play, pause } = usePlayerStateStore();
+function Draggable({soundHovering, setSoundHovering, hovering, setHovering, position, onDragging, show, setShow}: DraggableProps) {
+  const {name, audio, duration, currentTime, isPlaying, play, pause } = usePlayerStateStore();
+  const {volume, setVolume} = usePlayerStore();
 
   const [hoverTime, setHoverTime] = useState(0);
   const [onTimelineHovering, setOnTimelineHovering] = useState(false);
   const [cursorX, setCursorX] = useState(0);
+
+  const [closing, setClosing] = useState(false);
 
   function playMusic() {
     if (duration === currentTime) {
@@ -76,18 +90,24 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
     
     return (
         <motion.div
-        animate={show ? {minWidth: '250px', maxWidth: '500px', maxHeight:'140px'} : !hovering ? {minWidth: '40px', maxWidth: '40px', maxHeight:'40px'} : {minWidth: '150px', maxWidth: '150px', maxHeight:'50px'}}
+        animate={show ? {minWidth: '250px', maxWidth: '500px', maxHeight:'160px'} : !hovering ? {minWidth: '40px', maxWidth: '40px', maxHeight:'40px'} : closing ? {minWidth: '40px', maxWidth: '40px', maxHeight:'40px'} : {minWidth: '150px', maxWidth: '150px', maxHeight:'50px'}}
         transition={{type:'spring', duration: 0.5}}
-        onHoverStart={() => {if (!show) {setHovering(true)}} }
-        onHoverEnd={() => {if (!show) {setHovering(false)}}}
+        onHoverStart={() => {if (!closing) {setHovering(true)}} }
+        onHoverEnd={() => {if (!closing) {setHovering(false)}}}
         
         ref={setNodeRef} style={style}  className={`${styles.container} dropShadow ${onDragging ? 'hoverEffect' : ''}`}>
           <div className={styles.container__buttons}>
-            <img style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/move.png'></img>
+            <img alt='Нажмите, чтобы тянуть' style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/move.png'></img>
             {<AnimatePresence>
               {
                 show || (!show && hovering) ? (
-                  <motion.img initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.3}} onClick={() => setShow((prev: boolean) => !prev)} className={`${styles.container__buttons__minimize}`} src={show ? '/images/icons/minimize.png' : '/images/icons/maximize.png'}></motion.img>
+                  <motion.img alt='Показать/спрятать' initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.3}} onClick={() => {
+                    
+                    setClosing(true);
+                    setShow();
+                    setHovering(false);
+                    setTimeout(() => {setClosing(false)}, 500)
+                  }} className={`${styles.container__buttons__minimize}`} src={show ? '/images/icons/minimize.png' : '/images/icons/maximize.png'}></motion.img>
                 ) : ''
               }
 
@@ -97,7 +117,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
           <p className={`${styles.container__name}`}>{name || 'Не выбрано'}</p>
 
           <div className={styles.container__musicControl}>
-            <img onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/play.png' : isPlaying ? '/images/icons/pause.png' : '/images/icons/play.png'}/>
+            <img alt='Управление состоянием проигрывателя' onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/play.png' : isPlaying ? '/images/icons/pause.png' : '/images/icons/play.png'}/>
 
             <motion.div onMouseMove={(e) => {
               
@@ -124,7 +144,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
                   {onTimelineHovering && (
                   <div style={{left: cursorX - 20 || 0}} className={styles.container__musicControl__timeline__currentTime}>
                     <div className={styles.container__musicControl__timeline__currentTime__wrapper}>
-                                      <img src='/images/icons/currentTime.svg'></img>
+                                      <img alt='background' src='/images/icons/currentTime.svg'></img>
                                       <p>{hoverTime?.toFixed(0)}</p>
                     </div>
                   </div>
@@ -143,11 +163,11 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
             </motion.div>
 
             <motion.div onHoverStart={() => setSoundHovering(true)} onHoverEnd={() => setSoundHovering(false)} className={styles.sound}>
-                <img src={'/images/icons/sound.svg'} />
+                <img alt='Регулировка звука' src={'/images/icons/sound.svg'} />
                 <AnimatePresence>
                     {soundHovering ? (
                         <motion.div initial={{opacity: 0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.2}} className={styles.sound__edit}>
-                            <input type="range" min="0" max="0.2" step="0.01" value={0.5}/>
+                            <input type="range" min="0" max="0.2" step="0.01" value={volume || 0.5} onChange={(e) => setVolume(+e.target.value)}/>
                         </motion.div>
                     ) : ''}
 

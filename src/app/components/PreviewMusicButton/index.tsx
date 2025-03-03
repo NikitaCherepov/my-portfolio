@@ -2,10 +2,15 @@
 import styles from './PreviewMusicButton.module.scss'
 import { usePlayerStore } from '@/app/store/useExitStore'
 import { usePlayerStateStore } from '@/app/store/useExitStore'
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import {motion, AnimatePresence} from 'framer-motion'
 
-export default function PreviewMusicButton({src, name}: any) {
+interface PreviewMusicButtonProps {
+    src?: string,
+    name?: string
+}
+
+export default function PreviewMusicButton({src, name}: PreviewMusicButtonProps) {
     const { audio, setAudio, currentTime, currentSrc, play, isPlaying, pause, duration, setDuration, setName } = usePlayerStateStore();
     const { volume, setVolume } = usePlayerStore();
     const [hovering, setHovering] = useState(false);
@@ -14,13 +19,14 @@ export default function PreviewMusicButton({src, name}: any) {
     const playMusic = () => {
         console.log(duration);
         console.log(currentTime);
-        setName(name);
+        if (name) {
+            setName(name);
+        }
         if (currentSrc != src) {
             pause();
             setAudio(src);
             play();
             setDuration(audio?.duration);
-            console.log(audio?.duration);
         }
         else if (duration === currentTime) {
             play();
@@ -35,22 +41,17 @@ export default function PreviewMusicButton({src, name}: any) {
         }
     }
 
-    useEffect(() => {
-        if (currentSrc != '') {
-            audio.volume = volume;
-        }
-    }, [audio, volume])
-
 
     return (
         <button className={styles.container}>
             <img
+                alt='Управление музыкой'
                 onClick={() => playMusic()} 
-                src={currentSrc != src ? '/images/icons/play.png' : !isPlaying || audio.ended ? '/images/icons/play.png' : '/images/icons/pause.png'} 
+                src={currentSrc != src ? '/images/icons/play.png' : !isPlaying || audio?.ended ? '/images/icons/play.png' : '/images/icons/pause.png'} 
             />
             <p>{currentSrc != src ? 'Preview' : currentSrc === src ? currentTime.toFixed(0) : 0}</p>
             <motion.div onHoverStart={() => setHovering(true)} onHoverEnd={() => setHovering(false)} className={styles.sound}>
-                <img src={'/images/icons/sound.svg'} />
+                <img alt='Настройка громкости' src={'/images/icons/sound.svg'} />
                 <AnimatePresence>
                     {hovering ? (
                         <motion.div initial={{opacity: 0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.2}} className={styles.sound__edit}>

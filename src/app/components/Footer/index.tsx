@@ -1,6 +1,6 @@
 import styles from './Footer.module.scss'
 import Button from '../Cards/SiteCard/Button'
-import {motion, AnimatePresence} from 'framer-motion'
+import {motion} from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
 export default function Header() {

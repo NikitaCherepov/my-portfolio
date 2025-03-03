@@ -1,19 +1,19 @@
 'use client'
 import {useState} from 'react'
 import styles from './SiteCard.module.scss'
-import Image from 'next/image'
 import Button from './Button'
-import { useViewStore } from '@/app/store/useExitStore'
-import { usePathname } from 'next/navigation'
+import { SiteWork, useViewStore } from '@/app/store/useExitStore'
 
-import {AnimatePresence, hover, motion} from 'framer-motion'
+import {AnimatePresence, motion} from 'framer-motion'
 
-export default function SiteCard({object, toggleModal} : any) {
+interface SiteCardProps {
+    object : SiteWork,
+    toggleModal: (id: string) => void
+}
+
+export default function SiteCard({object, toggleModal} : SiteCardProps) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
-    const pathname = usePathname();
-
-    const MotionImage = motion(Image);
 
     const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
     const transitionHoverSettings = {duration: 0.2}
@@ -101,7 +101,7 @@ export default function SiteCard({object, toggleModal} : any) {
                     (
                         <div className={styles.container__mainContent}>
                             <div className={styles.container__mainContent__stack}>
-                                {object?.stack?.join(", ") || object.genre}
+                                {object?.stack?.join(", ")}
                             </div>
                             <Button link={object.github} icon={'/images/icons/github.svg'}/>
                             <Button icon={'/images/icons/link.svg'}/>

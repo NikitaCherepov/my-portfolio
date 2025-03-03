@@ -1,13 +1,13 @@
 "use client";
 import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
-import { useId } from 'react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 //Для переключения между страниц
 interface ExitStore {
     isLeaving: boolean;
     isAnimating: boolean;
-    handleExit: (currentPath: string, router: any, path: string) => void;
+    handleExit: (currentPath: string, router: AppRouterInstance, path: string) => void;
     turnOffLeaving: () => void;
     turnOnAnimating: () => void;
     turnOffAnimating: () => void;
@@ -46,7 +46,7 @@ export const useExitStore = create<ExitStore>((set) => {
 //Для сортировки
 
 
-interface SortingOption {
+export interface SortingOption {
     name: string;
     type: string;
     rotate: boolean;
@@ -504,16 +504,31 @@ export const usePagination = create<PaginationStore>((set) => ({
     }))
 }))
 
+interface PlayerPosition {
+    x: number;
+    y: number;
+}
 
 interface PlayerSettings {
-    volume: number,
-    setVolume: (volume: number) => void
+    volume: number;
+    setVolume: (volume: number) => void;
+    showPlayer: boolean;
+    setShowPlayer: () => void;
+    position: PlayerPosition;
+    setPosition: (newValue: PlayerPosition) => void;
 }
+
 export const usePlayerStore = create<PlayerSettings>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             volume: 0.05,
             setVolume: (volume) => set({ volume }),
+            
+            showPlayer: true,
+            setShowPlayer: () => {const state = get(); set({ showPlayer: !state.showPlayer })},
+            
+            position: { x: 0, y: 0 },
+            setPosition: (newValue) => {set({ position: newValue })},
         }),
         {
             name: "player-settings",
@@ -522,8 +537,8 @@ export const usePlayerStore = create<PlayerSettings>()(
     )
 );
 interface PlayerState {
-    audio: any,
-    setAudio: (music: any) => void,
+    audio: HTMLAudioElement | null,
+    setAudio: (music: string | undefined) => void,
     currentTime: number,
     setCurrentTime:(currentTime: number) => void,
     currentSrc: string,
@@ -531,7 +546,7 @@ interface PlayerState {
     play: () => void,
     pause: () => void,
     duration: number,
-    setDuration: (duration: number) => void,
+    setDuration: (duration: number | undefined) => void,
     name: string,
     setName: (name: string) => void
 }
@@ -554,7 +569,7 @@ export const usePlayerStateStore = create<PlayerState>((set, get) => {
                 state.audio.play();
             }
             else if (state.isPlaying && state.duration === state.currentTime) {
-                state.audio.play();
+                state?.audio?.play();
             }
         },
         pause: () => {

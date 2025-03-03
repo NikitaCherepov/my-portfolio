@@ -1,16 +1,12 @@
 'use client'
 
 
-import {useAnimate, motion} from 'framer-motion'
-import {useEffect, useState, useRef} from 'react'
+import {useAnimate} from 'framer-motion'
+import {useEffect, useRef} from 'react'
 import styles from './not-found.module.scss'
 import Button from './components/Cards/SiteCard/Button';
 import { useInitiateExit } from './hooks/useInitiateExit';
 
-import {usePathname, useRouter} from 'next/navigation'
-
-import { useDimensions } from '@/app/hooks/useDimensions'
-import { useExitStore } from './store/useExitStore';
 
 export default function NotFound() {
 

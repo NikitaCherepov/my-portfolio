@@ -1,7 +1,14 @@
 import styles from './SortingComponentForList.module.scss'
 import { useSortSitesStore } from '@/app/store/useExitStore'
 import { usePathname } from 'next/navigation';
-import {motion, AnimatePresence} from 'framer-motion'
+import {motion} from 'framer-motion'
+import { SortingOption } from '@/app/store/useExitStore';
+
+interface elementSort {
+    label: string,
+    descending:string,
+    ascending: string
+}
 
 export default function SortingComponentForList() {
     const {sortBy, setSortBy, sortingOptions, setSortingOptions} = useSortSitesStore();
@@ -9,7 +16,7 @@ export default function SortingComponentForList() {
 
     const pageKey = pathname.slice(1) as "sites" | "music";
 
-    const handleChange = (element: any) => {
+    const handleChange = (element: elementSort) => {
             if (sortBy[pageKey] === element.ascending ||sortBy[pageKey] === element.descending) {
                 if (sortBy[pageKey] === element.ascending) {
                     setSortBy(pageKey, element.descending);
@@ -26,9 +33,10 @@ export default function SortingComponentForList() {
             }
     }
 
-    const changeArrayOrder = (element:any) => {
+    const changeArrayOrder = (element:SortingOption | undefined) => {
         const currentOptions = sortingOptions[pageKey];  
         if (!currentOptions) return;
+        console.log(element);
       
         const selectedOption = currentOptions.find((obj) => obj.type === element?.type);
         if (!selectedOption) return;

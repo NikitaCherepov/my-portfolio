@@ -1,10 +1,11 @@
 'use client'
 import { usePlayerStore } from "@/app/store/useExitStore";
 import { usePlayerStateStore } from "@/app/store/useExitStore";
-import {useState, useRef, useEffect} from 'react'
+import {useEffect} from 'react'
 
-export default function PlayerWatcher({src, state}: any) {
-    const {audio, setAudio, currentTime, setCurrentTime, setDuration} = usePlayerStateStore();
+export default function PlayerWatcher() {
+    const {audio, setCurrentTime, setDuration} = usePlayerStateStore();
+    const {volume} = usePlayerStore();
 
     useEffect(() => {
         if (!audio) return;
@@ -21,7 +22,13 @@ export default function PlayerWatcher({src, state}: any) {
         return () => {
             audio.removeEventListener("timeupdate", updateTime);
         }
-    }, [audio])
+    }, [audio, setCurrentTime, setDuration])
+
+    useEffect(() => {
+        if (audio) {
+            audio.volume = volume;
+        }
+    }, [audio, volume])
 
     return null;
 }

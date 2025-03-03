@@ -1,10 +1,10 @@
 'use client'
 import styles from './SortingContainer.module.scss'
-import { useViewStore } from '../../store/useExitStore'
 import { useSortSitesStore } from '../../store/useExitStore'
 import {motion, useAnimate} from 'framer-motion'
-import {useState, useEffect, useRef, useLayoutEffect} from 'react'
+import {useState, useRef, useLayoutEffect} from 'react'
 import { usePathname } from 'next/navigation'
+import { SortingOption } from '../../store/useExitStore'
 
 import { useHasHydrated } from '@/app/hooks/useHasHydrated'
 
@@ -23,56 +23,9 @@ export default function SortingComponent() {
 
     const firstOptionRef = useRef<HTMLDivElement | null>(null);
 
-    const [defaultHeight, setDefaultHeight] = useState<number | null>(null);
-
-    // const [sortingOptions, setSortingOptions] = useState([
-    //     {
-    //         name: 'По дате',
-    //         type: 'newest',
-    //         rotate: true,
-    //         position: 1,
-    //         initialPosition:1
-    //     },
-    //     {
-    //         name: 'По дате',
-    //         type: 'oldest',
-    //         rotate: false,
-    //         position: 2,
-    //         initialPosition:2
-    //     },
-    //     {
-    //         name: 'По названию',
-    //         type: 'nameFromA',
-    //         rotate: true,
-    //         position: 3,
-    //         initialPosition:3
-    //     },
-    //     {
-    //         name: 'По названию',
-    //         type: 'nameFromZ',
-    //         rotate: false,
-    //         position: 4,
-    //         initialPosition:4
-    //     },
-    //     {
-    //         name: 'По стеку',
-    //         type: 'complex',
-    //         rotate: true,
-    //         position: 5,
-    //         initialPosition:5
-    //     },
-    //     {
-    //         name: 'По стеку',
-    //         type: 'easiest',
-    //         rotate: false,
-    //         position: 6,
-    //         initialPosition:6
-    //     }
-    // ])
-
     const {sortBy, setSortBy, sortingOptions, setSortingOptions} = useSortSitesStore();
 
-    const handleChange = (element: any) => {
+    const handleChange = (element: SortingOption) => {
 
         if (showModal) {
             setShowModal(false);
@@ -97,7 +50,7 @@ export default function SortingComponent() {
 
     }
 
-    const changeArrayOrder = (element:any) => {
+    const changeArrayOrder = (element:SortingOption) => {
         const currentOptions = sortingOptions[pageKey];  
         if (!currentOptions) return;
       
@@ -126,14 +79,17 @@ export default function SortingComponent() {
         setSortingOptions(pageKey, newOptions);
     }
 
-    useLayoutEffect(() => { 
+    useLayoutEffect(() => {
         setAnimationOn(false);
         if (!hasHydrated) {
             return;
         }
+        
 
-
-        const element:any = sortingOptions[pageKey].find((object) => object.type === sortBy[pageKey]);
+        const element = sortingOptions[pageKey].find((object) => object.type === sortBy[pageKey]);
+        if (!element) {
+            return;
+        }
         changeArrayOrder(element);
         setAnimationOn(true);
     }, [hasHydrated])
@@ -154,7 +110,7 @@ export default function SortingComponent() {
     else return (
         <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.3}} className={styles.container}>
             <div ref={firstOptionRef} style={{opacity: 0}} className={styles.container__option}>
-                <img className={`${sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
+                <img alt='arrow' className={`${sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
                 <p>{sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.name}</p>
             </div>
 
@@ -166,7 +122,7 @@ export default function SortingComponent() {
             >
                 {animationOn && sortingOptions[pageKey]
                 .sort((a,b) => a.position - b.position)
-                .map((object, index) => (
+                .map((object) => (
                     <motion.div
                     initial={false}
                     transition={{ type: "spring", stiffness: 150, damping: 20 }}
@@ -174,7 +130,7 @@ export default function SortingComponent() {
                     onClick={() => handleChange(object)} 
                     key={object.type} 
                     className={`${styles.container__option} hoverEffect ${object.position === 6 ? 'mb-[13px]' : ''}`}>
-                        <img className={`${object.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
+                        <img alt='arrow' className={`${object.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
                         <p>{object.name}</p>
                     </motion.div>
                 ))}

@@ -1,10 +1,8 @@
 'use client'
 import { useRef, useState } from 'react'
 import { motion, useMotionValue, useAnimationFrame, animate, AnimatePresence } from 'framer-motion'
-import {useRouter, usePathname} from 'next/navigation'
 import Image from 'next/image'
 import styles from './page.module.scss'
-import { useExitStore } from './store/useExitStore'
 import { useInitiateExit } from './hooks/useInitiateExit'
 
 export default function MainPage() {
@@ -14,8 +12,6 @@ export default function MainPage() {
 
   const initiateExit = useInitiateExit();
 
-  const router = useRouter();
-  const pathname = usePathname();
   // Координаты первого блока
   const x1 = useMotionValue(0);
   const y1 = useMotionValue(0);
@@ -69,8 +65,9 @@ export default function MainPage() {
     <div className={styles.container}>
       <h1>
         Привет!<br />
-        Я Никита Черепов,<br />
-        и на этом сайте собраны все мои работы.
+        Меня зовут Никита Черепов.<br />
+        Я пишу <em>музыку</em> и занимаюсь <em>разработкой сайтов</em>.<br/>
+        На этом сайте собраны все мои работы.
       </h1>
       <h2>Выбери, что интересно:</h2>
 

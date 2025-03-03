@@ -1,15 +1,14 @@
 'use client'
 
-import {useState, useEffect, useRef} from 'react'
+import {useRef} from 'react'
 import styles from './Menu.module.scss'
 import Image from 'next/image'
 
-import {motion, AnimatePresence, useCycle} from 'framer-motion'
+import {motion, useCycle} from 'framer-motion'
 
-import {usePathname, useRouter} from 'next/navigation'
+import {usePathname} from 'next/navigation'
 
 import { useDimensions } from '@/app/hooks/useDimensions'
-import {useExitStore} from '../../store/useExitStore'
 
 import { useInitiateExit } from '@/app/hooks/useInitiateExit'
 
@@ -20,9 +19,6 @@ export default function Menu() {
 
     const initiateExit = useInitiateExit();
 
-    const {handleExit, turnOnAnimating, turnOffAnimating} = useExitStore();
-
-    const router = useRouter();
     const pathname = usePathname();
 
 

@@ -1,17 +1,22 @@
 import styles from './ModalSites.module.scss'
 import { useWorkStore } from '@/app/store/useExitStore'
 import Button from '../Cards/SiteCard/Button';
-import {useRouter} from 'next/navigation'
 import getEmoji from '@/app/utilities/getEmoji';
 
-export default function ModalSites({toggleModal, id}: any) {
+interface ModalSitesProps {
+    toggleModal: (id: string | null) => void,
+    id: string | null
+}
+
+
+
+export default function ModalSites({toggleModal, id}: ModalSitesProps) {
     const {sites} = useWorkStore();
     const object = sites.find((el) => el.id === id);
-    const router = useRouter();
     return (
         <div className={`${styles.container}`} onClick={(e) => e.stopPropagation()}>
             <div onClick={() => toggleModal(null)} className={`${styles.closeButton} hoverEffect`}>
-                <img src='images/icons/close.svg'></img>
+                <img alt='Иконка закрытия' src='images/icons/close.svg'></img>
             </div>
 
             <h2 className={styles.container__header}>
@@ -28,7 +33,7 @@ export default function ModalSites({toggleModal, id}: any) {
                             </span>
                         ))}
                     </p>
-                    <img className={styles.content__description__mainImage} src={object?.mainImage}></img>
+                    <img alt='Скриншот сайта' className={styles.content__description__mainImage} src={object?.mainImage}></img>
                     <div className={styles.content__description__buttons}>
                         <Button link={object?.github} className={styles.link} background={'white'} text={'GitHub'} icon={'images/icons/github.svg'}></Button>
                         <Button className={styles.link} background={'white'} text='Перейти' icon='images/icons/link.svg'></Button>

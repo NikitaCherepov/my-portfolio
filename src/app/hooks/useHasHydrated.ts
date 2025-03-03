@@ -1,4 +1,4 @@
-// store/useHasHydrated.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
 export function useHasHydrated(store: any) {

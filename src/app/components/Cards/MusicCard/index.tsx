@@ -1,20 +1,20 @@
 'use client'
 import {useState} from 'react'
 import styles from './MusicCard.module.scss'
-import Image from 'next/image'
 import Button from '../SiteCard/Button'
 import { useViewStore } from '@/app/store/useExitStore'
-import { usePathname } from 'next/navigation'
 import PreviewMusicButton from '../../PreviewMusicButton'
+import { MusicWork } from '@/app/store/useExitStore'
 
-import {AnimatePresence, hover, motion} from 'framer-motion'
+interface MusicCardProps {
+    object: MusicWork;
+}
 
-export default function MusicCard({object, toggleModal} : any) {
+import {AnimatePresence, motion} from 'framer-motion'
+
+export default function MusicCard({object} : MusicCardProps) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
-    const pathname = usePathname();
-
-    const MotionImage = motion(Image);
 
     const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
     const transitionHoverSettings = {duration: 0.2}
@@ -63,10 +63,10 @@ export default function MusicCard({object, toggleModal} : any) {
                                                             <h2>{object.name}</h2>
                                                             <p className={styles.container__mainInfo__hoverMaterial__hoveredButtons__genres}>{object?.genre?.join(", ")}</p>
                                                             <div className={styles.container__mainInfo__hoverMaterial__hoveredButtons__buttons}>
-                                                                <Button style={"margin-top: 'auto'"} icon={'/images/icons/yt.svg'}/>
-                                                                <Button style={"margin-top: 'auto'"} icon={'/images/icons/vkmusic.svg'}/>
-                                                                <Button style={"margin-top: 'auto'"} icon={'/images/icons/spotify.svg'}/>
-                                                                <Button style={"margin-top: 'auto'"} icon={'/images/icons/ym.svg'}/>
+                                                                <Button icon={'/images/icons/yt.svg'}/>
+                                                                <Button icon={'/images/icons/vkmusic.svg'}/>
+                                                                <Button icon={'/images/icons/spotify.svg'}/>
+                                                                <Button icon={'/images/icons/ym.svg'}/>
                                                             </div>
                                                             {/* <Button style={"margin-top: 'auto'"} text={'Preview'} icon={'/images/icons/play.svg'}/> */}
                                                             <PreviewMusicButton name={object.name} src={object.preview}/>
