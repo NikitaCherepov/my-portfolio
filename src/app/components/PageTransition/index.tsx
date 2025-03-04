@@ -22,8 +22,8 @@ export default function PageTransition({children} : {children: React.ReactNode})
 
       const hide = async () => {
           await animate(scope.current, {x: '100vw'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0.5});
-          router.push(nextPage);
           animate(scope.current, {x: '-100vw'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0});
+          router.push(nextPage);
       }
       const show = async () => {
         await animate(scope.current, {x: '0'}, {ease: 'linear', type: 'tween', stiffness: 150, duration: 0.5});
@@ -44,7 +44,7 @@ export default function PageTransition({children} : {children: React.ReactNode})
           turnOffLeaving();
           show();
         }
-      }, [pathname])
+      }, [pathname, nextPage, isLeaving, setNextPage, turnOffLeaving])
 
 
       return (
