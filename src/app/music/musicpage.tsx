@@ -253,9 +253,9 @@ export default function MusicPage() {
 
             <div className={styles.myServices__buttons}>
 
-                <Button size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
-                <Button size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
-                <Button size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
+                <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
+                <Button link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
+                <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
                 <p>Псс... саундтрек нужен?</p>
 
             </div>

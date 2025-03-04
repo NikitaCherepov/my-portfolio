@@ -34,9 +34,13 @@ export default function ModalSites({toggleModal, id}: ModalSitesProps) {
                         ))}
                     </p>
                     <img alt='Скриншот сайта' className={styles.content__description__mainImage} src={object?.mainImage}></img>
-                    <div className={styles.content__description__buttons}>
-                        <Button link={object?.github} className={styles.link} background={'white'} text={'GitHub'} icon={'images/icons/github.svg'}></Button>
-                        <Button className={styles.link} background={'white'} text='Перейти' icon='images/icons/link.svg'></Button>
+                    <div style={object?.github === '' || object?.directLink === '' ? {justifyContent: 'center'} : undefined} className={styles.content__description__buttons}>
+                        {object?.github != '' && (
+                            <Button link={object?.github} className={styles.link} background={'white'} text={'GitHub'} icon={'images/icons/github.svg'}></Button>
+                        )}
+                        {object?.directLink != '' && (
+                            <Button link={object?.directLink} className={styles.link} background={'white'} text='Перейти' icon='images/icons/link.svg'></Button>
+                        )}
                     </div>
                 </div>
 

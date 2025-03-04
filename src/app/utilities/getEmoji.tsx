@@ -6,6 +6,8 @@ export default function getEmoji(text: string) {
         'Zustand': '📦 Zustand',
         'Typescript': '🔷 Typescript',
         'SCSS': '🎨 SCSS',
+        'dnd-kit': '🔀 dnd-kit',
+        'Bubble': '🟦 Bubble'
     };
     return emojiMap[text] || text;
 }

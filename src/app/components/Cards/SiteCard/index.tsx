@@ -67,10 +67,16 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                                         transition={transitionHoverSettings}
                                         key='hover'
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
+                                        style={object?.github === '' || object?.directLink === '' ? {justifyContent: 'flex-end', gap: '25px'} : undefined}
                                         >
                                             <Button onClick={() => toggleModal(object.id)} text={"Подробнее"}></Button>
-                                            <Button link={object.github} icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
-                                            <Button icon={'/images/icons/link.svg'}  text={"Перейти"}></Button>
+                                            {object?.github != '' && (
+                                                <Button link={object.github} icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
+                                            )}
+                                            {object?.directLink != '' && (
+                                                <Button link={object.directLink} icon={'/images/icons/link.svg'}  text={"Перейти"}></Button>
+                                            )}
+
                                         </motion.div>
                                     )
                                     :
@@ -103,8 +109,12 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                             <div className={styles.container__mainContent__stack}>
                                 {object?.stack?.join(", ")}
                             </div>
+                            {object?.github != '' && (
                             <Button link={object.github} icon={'/images/icons/github.svg'}/>
-                            <Button icon={'/images/icons/link.svg'}/>
+                            )}
+                            {object?.directLink != '' && (
+                            <Button link={object.directLink} icon={'/images/icons/link.svg'}/>
+                            )}
                             <Button onClick={() => toggleModal(object.id)} text={'Подробнее'}/>
 
                             <p className={styles.container__mainContent__date}>
