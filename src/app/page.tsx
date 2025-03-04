@@ -89,7 +89,7 @@ export default function MainPage() {
             priority
             quality={100}
             placeholder="blur" 
-            blurDataURL="/loaders/loaders.svg"
+            blurDataURL="/loaders/loader.svg"
           />
           <AnimatePresence>
             {hoverSites ? (
@@ -118,7 +118,7 @@ export default function MainPage() {
             priority
             quality={100}
             placeholder="blur" 
-            blurDataURL="/loaders/loaders.svg"
+            blurDataURL="/loaders/loader.svg"
           />
           <AnimatePresence>
             {hoverMusic ? (
