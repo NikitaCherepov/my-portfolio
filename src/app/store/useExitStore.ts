@@ -3,7 +3,6 @@ import {create} from 'zustand'
 import {createJSONStorage, persist} from 'zustand/middleware'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {v4 as uuidv4} from 'uuid'
-import { m } from 'framer-motion';
 
 //Для переключения между страниц
 interface ExitStore {
