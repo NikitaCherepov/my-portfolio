@@ -5,6 +5,9 @@ import Image from 'next/image'
 import styles from './page.module.scss'
 import { useInitiateExit } from './hooks/useInitiateExit'
 
+import musicImg from '/images/main/allSongs.webp';
+import sitesImg from '/images/main/sites.png';
+
 export default function MainPage() {
 
   const [hoverSites, setHoverSites] = useState(false);
@@ -81,7 +84,7 @@ export default function MainPage() {
           onClick={() => initiateExit('/music')}
         >
           <Image
-            src='/images/main/allSongs.webp'
+            src={musicImg}
             className={styles.choices__choiceButton__image}
             alt={'Музыкальные работы'}
             width={500}
@@ -110,7 +113,7 @@ export default function MainPage() {
           onClick={() => initiateExit('/sites')}
         >
           <Image
-            src='/images/main/sites.png'
+            src={sitesImg}
             className={`${styles.choices__choiceButton__image}`}
             alt={'Модель сайта'}
             width={500}
