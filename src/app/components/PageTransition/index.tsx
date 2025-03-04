@@ -44,7 +44,7 @@ export default function PageTransition({children} : {children: React.ReactNode})
           turnOffLeaving();
           show();
         }
-      }, [pathname, nextPage, isLeaving, setNextPage, turnOffLeaving, show])
+      }, [pathname])
 
 
       return (

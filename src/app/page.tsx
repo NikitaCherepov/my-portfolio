@@ -5,9 +5,6 @@ import Image from 'next/image'
 import styles from './page.module.scss'
 import { useInitiateExit } from './hooks/useInitiateExit'
 
-import musicImg from '/images/main/allSongs.webp';
-import sitesImg from '/images/main/sites.png';
-
 export default function MainPage() {
 
   const [hoverSites, setHoverSites] = useState(false);
@@ -84,15 +81,13 @@ export default function MainPage() {
           onClick={() => initiateExit('/music')}
         >
           <Image
-            src={musicImg}
+            src='/images/main/allSongs.webp'
             className={styles.choices__choiceButton__image}
             alt={'Музыкальные работы'}
             width={500}
             height={500}
             priority
             quality={100}
-            placeholder="blur" 
-            blurDataURL="/images/loaders/loader.svg"
           />
           <AnimatePresence>
             {hoverSites ? (
@@ -113,15 +108,13 @@ export default function MainPage() {
           onClick={() => initiateExit('/sites')}
         >
           <Image
-            src={sitesImg}
+            src='/images/main/sites.png'
             className={`${styles.choices__choiceButton__image}`}
             alt={'Модель сайта'}
             width={500}
             height={500}
             priority
             quality={100}
-            placeholder="blur" 
-            blurDataURL="/images/loaders/loader.svg"
           />
           <AnimatePresence>
             {hoverMusic ? (
