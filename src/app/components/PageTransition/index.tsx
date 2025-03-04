@@ -42,7 +42,7 @@ export default function PageTransition({children} : {children: React.ReactNode})
         if (pathname === nextPage && isLeaving) {
           setNextPage('');
           turnOffLeaving();
-          show();
+          setTimeout(() => show(), 100)
         }
       }, [pathname, nextPage, isLeaving, setNextPage, turnOffLeaving])
 

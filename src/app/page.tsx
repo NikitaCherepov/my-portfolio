@@ -81,7 +81,7 @@ export default function MainPage() {
           onClick={() => initiateExit('/music')}
         >
           <Image
-            src='/images/main/allSongs.webp'
+            src='/images/main/allSongs_compressed.webp'
             className={styles.choices__choiceButton__image}
             alt={'Музыкальные работы'}
             width={500}
