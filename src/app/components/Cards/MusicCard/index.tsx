@@ -63,10 +63,10 @@ export default function MusicCard({object} : MusicCardProps) {
                                                             <h2>{object.name}</h2>
                                                             <p className={styles.container__mainInfo__hoverMaterial__hoveredButtons__genres}>{object?.genre?.join(", ")}</p>
                                                             <div className={styles.container__mainInfo__hoverMaterial__hoveredButtons__buttons}>
-                                                                <Button icon={'/images/icons/yt.svg'}/>
-                                                                <Button icon={'/images/icons/vkmusic.svg'}/>
-                                                                <Button icon={'/images/icons/spotify.svg'}/>
-                                                                <Button icon={'/images/icons/ym.svg'}/>
+                                                                <Button link={object.youtube} icon={'/images/icons/yt.svg'}/>
+                                                                <Button link={object.vkmusic} icon={'/images/icons/vkmusic.svg'}/>
+                                                                <Button link={object.spotify} icon={'/images/icons/spotify.svg'}/>
+                                                                <Button link={object.ymusic} icon={'/images/icons/ym.svg'}/>
                                                             </div>
                                                             {/* <Button style={"margin-top: 'auto'"} text={'Preview'} icon={'/images/icons/play.svg'}/> */}
                                                             <PreviewMusicButton name={object.name} src={object.preview}/>
@@ -92,10 +92,10 @@ export default function MusicCard({object} : MusicCardProps) {
                             <div className={styles.container__mainContent__stack}>
                                 {object?.genre?.join(", ")}
                             </div>
-                            <Button icon={'/images/icons/yt.svg'}/>
-                            <Button icon={'/images/icons/spotify.svg'}/>
-                            <Button icon={'/images/icons/vkmusic.svg'}/>
-                            <Button icon={'/images/icons/ym.svg'}/>
+                            <Button link={object.youtube} icon={'/images/icons/yt.svg'}/>
+                            <Button link={object.spotify} icon={'/images/icons/spotify.svg'}/>
+                            <Button link={object.vkmusic} icon={'/images/icons/vkmusic.svg'}/>
+                            <Button link={object.ymusic} icon={'/images/icons/ym.svg'}/>
                             {/* <Button background={'white'} onClick={() => toggleModal(object.id)} text={'Preview'} icon={'/images/icons/play.svg'}/> */}
                             <PreviewMusicButton name={object.name} src={object?.preview}/>
 

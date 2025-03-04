@@ -80,7 +80,7 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                max-width: 300px;
+                max-width: 250px;
             }
         }
     
@@ -149,7 +149,7 @@
                     display: grid;
                     grid-template-columns: repeat(2, minmax(53px, 1fr));
                     gap: 20px 70px;
-                    margin-top: 30px;
+                    margin: 15px 0;
                 }
                 
             }
