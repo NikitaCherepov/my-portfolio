@@ -12,7 +12,7 @@ export const metadata = {
     siteName: "Портфолио Никиты Черепова",
     images: [
       {
-        url: "/preview.png",
+        url: "https://ncherepov.ru/preview.png",
         width: 64,
         height: 64,
         alt: "Описание изображения",
