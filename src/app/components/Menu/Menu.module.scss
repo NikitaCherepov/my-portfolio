@@ -16,6 +16,10 @@
         height: 500px;
         width: 365px;
 
+        @media (max-width: 450px) {
+            width: 300px;
+        }
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -31,6 +35,10 @@
             height: 100%;
             max-width: 300px;
             max-height: 75px;
+
+            @media (max-width: 450px) {
+                max-width: 90%;
+            }
 
             display: flex;
             justify-content: center;

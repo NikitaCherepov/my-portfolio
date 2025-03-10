@@ -64,6 +64,10 @@
             &_grid {
                 max-height: 391px;
                 max-width: 340px;
+                @media (max-width: 1600px) {
+                    max-width: 280px;
+                    max-height: 330px;
+                }
             }
             &_list {
                 max-height: 100px;

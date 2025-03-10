@@ -21,6 +21,7 @@
         justify-content: flex-start;
     
         width: 100%;
+        min-height: 36px;
 
         padding: 0 10px;
 
@@ -57,4 +58,22 @@
 
         z-index: 2;
     }
+}
+
+@media (max-width: 1000px) {
+    .container {
+        width: 180px;
+        height: 36px;
+    }
+
+}
+@media (max-width: 450px) {
+    .container {
+        width: 140px;
+        img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
 }
