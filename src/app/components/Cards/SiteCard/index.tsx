@@ -36,6 +36,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                 className={`${styles.container__mainInfo} ${view === 'list' ? styles.container__mainInfo_list : styles.container__mainInfo_grid}`}
                 onHoverStart={() => setHovering(true)}
                 onHoverEnd={() => setHovering(false)}
+                onTap={() => setHovering((prev) => !prev)}
                 >
 
 
