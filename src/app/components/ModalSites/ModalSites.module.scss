@@ -4,6 +4,9 @@
     max-width: 1200px;
     min-width: 320px;
 
+    max-height: 100vh;
+    overflow: auto;
+
     background: var(--background);
 
     display: flex;
