@@ -89,10 +89,12 @@ export default function SitesPage() {
     const toggleModal = (id: string | null) => {
         // !showModal ? document.body.classList.add("no-scroll") : document.body.classList.remove("no-scroll");
         if (id) {
-            setIdModal(id)
+            setIdModal(id);
+            document.body.style.overflow = 'hidden';
         }
         else {
-            setIdModal(null)
+            setIdModal(null);
+            document.body.style.overflow = '';
         }
         setShowModal((prev) => !prev);
     }
