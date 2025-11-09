@@ -26,6 +26,7 @@ model Site {
   description   String
   stack         String[]  // Массив технологий: ["React", "Next.js", "TypeScript"]
   features      String[]  // Массив особенностей: ["Дизайн", "Анимации", "Адаптивность"]
+  gallery       String[]  // Массив изображений галереи
   date          DateTime
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
