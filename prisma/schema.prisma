@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String?
+
+  @@map("users")
+}
+
+// Таблица для сайтов
+model Site {
+  id            String    @id @default(cuid())
+  name          String
+  mainImage     String
+  directLink    String
+  github        String    @default("")
+  description   String
+  stack         String[]  // Массив технологий: ["React", "Next.js", "TypeScript"]
+  features      String[]  // Массив особенностей: ["Дизайн", "Анимации", "Адаптивность"]
+  date          DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("sites")
+}
+
+// Таблица для жанров
+model Genre {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  music       Music[]
+
+  @@map("genres")
+}
+
+// Таблица для музыки
+model Music {
+  id          String    @id @default(cuid())
+  name        String
+  mainImage   String
+  youtube     String
+  spotify     String
+  vkmusic     String
+  ymusic      String
+  preview     String
+  date        DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  genreId     String
+
+  // Связь с жанром
+  genre       Genre     @relation(fields: [genreId], references: [id])
+
+  @@map("music")
+}

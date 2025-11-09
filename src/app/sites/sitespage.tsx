@@ -1,6 +1,7 @@
 'use client'
 import styles from './sites.module.scss'
 import { useWorkStore } from "../store/useExitStore"
+import { useSites } from "../hooks/useSites"
 import SiteCard from "../components/Cards/SiteCard"
 import { usePathname } from "next/navigation"
 import { useViewStore } from "../store/useExitStore"
@@ -86,6 +87,8 @@ export default function SitesPage() {
 
     const [showModal, setShowModal] = useState(false);
     const [idModal, setIdModal] = useState<string | null>(null);
+    const [sortedSites, setSortedSites] = useState<SiteWork[]>([]);
+    const [totalPages, setTotalPages] = useState(1);
     const toggleModal = (id: string | null) => {
         // !showModal ? document.body.classList.add("no-scroll") : document.body.classList.remove("no-scroll");
         if (id) {
@@ -98,7 +101,7 @@ export default function SitesPage() {
         }
         setShowModal((prev) => !prev);
     }
-    const {sites} = useWorkStore();
+    const {data: sites, isLoading, isSuccess} = useSites();
 
     const sortingMethods: Record<string, Record<string, (a: SiteWork, b: SiteWork) => number>> = {
         sites: {
@@ -113,13 +116,21 @@ export default function SitesPage() {
       };
       
 
-    const sortedSites = [...sites]
-    .sort(sortingMethods[pageKey][sortBy[pageKey]])
-    .slice((pagination[pageKey].currentPage - 1) * pagination[pageKey].cardsPerPage, pagination[pageKey].currentPage * pagination[pageKey].cardsPerPage);
-    const totalPages = Math.ceil(sites.length / pagination[pageKey].cardsPerPage);
+
+    useEffect(() => {
+        if (sites) {
+            const newSortedSites = [...sites]
+            .sort(sortingMethods[pageKey][sortBy[pageKey]])
+            .slice((pagination[pageKey].currentPage - 1) * pagination[pageKey].cardsPerPage, pagination[pageKey].currentPage * pagination[pageKey].cardsPerPage);
+            setSortedSites(newSortedSites);
+
+            const newTotalPages = Math.ceil(sites.length / pagination[pageKey].cardsPerPage);
+            setTotalPages(newTotalPages);
+        }
+    }, [sites, sortBy, pageKey, pagination])
     const delta = 2;
 
-    return (
+    if (sites && !isLoading && isSuccess) return (
         <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} layout className={`mainContainer  ${styles.container}`}>
             <AnimatePresence>
                 {showModal && 
@@ -208,9 +219,18 @@ export default function SitesPage() {
             </motion.div>
             
             
-            <Button onClick={() => toggleModal(sites?.find((el) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
+            <Button onClick={() => toggleModal(sites?.find((el: any) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
 
 
         </motion.div>
     )
+    else 
+        return (
+            <div className={`mainContainer  ${styles.container}`}>
+                <div className={styles.loader}>
+                    <img src='/images/loaders/loader.svg' />
+                </div>
+            </div>
+        );
+
 }
