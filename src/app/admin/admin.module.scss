@@ -1,0 +1,117 @@
+.admin {
+    min-height: 100vh;
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+
+    &__loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.125rem;
+        color: var(--header-name-color);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    &__header {
+        background: var(--footer-background);
+        color: var(--header-name-color);
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: var(--header-height);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    &__navGroup {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    &__navLink {
+        color: var(--header-name-color);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: var(--default-border-radius-small);
+        background: var(--button-light);
+        transition: all 0.3s ease;
+        font-family: 'JetBrains Mono', monospace;
+
+        &:hover {
+            background: var(--button-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        &_logout {
+            background: rgba(220, 53, 69, 0.8);
+
+            &:hover {
+                background: rgba(220, 53, 69, 1);
+            }
+        }
+    }
+
+    &__main {
+        flex: 1;
+        padding: 32px;
+        min-height: calc(100vh - var(--header-height));
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    height: 100%;
+    width: 100%;
+    background: var(--background);
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        padding: 22px;
+        text-align: center;
+    }
+
+    &__redirect {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.125rem;
+        color: var(--foreground);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
