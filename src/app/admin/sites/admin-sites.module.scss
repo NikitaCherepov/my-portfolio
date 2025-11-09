@@ -1,0 +1,107 @@
+.sites {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-height: 100%;
+
+    &__loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 60px 20px;
+
+        img {
+            width: 60px;
+            height: 60px;
+        }
+
+        p {
+            color: var(--header-name-color);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+        }
+    }
+
+    &__error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+
+        p {
+            color: #dc3545;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            font-size: 1.125rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: var(--white);
+        border-radius: var(--default-border-radius-small);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+        h1 {
+            font-size: 1.875rem;
+            margin: 0;
+            color: var(--header-name-color);
+            font-weight: bold;
+        }
+    }
+
+    &__addButton {
+        padding: 10px 20px;
+        background: var(--button-dark);
+        color: var(--header-name-color);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: var(--button-darkest);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__content {
+        flex: 1;
+    }
+
+    &__empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        background: var(--white);
+        border-radius: var(--default-border-radius-small);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+        p {
+            color: var(--header-name-color);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            opacity: 0.8;
+            font-size: 1.125rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .sites {
+        &__header {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+    }
+}
