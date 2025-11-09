@@ -9,8 +9,9 @@ datasource db {
 
 model User {
   id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String?
+  login String @unique
+  admin Boolean @default(false)
+  password String
 
   @@map("users")
 }
