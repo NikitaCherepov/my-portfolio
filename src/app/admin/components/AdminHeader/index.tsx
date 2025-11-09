@@ -42,6 +42,12 @@ export default function AdminHeader({ pathname }: AdminHeaderProps) {
           >
             Каталог
           </a>
+          <a
+            href="/admin/sites"
+            className={`${styles.header__navLink} ${isActiveLink('/admin/sites') ? styles.header__navLink_active : ''}`}
+          >
+            Сайты
+          </a>
         </nav>
       </div>
 
