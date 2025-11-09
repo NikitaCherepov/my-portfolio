@@ -8,6 +8,7 @@ import { useSortSitesStore } from '@/app/store/useExitStore'
 import styles from './PageTransition.module.scss'
 import Header from '../Header'
 import Footer from '../Footer'
+import { Toaster } from 'sonner'
 
 
 export default function PageTransition({children} : {children: React.ReactNode}) {
@@ -51,6 +52,10 @@ export default function PageTransition({children} : {children: React.ReactNode})
         <html>
           
           <body data-theme={pathname === "/music" ? "music" : "sites" }>
+                              <Toaster
+              position="top-right"
+              expand={true}
+              visibleToasts={10}/>
             {!hasHydrated ? (
               <div className={styles.container}>
                 <img alt='Загрузка' className={styles.container__loader} src='/images/loaders/loader.svg'></img>
