@@ -4,6 +4,7 @@ import { useLoginMutation } from '../../hooks/useLoginMutation';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAuth } from '../../hooks/useAuth';
+import styles from './admin-login.module.scss';
 
 interface LoginFormData {
   login: string;
@@ -45,26 +46,20 @@ export default function AdminLoginPage() {
 
   if (isLoading) {
     return (
-      <div style={{ padding: '20px' }}>
-        <p>Проверка аутентификации...</p>
+      <div className={styles.login__loading}>
+        Проверка аутентификации...
       </div>
     );
   }
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '50px auto',
-      padding: '20px',
-      border: '1px solid #ccc',
-      borderRadius: '8px'
-    }}>
-      <h1>Админ-панель</h1>
-      <p>Войдите для доступа к управлению</p>
+    <div className={styles.login}>
+      <form onSubmit={handleSubmit(handleLogin)} className={styles.login__form}>
+        <h1 className={styles.login__title}>Админ-панель</h1>
+        <p className={styles.login__subtitle}>Войдите для доступа к управлению</p>
 
-      <form onSubmit={handleSubmit(handleLogin)} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label htmlFor="login">Логин:</label>
+        <div className={styles.login__field}>
+          <label htmlFor="login" className={styles.login__label}>Логин:</label>
           <input
             id="login"
             type="text"
@@ -75,23 +70,17 @@ export default function AdminLoginPage() {
                 message: 'Минимум 3 символа'
               }
             })}
-            style={{
-              width: '100%',
-              padding: '8px',
-              marginTop: '5px',
-              border: errors.login ? '1px solid red' : '1px solid #ccc',
-              borderRadius: '4px'
-            }}
+            className={`${styles.login__input} ${errors.login ? styles.login__input_error : ''}`}
           />
           {errors.login && (
-            <p style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+            <p className={styles.login__error}>
               {errors.login.message}
             </p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="password">Пароль:</label>
+        <div className={styles.login__field}>
+          <label htmlFor="password" className={styles.login__label}>Пароль:</label>
           <input
             id="password"
             type="password"
@@ -102,16 +91,10 @@ export default function AdminLoginPage() {
                 message: 'Минимум 6 символов'
               }
             })}
-            style={{
-              width: '100%',
-              padding: '8px',
-              marginTop: '5px',
-              border: errors.password ? '1px solid red' : '1px solid #ccc',
-              borderRadius: '4px'
-            }}
+            className={`${styles.login__input} ${errors.password ? styles.login__input_error : ''}`}
           />
           {errors.password && (
-            <p style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+            <p className={styles.login__error}>
               {errors.password.message}
             </p>
           )}
@@ -120,31 +103,17 @@ export default function AdminLoginPage() {
         <button
           type="submit"
           disabled={isSubmitting || loginMutation.isPending}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: isSubmitting || loginMutation.isPending ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: isSubmitting || loginMutation.isPending ? 'not-allowed' : 'pointer'
-          }}
+          className={styles.login__button}
         >
           {isSubmitting || loginMutation.isPending ? 'Вход...' : 'Войти'}
         </button>
-      </form>
 
-      {loginMutation.error && (
-        <div style={{
-          marginTop: '15px',
-          padding: '10px',
-          backgroundColor: '#f8d7da',
-          color: '#721c24',
-          borderRadius: '4px',
-          border: '1px solid #f5c6cb'
-        }}>
-          Ошибка: {(loginMutation.error as any)?.error || 'Ошибка входа'}
-        </div>
-      )}
+        {loginMutation.error && (
+          <div className={styles.login__errorBox}>
+            Ошибка: {(loginMutation.error as any)?.error || 'Ошибка входа'}
+          </div>
+        )}
+      </form>
     </div>
   );
 }
