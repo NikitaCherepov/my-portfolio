@@ -149,7 +149,11 @@ export default function SitesPage() {
                         transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}}
                         className={styles.modal_container}
                         >
-                        <ModalSites id={idModal} toggleModal={(id: string | null) => toggleModal(id)}/>
+                        <ModalSites
+    id={idModal}
+    toggleModal={(id: string | null) => toggleModal(id)}
+    siteData={sortedSites.find(site => site.id === idModal)}
+/>
                         </motion.div>
                     </motion.div>
                 }

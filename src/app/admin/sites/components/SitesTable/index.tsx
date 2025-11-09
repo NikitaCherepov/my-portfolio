@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import sitesService from '../../../../services/sitesService';
 import { SiteWork } from '../../../../store/useExitStore';
+import { format } from 'date-fns';
 import styles from './SitesTable.module.scss';
 
 interface SitesTableProps {
@@ -33,16 +34,20 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
         }
     };
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | Date) => {
         try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ru-RU', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
+            // Обработка ISO строки от Prisma или Date объекта
+            const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+
+            // Проверка на валидность даты
+            if (isNaN(date.getTime())) {
+                return typeof dateString === 'string' ? dateString : 'Невалидная дата';
+            }
+
+            // Используем date-fns для форматирования
+            return format(date, 'dd.MM.yyyy');
         } catch {
-            return dateString;
+            return typeof dateString === 'string' ? dateString : 'Ошибка даты';
         }
     };
 
@@ -103,6 +108,12 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
                                     {formatDate(site.date)}
                                 </td>
                                 <td className={`${styles.table__cell} ${styles.table__cell_actions}`}>
+                                    <a
+                                        href={`/admin/sites/edit?id=${site.id}`}
+                                        className={`${styles.table__button} ${styles.table__button_edit}`}
+                                    >
+                                        ✏️ Подробнее
+                                    </a>
                                     <a
                                         href={site.directLink}
                                         target="_blank"

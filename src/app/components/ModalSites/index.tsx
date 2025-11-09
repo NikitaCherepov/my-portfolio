@@ -1,18 +1,15 @@
 import styles from './ModalSites.module.scss'
-import { useWorkStore } from '@/app/store/useExitStore'
 import Button from '../Cards/SiteCard/Button';
 import getEmoji from '@/app/utilities/getEmoji';
 
 interface ModalSitesProps {
     toggleModal: (id: string | null) => void,
-    id: string | null
+    id: string | null,
+    siteData?: any // данные сайта из API
 }
 
-
-
-export default function ModalSites({toggleModal, id}: ModalSitesProps) {
-    const {sites} = useWorkStore();
-    const object = sites.find((el) => el.id === id);
+export default function ModalSites({toggleModal, id, siteData}: ModalSitesProps) {
+    const object = siteData;
     return (
         <div className={`${styles.container}`} onClick={(e) => e.stopPropagation()}>
             <div onClick={() => toggleModal(null)} className={`${styles.closeButton} hoverEffect`}>
