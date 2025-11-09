@@ -56,6 +56,8 @@
     }
 
     &__addButton {
+        display: inline-flex;
+        align-items: center;
         padding: 10px 20px;
         background: var(--button-dark);
         color: var(--header-name-color);
@@ -65,11 +67,14 @@
         font-family: 'JetBrains Mono', monospace;
         font-weight: bold;
         transition: all 0.3s ease;
+        text-decoration: none;
 
         &:hover {
             background: var(--button-darkest);
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            color: var(--header-name-color);
         }
     }
 

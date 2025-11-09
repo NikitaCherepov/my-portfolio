@@ -3,6 +3,7 @@ import {useState} from 'react'
 import styles from './SiteCard.module.scss'
 import Button from './Button'
 import { SiteWork, useViewStore } from '@/app/store/useExitStore'
+import { format, parseISO, isValid } from 'date-fns'
 
 import {AnimatePresence, motion} from 'framer-motion'
 
@@ -17,6 +18,16 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
 
     const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
     const transitionHoverSettings = {duration: 0.2}
+
+    const formatDisplayDate = (value: string) => {
+        try {
+            const date = parseISO(value);
+            if (!isValid(date)) return value;
+            return format(date, 'dd.MM.yyyy');
+        } catch {
+            return value;
+        }
+    }
 
     return (
         <motion.div
@@ -119,7 +130,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                             <Button onClick={() => toggleModal(object.id)} text={'Подробнее'}/>
 
                             <p className={styles.container__mainContent__date}>
-                                {object.date}
+                                {formatDisplayDate(object.date)}
                             </p>
                         </div>
                     )

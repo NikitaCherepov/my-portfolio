@@ -31,9 +31,9 @@ export default function AdminSitesPage() {
     <div className={styles.sites}>
       <div className={styles.sites__header}>
         <h1>Управление сайтами</h1>
-        <button className={styles.sites__addButton}>
+        <a href="/admin/sites/create" className={styles.sites__addButton}>
           Добавить сайт
-        </button>
+        </a>
       </div>
 
       <div className={styles.sites__content}>
