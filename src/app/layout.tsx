@@ -1,5 +1,6 @@
 import './global.css'
 import PageTransition from './components/PageTransition'
+import ReactQueryProvider from './providers/ReactQueryProvider'
 
 export const metadata = {
   title: "Портфолио Никиты Черепова | Музыка и сайты",
@@ -25,8 +26,10 @@ export const metadata = {
 
 
 export default function RootLayout({children} : {children: React.ReactNode}) {
-  
+
   return (
-    <PageTransition>{children}</PageTransition>
+    <ReactQueryProvider>
+      <PageTransition>{children}</PageTransition>
+    </ReactQueryProvider>
   )
 }

@@ -8,6 +8,18 @@
     height: 100%;
     gap: 26px;
 
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+
+        img {
+            width: 60px;
+            height: 60px;
+        }
+    }
+
     &__cards {
         display: grid;
         width: 100%;
