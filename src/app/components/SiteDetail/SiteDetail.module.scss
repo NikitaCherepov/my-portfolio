@@ -1,7 +1,7 @@
 .siteDetail {
   display: grid;
   grid-template-rows: auto 1fr;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  min-height: calc(100vh);
   background: var(--background);
   color: var(--header-name-color); // Черный цвет по умолчанию для всего текста
   position: relative;
@@ -127,12 +127,17 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     // border: 1px solid rgba(175, 175, 175, 0.1);
     overflow: hidden; // Важно для Swiper
+    width: 100%;
+
+    max-height: 500px;
   }
 
   &__swiper {
     position: relative;
     width: 100%;
     background: var(--foreground);
+    display: flex !important;
+    height: 100%;
 
     // Изолируем Swiper от внешних стилей
     // contain: layout style paint;
@@ -147,7 +152,11 @@
     :global(.swiper-wrapper) {
       align-items: center; // Центрируем слайды по вертикали
       width: 500px;
-      height: fit-content;
+      height: 100%;
+
+      @media (max-width: 550px) {
+        width: 300px;
+      }
     }
 
     :global(.swiper-slide) {
@@ -191,6 +200,7 @@
       width: 20px;
       height: 20px;
       transition: transform 0.2s ease;
+      object-fit: cover;
     }
 
     &_prev {
