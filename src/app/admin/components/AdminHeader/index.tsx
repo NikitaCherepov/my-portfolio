@@ -36,18 +36,24 @@ export default function AdminHeader({ pathname }: AdminHeaderProps) {
       <div className={styles.header__navGroup}>
         <h1 className={styles.header__title}>Админ-панель</h1>
         <nav className={styles.header__nav}>
-          <a
-            href="/admin/catalog"
+          <button
+            onClick={() => router.push('/admin/catalog')}
             className={`${styles.header__navLink} ${isActiveLink('/admin/catalog') ? styles.header__navLink_active : ''}`}
           >
             Каталог
-          </a>
-          <a
-            href="/admin/sites"
+          </button>
+          <button
+            onClick={() => router.push('/admin/sites')}
             className={`${styles.header__navLink} ${isActiveLink('/admin/sites') ? styles.header__navLink_active : ''}`}
           >
             Сайты
-          </a>
+          </button>
+          <button
+            onClick={() => router.push('/admin/genres')}
+            className={`${styles.header__navLink} ${isActiveLink('/admin/genres') ? styles.header__navLink_active : ''}`}
+          >
+            Жанры
+          </button>
         </nav>
       </div>
 

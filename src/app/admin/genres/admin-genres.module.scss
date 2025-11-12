@@ -1,0 +1,174 @@
+.genres {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-height: 100%;
+
+    &__loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 60px 20px;
+
+        img {
+            width: 60px;
+            height: 60px;
+        }
+
+        p {
+            color: var(--header-name-color);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+        }
+    }
+
+    &__error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+
+        p {
+            color: #dc3545;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            font-size: 1.125rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: var(--white);
+        border-radius: var(--default-border-radius-small);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+        h1 {
+            font-size: 1.875rem;
+            margin: 0;
+            color: var(--header-name-color);
+            font-weight: bold;
+        }
+
+        &-add {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+    }
+
+    &__addButton {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background: #28a745;
+        color: var(--white);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-decoration: none;
+
+        &:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            text-decoration: none;
+            color: var(--white);
+        }
+
+        &:disabled {
+            background: var(--button-darkest);
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+        }
+    }
+
+    &__input {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        input {
+            padding: 10px 16px;
+            border: 1px solid var(--button-darkest);
+            border-radius: var(--default-border-radius-small);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            background: var(--white);
+            color: var(--header-name-color);
+            transition: all 0.3s ease;
+            width: 250px;
+
+            &:focus {
+                outline: none;
+                border-color: var(--button-dark);
+                box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+            }
+
+            &::placeholder {
+                color: var(--header-name-color);
+                opacity: 0.5;
+            }
+
+            &.error {
+                border-color: #dc3545;
+                background-color: rgba(220, 53, 69, 0.05);
+            }
+        }
+    }
+
+    &__content {
+        flex: 1;
+    }
+
+    &__empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        background: var(--white);
+        border-radius: var(--default-border-radius-small);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+        p {
+            color: var(--header-name-color);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            opacity: 0.8;
+            font-size: 1.125rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .genres {
+        &__header {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+
+            &-add {
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+            }
+        }
+
+        &__input {
+            width: 100%;
+
+            input {
+                flex: 1;
+                width: 100%;
+            }
+        }
+    }
+}
