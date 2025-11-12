@@ -1,5 +1,6 @@
 'use client'
 import {useState} from 'react'
+import {useRouter} from 'next/navigation'
 import styles from './SiteCard.module.scss'
 import Button from './Button'
 import { SiteWork, useViewStore } from '@/app/store/useExitStore'
@@ -15,6 +16,7 @@ interface SiteCardProps {
 export default function SiteCard({object, toggleModal} : SiteCardProps) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
+    const router = useRouter();
 
     const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
     const transitionHoverSettings = {duration: 0.2}
@@ -29,6 +31,10 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
         }
     }
 
+    const handleNavigateToDetail = () => {
+        router.push(`/sites/site?id=${object.id}`);
+    }
+
     return (
         <motion.div
         className={`${styles.container} ${view === 'list' ? styles.container_list : styles.container_grid}`}
@@ -36,7 +42,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
         layout
         transition={transitionSettings}
         >
-                                <motion.button onClick={() => toggleModal(object.id)} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
+                                <motion.button onClick={handleNavigateToDetail} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
                                 <motion.img transition={transitionSettings} layout src='/images/icons/square.svg'></motion.img>
                             </motion.button>
 
@@ -81,7 +87,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                         style={object?.github === '' || object?.directLink === '' ? {justifyContent: 'flex-end', gap: '25px'} : undefined}
                                         >
-                                            <Button onClick={() => toggleModal(object.id)} text={"Подробнее"}></Button>
+                                            <Button onClick={handleNavigateToDetail} text={"Подробнее"}></Button>
                                             {object?.github != '' && (
                                                 <Button link={object.github} icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
                                             )}
@@ -127,7 +133,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                             {object?.directLink != '' && (
                             <Button link={object.directLink} icon={'/images/icons/link.svg'}/>
                             )}
-                            <Button onClick={() => toggleModal(object.id)} text={'Подробнее'}/>
+                            <Button onClick={handleNavigateToDetail} text={'Подробнее'}/>
 
                             <p className={styles.container__mainContent__date}>
                                 {formatDisplayDate(object.date)}

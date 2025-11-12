@@ -1,0 +1,724 @@
+.siteDetail {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  background: var(--background);
+  color: var(--header-name-color); // Черный цвет по умолчанию для всего текста
+  position: relative;
+
+  // Добавляем красивый градиентный фон
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+      var(--background) 0%,
+      rgba(217, 217, 217, 0.1) 50%,
+      var(--background) 100%);
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  // Базовый текстовый контейнер для консистентности
+  &__textContent {
+    color: var(--header-name-color);
+
+    // Инвертированные цвета для серых фонов
+    &_inverted {
+      color: var(--background);
+    }
+  }
+}
+
+// Навигационная секция - Flexbox
+.navigation {
+  display: flex;
+  align-items: center;
+  padding: 25px 40px;
+  background: var(--foreground);
+  border-bottom: 2px solid var(--button-darkest);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  &__backButton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: var(--background);
+    border: none;
+    border-radius: var(--default-border-radius-small);
+    color: var(--header-name-color);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &__icon {
+      width: 22px;
+      height: 22px;
+      transform: rotate(180deg);
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+      &__icon {
+        transform: rotate(180deg) translateX(-3px);
+      }
+    }
+  }
+
+  &__date {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--header-name-color);
+    font-weight: 500;
+    opacity: 0.9;
+  }
+}
+
+// Основной контент - CSS Grid
+.main {
+  flex: 1;
+  display: flex;
+  padding: 50px 40px;
+  position: relative;
+  z-index: 1;
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 70px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+// Левая колонка с галереей - Flexbox
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+
+  &__container {
+    position: relative;
+    border-radius: var(--default-border-radius-big);
+    background: var(--white);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    // border: 1px solid rgba(175, 175, 175, 0.1);
+    overflow: hidden; // Важно для Swiper
+  }
+
+  &__swiper {
+    position: relative;
+    width: 100%;
+    background: var(--foreground);
+
+    // Изолируем Swiper от внешних стилей
+    // contain: layout style paint;
+
+    :global(.swiper) {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; // Обязательно для Swiper
+      border-radius: var(--default-border-radius-big);
+    }
+
+    :global(.swiper-wrapper) {
+      align-items: center; // Центрируем слайды по вертикали
+      width: 500px;
+      height: fit-content;
+    }
+
+    :global(.swiper-slide) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--foreground); // Серый фон вместо белого
+      padding: 30px;
+      min-height: 100%;
+    }
+
+    // Кастомные кнопки навигации
+  &__navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: var(--foreground);
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background: var(--button-darkest);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s ease;
+    }
+
+    &_prev {
+      left: 20px;
+
+      img {
+        transform: rotate(180deg);
+      }
+    }
+
+    &_next {
+      right: 20px;
+    }
+  }
+
+    // Кастомная пагинация
+    :global(.swiper-pagination-bullet) {
+      width: 20px;
+      height: 20px;
+      background: var(--white);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+      margin: 0 4px;
+    }
+
+    :global(.swiper-pagination-bullet-active) {
+      background: var(--header-name-color);
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
+
+  // Custom nav buttons (outside of &__swiper so class names match JSX)
+  &__navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: var(--foreground);
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background: var(--button-darkest);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s ease;
+    }
+
+    &_prev {
+      left: 20px;
+
+      img {
+        transform: rotate(270deg);
+      }
+    }
+
+    &_next {
+      right: 20px;
+      img {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  &__image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: scale(1.01);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+// Описание проекта - Flexbox
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px;
+  background: var(--foreground);
+  border-radius: var(--default-border-radius-big);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(175, 175, 175, 0.1);
+
+  &__title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--header-name-color);
+    color: var(--header-name-color); // Черный цвет
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--header-name-color); // Черный цвет
+
+    p {
+      margin: 0;
+      text-align: justify;
+    }
+  }
+}
+
+// Правая колонка (сайдбар) - Flexbox
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: sticky;
+  top: 40px;
+  height: fit-content;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    background: var(--foreground);
+    border-radius: var(--default-border-radius-big);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(175, 175, 175, 0.1);
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.2;
+    color: var(--header-name-color); // Черный цвет
+    text-align: center;
+  }
+}
+
+// Технологический стек - Flexbox
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 25px;
+  background: var(--foreground);
+  border-radius: var(--default-border-radius-big);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(175, 175, 175, 0.1);
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: var(--header-name-color); // Черный текст на белом фоне
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--white);
+    border-radius: var(--default-border-radius-small);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__emoji {
+    font-size: 1.5rem;
+    min-width: 30px;
+    text-align: center;
+  }
+
+  &__name {
+    font-size: 1.125rem;
+    color: var(--header-name-color); // Черный цвет
+    font-weight: 500;
+  }
+}
+
+// Особенности проекта - теперь интегрированы в описание
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px solid var(--button-darkest);
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: var(--header-name-color);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  &__item {
+    font-size: 1.125rem;
+    color: var(--header-name-color);
+    line-height: 1.6;
+    position: relative;
+    padding-left: 36px;
+    display: flex;
+    align-items: flex-start;
+
+    // Кастомный маркер с галочкой
+    &::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 24px;
+      height: 24px;
+      background: var(--button-dark);
+      border-radius: 50%;
+      color: var(--header-name-color);
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    &:hover::before {
+      background: var(--button-darkest);
+      transform: scale(1.1);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+// Кнопки действий - Flexbox
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 30px;
+  background: var(--white);
+  border-radius: var(--default-border-radius-big);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(175, 175, 175, 0.1);
+  background: var(--foreground);
+
+  a {
+    width: 100%;
+    justify-content: center;
+    padding: 18px 24px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-radius: var(--default-border-radius-small);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    max-width: none !important;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
+// Адаптивность через Flexbox/Grid
+@media (max-width: 1200px) {
+  .main {
+    &__content {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+  }
+
+  .sidebar {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .navigation {
+    padding: 20px 25px;
+
+    &__content {
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    &__backButton {
+      font-size: 1.125rem;
+      padding: 12px 18px;
+    }
+  }
+
+  .main {
+    padding: 30px 25px;
+  }
+
+  .gallery {
+    gap: 30px;
+
+    &__swiper {
+      height: 350px;
+
+      // Кастомные стрелки для мобильных
+      :global(.swiper-button-next),
+      :global(.swiper-button-prev) {
+        width: 40px;
+        height: 40px;
+
+        &::after {
+          font-size: 14px;
+        }
+      }
+
+      :global(.swiper-button-next) {
+        right: 15px;
+      }
+
+      :global(.swiper-button-prev) {
+        left: 15px;
+      }
+    }
+  }
+
+  .description {
+    gap: 20px;
+    padding: 25px;
+
+    &__title {
+      font-size: 1.75rem;
+    }
+
+    &__text {
+      font-size: 1.125rem;
+    }
+  }
+
+  .sidebar {
+    gap: 30px;
+
+    &__header {
+      padding: 25px;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+  }
+
+  .stack {
+    padding: 25px;
+
+    &__title {
+      font-size: 1.375rem;
+    }
+
+    &__item {
+      padding: 12px;
+    }
+
+    &__name {
+      font-size: 1rem;
+    }
+  }
+
+  
+  .actions {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navigation {
+    padding: 15px 20px;
+
+    &__backButton {
+      font-size: 1rem;
+      padding: 10px 15px;
+    }
+  }
+
+  .main {
+    padding: 20px 15px;
+  }
+
+  .gallery {
+    gap: 25px;
+
+    &__swiper {
+      height: 280px;
+
+      :global(.swiper-slide) {
+        padding: 20px;
+      }
+    }
+  }
+
+  .description {
+    padding: 20px;
+
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__text {
+      font-size: 1rem;
+    }
+  }
+
+  .sidebar {
+    gap: 25px;
+
+    &__header {
+      padding: 20px;
+    }
+
+    &__title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .stack {
+    padding: 20px;
+    gap: 15px;
+
+    &__title {
+      font-size: 1.25rem;
+    }
+
+    &__item {
+      padding: 10px;
+      gap: 10px;
+    }
+
+    &__emoji {
+      font-size: 1.25rem;
+      min-width: 25px;
+    }
+
+    &__name {
+      font-size: 0.9rem;
+    }
+  }
+
+  .description {
+    gap: 15px;
+
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__text {
+      font-size: 1.125rem;
+    }
+  }
+
+  .features {
+    margin-top: 25px;
+    padding-top: 25px;
+
+    &__title {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    &__list {
+      padding-left: 20px;
+    }
+
+    &__item {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+
+  .actions {
+    padding: 20px;
+    flex-direction: row;
+    gap: 12px;
+
+    &__button {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+    }
+  }
+}
