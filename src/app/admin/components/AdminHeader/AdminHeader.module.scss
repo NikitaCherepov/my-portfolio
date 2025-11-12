@@ -41,10 +41,13 @@
         color: var(--header-name-color);
         text-decoration: none;
         padding: 8px 16px;
+        border: none;
         border-radius: var(--default-border-radius-small);
         background: var(--button-light);
         transition: all 0.3s ease;
         font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        cursor: pointer;
 
         &:hover {
             background: var(--button-dark);

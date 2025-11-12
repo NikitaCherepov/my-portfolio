@@ -1,9 +1,11 @@
 'use client';
 import { useAuth } from '../../hooks/useAuth';
+import { useRouter } from 'next/navigation';
 import styles from './admin-catalog.module.scss';
 
 export default function AdminCatalogPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <div className={styles.catalog}>
@@ -18,7 +20,7 @@ export default function AdminCatalogPage() {
         <div className={styles.catalog__card}>
           <h3>Управление сайтами</h3>
           <p>Добавление, редактирование и удаление сайтов</p>
-          <button className={styles.catalog__cardButton}>
+          <button onClick={() => router.push('/admin/sites')} className={styles.catalog__cardButton}>
             Управление сайтами
           </button>
         </div>
@@ -34,7 +36,7 @@ export default function AdminCatalogPage() {
         <div className={styles.catalog__card}>
           <h3>Управление жанрами</h3>
           <p>Добавление и редактирование музыкальных жанров</p>
-          <button className={styles.catalog__cardButton}>
+          <button onClick={() => router.push('/admin/genres')} className={styles.catalog__cardButton}>
             Управление жанрами
           </button>
         </div>
