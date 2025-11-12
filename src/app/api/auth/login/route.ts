@@ -65,7 +65,6 @@ export async function POST(request: NextRequest) {
       user: {
         id: user.id,
         login: user.login,
-        name: user.name,
         admin: user.admin
       }
     });
