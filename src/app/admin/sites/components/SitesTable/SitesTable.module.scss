@@ -15,6 +15,9 @@
 
     &__header {
         background: var(--foreground);
+        display: grid;
+        grid-template-columns: 200px 1fr 1fr 1fr 100px 1.5fr;
+        width: 100%;
 
         th {
             padding: 16px 12px;
@@ -25,6 +28,8 @@
             font-size: 0.875rem;
             white-space: nowrap;
             border-bottom: 2px solid var(--background);
+            display: flex;
+            align-items: center;
 
             &:first-child {
                 padding-left: 20px;
@@ -33,14 +38,21 @@
             &:last-child {
                 padding-right: 20px;
                 text-align: center;
+                justify-content: center;
             }
         }
     }
 
     &__body {
+        display: flex;
+        flex-direction: column;
+
         tr {
+            height: fit-content;
             border-bottom: 1px solid var(--button-darkest);
             transition: background-color 0.3s ease;
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr 100px 1.5fr;
 
             &:hover {
                 background: var(--background);
@@ -49,11 +61,20 @@
             &:last-child {
                 border-bottom: none;
             }
+
+            td {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                width: 100%;
+                overflow: hidden;
+                min-width: 0;
+            }
         }
     }
 
     &__cell {
-        padding: 16px 12px;
+        padding: 5px 5px;
         font-family: 'JetBrains Mono', monospace;
         color: var(--header-name-color);
         font-size: 0.875rem;
@@ -67,12 +88,12 @@
             padding-right: 20px;
         }
 
-        &-name {
+        &_name {
             font-weight: bold;
             color: var(--header-name-color);
         }
 
-        &-link {
+        &_link {
             a {
                 color: #007bff;
                 text-decoration: none;
@@ -84,8 +105,11 @@
             }
         }
 
-        &-stack {
+        &_stack {
             max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
 
             &__item {
                 display: inline-block;
@@ -98,13 +122,13 @@
             }
         }
 
-        &-date {
+        &_date {
             color: var(--header-name-color);
             opacity: 0.7;
             white-space: nowrap;
         }
 
-        &-actions {
+        &_actions {
             display: flex;
             gap: 8px;
             justify-content: center;
@@ -124,9 +148,11 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
+        white-space: nowrap;
 
-        &-edit {
+        &_edit {
             background: #17a2b8;
             color: var(--white);
 
@@ -137,7 +163,7 @@
             }
         }
 
-        &-view {
+        &_view {
             background: #007bff;
             color: var(--white);
 
@@ -148,7 +174,7 @@
             }
         }
 
-        &-delete {
+        &_delete {
             background: #dc3545;
             color: var(--white);
 
@@ -175,11 +201,11 @@
         }
 
         &__cell {
-            &-stack {
+            &_stack {
                 max-width: 150px;
             }
 
-            &-actions {
+            &_actions {
                 flex-direction: column;
                 align-items: center;
                 gap: 4px;
