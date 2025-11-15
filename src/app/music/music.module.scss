@@ -1,3 +1,25 @@
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-height: calc(100vh - var(--header-height));
+    padding: 60px 20px;
+
+    img {
+        width: 60px;
+        height: 60px;
+    }
+
+    p {
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        margin: 0;
+        opacity: 0.8;
+    }
+}
+
 .container {
     display: flex;
     flex-direction: column;

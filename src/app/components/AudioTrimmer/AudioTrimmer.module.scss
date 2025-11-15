@@ -1,0 +1,260 @@
+.audioTrimmer {
+    width: 100%;
+
+    &__upload {
+        width: 100%;
+    }
+
+    &__dropZone {
+        border: 2px dashed var(--button-darkest);
+        border-radius: var(--default-border-radius-small);
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--white);
+
+        &:hover, &_dragging {
+            border-color: #007bff;
+            background: rgba(0, 123, 255, 0.05);
+        }
+
+        &Content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        &Icon {
+            font-size: 3rem;
+            opacity: 0.6;
+        }
+
+        &Text {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--header-name-color);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        &Hint {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--header-name-color);
+            font-size: 0.875rem;
+            opacity: 0.6;
+        }
+    }
+
+    &__player {
+        background: var(--white);
+        border-radius: var(--default-border-radius-small);
+        border: 1px solid var(--button-darkest);
+        overflow: hidden;
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        background: var(--background);
+        border-bottom: 1px solid var(--button-darkest);
+        gap: 16px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+    }
+
+    &__playButton {
+        background: #28a745;
+        color: var(--white);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        padding: 8px 16px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            background: var(--button-darkest);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+
+    &__changeButton {
+        background: var(--button-dark);
+        color: var(--header-name-color);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        padding: 8px 12px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            background: var(--button-darkest);
+            transform: translateY(-1px);
+        }
+    }
+
+    &__time {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--header-name-color);
+        font-size: 0.875rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    &__trimControls {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__slider {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--header-name-color);
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--button-darkest);
+            outline: none;
+            -webkit-appearance: none;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #007bff;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: #0056b3;
+                    transform: scale(1.1);
+                }
+            }
+
+            &::-moz-range-thumb {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #007bff;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: #0056b3;
+                    transform: scale(1.1);
+                }
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+
+                &::-webkit-slider-thumb {
+                    cursor: not-allowed;
+                }
+
+                &::-moz-range-thumb {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+    }
+
+    &__trimButton {
+        background: #17a2b8;
+        color: var(--white);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        padding: 10px 20px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            background: #138496;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        }
+
+        &:disabled {
+            background: var(--button-darkest);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+
+    &__resetButton {
+        background: #6c757d;
+        color: var(--white);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        padding: 10px 20px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            background: #5a6268;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+        }
+
+        &:disabled {
+            background: var(--button-darkest);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+
+    &__info {
+        text-align: center;
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--header-name-color);
+        font-size: 0.875rem;
+        padding: 12px;
+        background: var(--background);
+        border-radius: var(--default-border-radius-small);
+        border: 1px solid var(--button-darkest);
+    }
+}

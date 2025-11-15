@@ -28,7 +28,7 @@ export default function AdminCatalogPage() {
         <div className={styles.catalog__card}>
           <h3>Управление музыкой</h3>
           <p>Добавление, редактирование и удаление музыкальных треков</p>
-          <button className={styles.catalog__cardButton}>
+          <button onClick={() => router.push('/admin/music')} className={styles.catalog__cardButton}>
             Управление музыкой
           </button>
         </div>

@@ -3,6 +3,7 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 const UPLOAD_DIR = 'public/uploads/sites';
+const AUDIO_UPLOAD_DIR = 'public/uploads/audio';
 
 export interface UploadedFile {
   filename: string;
@@ -93,6 +94,69 @@ export function validateMultipleFiles(files: File[]): boolean {
   }
 
   files.forEach(file => validateImageFile(file));
+
+  return true;
+}
+
+/**
+ * Сохраняет аудиофайл и возвращает информацию о нем
+ */
+export async function saveAudioFile(file: File | Blob): Promise<UploadedFile> {
+  try {
+    // Создаем директорию для аудио, если она не существует
+    const fullPath = join(process.cwd(), AUDIO_UPLOAD_DIR);
+    await mkdir(fullPath, { recursive: true });
+
+    // Генерируем уникальное имя файла
+    const timestamp = Date.now();
+    const uniqueId = uuidv4().slice(0, 8);
+    const originalName = (file as File).name || 'audio';
+    const extension = originalName.split('.').pop() || 'mp3';
+    const filename = `${timestamp}_${uniqueId}.${extension}`;
+
+    // Получаем файл как буфер
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Сохраняем файл
+    const filepath = join(fullPath, filename);
+    await writeFile(filepath, buffer);
+
+    // Возвращаем URL для доступа к файлу
+    const url = `/uploads/audio/${filename}`;
+
+    return {
+      filename,
+      filepath,
+      url
+    };
+  } catch (error) {
+    console.error('Error saving audio file:', error);
+    throw new Error('Failed to save audio file');
+  }
+}
+
+/**
+ * Валидация аудиофайла
+ */
+export function validateAudioFile(file: File): boolean {
+  const allowedTypes = [
+    'audio/mpeg',     // MP3
+    'audio/wav',      // WAV
+    'audio/ogg',      // OGG
+    'audio/m4a',      // M4A/AAC
+    'audio/mp3',      // MP3 (alternative)
+    'audio/x-wav'     // WAV (alternative)
+  ];
+  const maxSize = 50 * 1024 * 1024; // 50MB для аудио
+
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error('Invalid file type. Only MP3, WAV, OGG, and M4A audio files are allowed.');
+  }
+
+  if (file.size > maxSize) {
+    throw new Error('File size too large. Maximum size is 50MB.');
+  }
 
   return true;
 }

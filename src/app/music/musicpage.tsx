@@ -1,6 +1,6 @@
 'use client'
 import styles from './music.module.scss'
-import { useWorkStore } from "../store/useExitStore"
+import { useMusic } from "../hooks/useMusic"
 import { usePathname } from "next/navigation"
 import { useViewStore } from "../store/useExitStore"
 import { useSortSitesStore } from "../store/useExitStore"
@@ -12,7 +12,7 @@ import Button from "../components/Cards/SiteCard/Button"
 import SortingComponentForList from "../components/SortingComponentForList"
 import PlayerWatcher from "../components/PlayerWatcher"
 import MusicPlayer from "../components/MusicPlayer"
-import { MusicWork } from '../store/useExitStore'
+import { Music } from '../services/musicService'
 
 
 export default function MusicPage() {
@@ -98,14 +98,24 @@ export default function MusicPage() {
     //     setShowModal((prev) => !prev);
     // }
 
-    const {music} = useWorkStore();
+    const {music, loading} = useMusic();
 
-    const sortingMethods: Record<string, Record<string, (a: MusicWork, b: MusicWork) => number>> = {
+    // Показываем loader во время загрузки
+    if (loading) {
+        return (
+            <div className={styles.loading}>
+                <img src='/images/loaders/loader.svg' alt="Загрузка" />
+                <p>Загрузка музыки...</p>
+            </div>
+        );
+    }
+
+    const sortingMethods: Record<string, Record<string, (a: Music, b: Music) => number>> = {
         music: {
             newest: (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
             oldest: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-            genreFromA: (a, b) => a.genre[0]?.localeCompare(b.genre[0], "en"),
-            genreFromZ: (a, b) => b.genre[0]?.localeCompare(a.genre[0], "en"),
+            genreFromA: (a, b) => a.genre.name.localeCompare(b.genre.name, "ru"),
+            genreFromZ: (a, b) => b.genre.name.localeCompare(a.genre.name, "ru"),
             nameFromA: (a, b) => a.name.localeCompare(b.name, "ru"),
             nameFromZ: (a, b) => b.name.localeCompare(a.name, "ru"),
         }
