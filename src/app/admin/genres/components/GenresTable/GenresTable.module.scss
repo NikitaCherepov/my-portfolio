@@ -15,6 +15,9 @@
 
     &__header {
         background: var(--foreground);
+        display: grid;
+        grid-template-columns: 250px 1fr 150px 120px;
+        width: 100%;
 
         th {
             padding: 16px 12px;
@@ -25,6 +28,8 @@
             font-size: 0.875rem;
             white-space: nowrap;
             border-bottom: 2px solid var(--background);
+            display: flex;
+            align-items: center;
 
             &:first-child {
                 padding-left: 20px;
@@ -33,15 +38,21 @@
             &:last-child {
                 padding-right: 20px;
                 text-align: center;
-                width: 120px;
+                justify-content: center;
             }
         }
     }
 
     &__body {
+        display: flex;
+        flex-direction: column;
+
         tr {
+            height: fit-content;
             border-bottom: 1px solid var(--button-darkest);
             transition: background-color 0.3s ease;
+            display: grid;
+            grid-template-columns: 250px 1fr 150px 120px;
 
             &:hover {
                 background: var(--background);
@@ -50,11 +61,18 @@
             &:last-child {
                 border-bottom: none;
             }
+
+            td {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                width: 100%;
+            }
         }
     }
 
     &__cell {
-        padding: 16px 12px;
+        padding: 15px 5px;
         font-family: 'JetBrains Mono', monospace;
         color: var(--header-name-color);
         font-size: 0.875rem;
@@ -68,12 +86,12 @@
             padding-right: 20px;
         }
 
-        &-name {
+        &_name {
             font-weight: bold;
             color: var(--header-name-color);
         }
 
-        &-description {
+        &_description {
             color: var(--header-name-color);
             opacity: 0.7;
             max-width: 300px;
@@ -86,20 +104,20 @@
             }
         }
 
-        &-date {
+        &_date {
             color: var(--header-name-color);
             opacity: 0.7;
             white-space: nowrap;
         }
 
-        &-musicCount {
+        &_musicCount {
             text-align: center;
             color: var(--header-name-color);
             opacity: 0.7;
             font-weight: bold;
         }
 
-        &-actions {
+        &_actions {
             display: flex;
             gap: 8px;
             justify-content: center;
@@ -119,9 +137,11 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
+        white-space: nowrap;
 
-        &-delete {
+        &_delete {
             background: #dc3545;
             color: var(--white);
 
