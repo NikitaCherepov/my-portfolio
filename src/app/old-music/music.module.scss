@@ -1,0 +1,284 @@
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-height: calc(100vh - var(--header-height));
+    padding: 60px 20px;
+
+    img {
+        width: 60px;
+        height: 60px;
+    }
+
+    p {
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        margin: 0;
+        opacity: 0.8;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 22px 0px 22px 0px;
+    gap: 26px;
+    min-height: calc(100vh - var(--header-height));
+
+    &__cards {
+        display: grid;
+        width: 100%;
+        justify-content: center;
+        justify-items: center;
+
+        perspective: 500vw; 
+        max-width: 1500px;
+
+        gap: 40px 80px;
+
+        flex-grow:0;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        &_scrollDown {
+            transform: rotateZ(10deg);
+        }
+        &_scrollUp {
+            transform: rotateZ(-10deg);
+        }
+
+        &_list {
+            grid-template-columns: repeat(1, 1fr);
+            grid-auto-rows: min-content;
+            align-items: flex-start;
+            padding-right: 25px;
+            max-height: calc(100vh - var(--header-height) - 170px);
+            flex-grow: 1;
+        }
+        &_grid {
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            max-width: 1400px;
+            padding: 0 50px;
+            gap: 40px 80px;
+            max-height: calc(100vh - var(--header-height) - 100px);
+            flex-grow: 0;
+        }
+
+        &__card {
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        
+            min-width: 270px;
+        
+            aspect-ratio: 1 / 1;
+        
+            width: 100%;
+        
+
+            position: relative;
+
+            &_grid {
+                max-height: 391px;
+                max-width: 340px;
+                @media (max-width: 1600px) {
+                    max-width: 280px;
+                    max-height: 330px;
+                }
+            }
+            &_list {
+                max-height: 100px;
+
+                @media (max-width: 1285px) {
+                    max-height: 250px;
+                }
+            }
+        }
+    }
+    &__cards::-webkit-scrollbar-thumb {
+        all: unset;
+        width: 82px;
+        height: 22px;
+        background: rgba(255, 255, 255, 0.8); 
+        border-radius: var(--default-border-radius-small);
+    }
+    &__cards::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 1);
+        cursor: pointer;
+    }
+    &__cards::-webkit-scrollbar {
+        all: unset;
+        width: 20px;
+    }
+    &__cards::-webkit-scrollbar-track {
+        all: unset;
+        width: 1px;
+        background: var(--background);
+    }
+
+    &__cards::-webkit-scrollbar-track {
+        background-image: url("/images/icons/scroll-track.png");
+        background-repeat: repeat-y;
+        background-size: contain;
+    }
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+
+    background: rgba(255, 255, 255, 0.275);
+
+    z-index: 6;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 31px;
+    position: absolute;
+    bottom: 25px;
+
+    button {
+        padding: 5px;
+        background: var(--white);
+        min-width: 44px;
+        min-height: 41px;
+        width: fit-content;
+        border-radius: var(--default-border-radius-small);
+        filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25))
+    }
+    button:disabled {
+        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.41);
+        cursor:auto;
+    }
+}
+
+.myServices {
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    align-items: center;
+
+    width: 100%;
+    min-height: calc(100vh - var(--footer-height));;
+    height: 100%;
+
+    &__background {
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 15px 0px;
+
+        gap: 20px;
+
+        max-width: 1724px;
+        width: 100%;
+        flex: 1;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(192, 192, 192, 0.77) 100%);
+    }
+
+    h2 {
+        font-size: 3rem;
+    }
+    h3 {
+        font-size: 2rem;
+    }
+    h4 {
+        font-size: 1.85rem;
+    }
+
+    &__genres {
+
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(0, 0, 0, 0.1) 100%);
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+
+        width: 100%;
+        max-width: 955px;
+
+        gap: 35px;
+
+        padding: 15px 100px;
+
+        padding-left: 250px;
+
+        font-size: 1.5rem;
+
+        ul, li {
+            list-style-type: disc;
+        }
+
+        box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+    }
+
+    p {
+        font-size: 1.5rem;
+    }
+
+    &__buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 60px 30px;
+
+        p {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+    }
+}
+
+.scrollButton {
+    display: flex;
+    position: absolute;
+    background: white;
+
+    width: 100px;
+    height: 100px;
+
+    bottom: 50px;
+    right: 50px;
+
+    border-radius: 50%;
+
+    transition: filter 0.2s ease-in-out, transform 0.1s ease-in-out;
+    z-index: 5;
+}
+.scrollButton {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.47));
+}
+.scrollButton:hover {
+    filter: none;
+}
+.scrollButton:active {
+    transform: scale(0.9);
+}
