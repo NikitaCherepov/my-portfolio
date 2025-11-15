@@ -69,7 +69,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
             <div className={styles.table__container}>
                 <table className={styles.table__wrapper}>
                     <thead className={styles.table__header}>
-                        
+                        <tr>
                             <th>Обложка</th>
                             <th>Название</th>
                             <th>Жанр</th>
@@ -77,7 +77,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
                             <th>Spotify</th>
                             <th>Дата</th>
                             <th>Действия</th>
-                        
+                        </tr>
                     </thead>
                     <tbody className={styles.table__body}>
                         {music.map((track) => (
