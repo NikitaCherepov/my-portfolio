@@ -43,10 +43,45 @@
     gap: 80px;
     &__logo {
         width: 450px;
+        z-index: 1;
     }
     &__motto {
         color: var(--white);
         font-size: 2.5rem;
         text-align: center;
+    }
+    &__background {
+        pointer-events: none;
+        inset: 0;
+        position: absolute;
+        z-index: 0;
+
+        &__note {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0.7;
+            pointer-events: none;
+            will-change: transform, opacity;
+            pointer-events: all;
+            cursor: pointer;
+            transition: transform 0.2s linear;
+
+            img {
+            width: auto;
+            height: 100px;
+                object-fit: cover;
+                filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+                transition: filter 0.3s ease;
+            }
+
+            &:hover img {
+                filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
+                user-select: none;
+            }
+        }
+        &__note:hover {
+            filter: drop-shadow(1px 1px 1px white);
+        }
     }
 }
