@@ -1,6 +1,6 @@
 'use client'
 
-import {useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import styles from './Menu.module.scss'
 import Image from 'next/image'
 
@@ -24,6 +24,7 @@ export default function Menu() {
 
     const sidebarVariants = {
         open: (height = 1000) => ({
+            // backgroundColor: 'var(--menu-slides-background)',
           clipPath: `circle(${height * 2 + 200}px at 40px 40px)`,
           transition: {
             type: "spring",
@@ -32,6 +33,7 @@ export default function Menu() {
           },
         }),
         closed: {
+            // backgroundColor: 'var(--menu-slides-background)',
           clipPath: "circle(50px at 66px 50px)",
           transition: {
             delay: 0,
@@ -43,7 +45,7 @@ export default function Menu() {
     };
     const buttonVariants = {
         open: {
-            backgroundColor: "var(--button-light)",
+            // backgroundColor: "var(--button-light)",
             boxShadow: "inset 4px 4px 4px rgba(0, 0, 0, 0.41)",
             transition: {
                 type: "spring",
@@ -52,7 +54,7 @@ export default function Menu() {
               },
         },
         closed: {
-            backgroundColor: "var(--button-dark)",
+            // backgroundColor: "var(--button-dark)",
             boxShadow: "none",
             transition: {
                 delay: 0,
@@ -69,6 +71,19 @@ export default function Menu() {
         }
     }
 
+    const [backgroundFix, setBackgroundFix] = useState<String>();
+
+    useEffect(() => {
+        if (!isOpen) {
+            setTimeout(() => {
+                if (!isOpen) setBackgroundFix('transparent');
+            }, 400)
+        }
+        else {
+            setBackgroundFix('var(--menu-slides-background)');
+        }
+    }, [isOpen, backgroundFix])
+
       
 
 
@@ -82,7 +97,7 @@ export default function Menu() {
         ref={containerRef}
         custom={height}
         className={styles.container}>
-            <motion.div className={`${styles.container__sidebar} dropShadow`} variants={sidebarVariants}>
+            <motion.div className={`${styles.container__sidebar} dropShadow`} variants={sidebarVariants} style={{background: backgroundFix}}>
                 <button onClick={() =>  initiateExit("/")} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
                     Главная
                 </button>
@@ -93,8 +108,13 @@ export default function Menu() {
                     Музыка
                 </button>
             </motion.div>
-            <motion.button whileHover={!isOpen? "hoverOpen" : 'hoverClosed'} animate={isOpen ? "open" : "closed"} variants = {buttonVariants} transition={{duration: 0.3}} onClick={() => toggleOpen()} className={styles.container__navButton}>
-                <Image className={styles.container__navButton__image} src={pathname === '/music' ? '/images/menu/note.svg' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt='Нота меню' width={100} height={100}/>
+            <motion.button style={{background: pathname === '/sites' ? 'var(--button-dark)' : ''}} whileHover={!isOpen? "hoverOpen" : 'hoverClosed'} animate={isOpen ? "open" : "closed"} variants = {buttonVariants} transition={{duration: 0.3}} onClick={() => toggleOpen()} className={styles.container__navButton}>
+                                {pathname === '/music' && (
+                <Image className={styles.container__navButton__background} src={pathname === '/music' ? '/images/menu/menuPhoto.png' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt='Нота меню' width={100} height={100}/>
+                                )}
+                {pathname !== '/music' && (
+                    <Image className={styles.container__navButton__image} src={pathname === '/music' ? '/images/menu/note.svg' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt='Нота меню' width={100} height={100}/>
+                )}
             </motion.button>
         </motion.nav>
     )

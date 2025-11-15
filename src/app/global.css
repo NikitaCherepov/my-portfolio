@@ -31,7 +31,8 @@ body[data-theme="sites"] {
 }
 
 body[data-theme="music"] {
-  --background: linear-gradient(180deg, rgba(1, 1, 1, 0.82) 0%, #FFFFFF 100%);
+  /* --background: linear-gradient(180deg, rgba(1, 1, 1, 0.82) 0%, #FFFFFF 100%); */
+  --background: black;
   --foreground: #D9D9D9;
   --white: white;
   --button-light: white;
