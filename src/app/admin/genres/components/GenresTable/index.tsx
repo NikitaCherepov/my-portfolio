@@ -67,12 +67,12 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
             <div className={styles.table__container}>
                 <table className={styles.table__wrapper}>
                     <thead className={styles.table__header}>
-                        <tr>
+
                             <th>Название</th>
                             <th>Описание</th>
                             <th>Дата создания</th>
                             <th>Действия</th>
-                        </tr>
+
                     </thead>
                     <tbody className={styles.table__body}>
                         {genres.map((genre) => (
