@@ -1,0 +1,203 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+
+    &__content {
+        display: flex;
+        gap: 32px;
+        width: 100%;
+
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            gap: 24px;
+        }
+    }
+
+    &__left {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        flex: 0 0 300px;
+
+        @media (max-width: 1024px) {
+            flex: 1;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+
+    &__right {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        flex: 1;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        padding: 20px 0 0 0;
+        border-top: 1px solid var(--button-darkest);
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+    }
+
+    &__button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+
+        &-submit {
+            background: #28a745;
+            color: var(--white);
+
+            &:hover:not(:disabled) {
+                background: #218838;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            }
+
+            &:disabled {
+                background: var(--button-darkest);
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+        }
+
+        &-cancel {
+            background: var(--button-dark);
+            color: var(--header-name-color);
+
+            &:hover {
+                background: var(--button-darkest);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        &-delete {
+            background: #dc3545;
+            color: var(--white);
+
+            &:hover:not(:disabled) {
+                background: #c82333;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            }
+
+            &:disabled {
+                background: var(--button-darkest);
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+        }
+    }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &__label {
+        font-weight: bold;
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+    }
+
+    &__input {
+        padding: 12px 16px;
+        border: 1px solid var(--button-darkest);
+        border-radius: var(--default-border-radius-small);
+        background: var(--white);
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+
+        &:focus {
+            outline: none;
+            border-color: var(--button-dark);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+        &-error {
+            border-color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+
+        &_dragging {
+            background: rgba(0, 123, 255, 0.05);
+            border-color: #007bff;
+            transition: all 0.2s ease;
+
+            // Предотвращаем выделение текста при drag
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+    }
+
+    &__error {
+        color: #dc3545;
+        font-size: 0.75rem;
+        margin-top: 4px;
+    }
+
+    &__required {
+        color: #dc3545;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .form {
+        &__content {
+            gap: 20px;
+        }
+
+        &__left {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        &__actions {
+            flex-direction: column;
+            gap: 12px;
+
+            .form__button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+
+    .field {
+        &__input {
+            font-size: 0.875rem;
+        }
+    }
+}

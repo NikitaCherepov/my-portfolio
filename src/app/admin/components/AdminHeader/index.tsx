@@ -54,6 +54,12 @@ export default function AdminHeader({ pathname }: AdminHeaderProps) {
           >
             Жанры
           </button>
+          <button
+            onClick={() => router.push('/admin/music')}
+            className={`${styles.header__navLink} ${isActiveLink('/admin/music') ? styles.header__navLink_active : ''}`}
+          >
+            Музыка
+          </button>
         </nav>
       </div>
 

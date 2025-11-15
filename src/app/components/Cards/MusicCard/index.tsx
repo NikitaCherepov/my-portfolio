@@ -4,10 +4,11 @@ import styles from './MusicCard.module.scss'
 import Button from '../SiteCard/Button'
 import { useViewStore } from '@/app/store/useExitStore'
 import PreviewMusicButton from '../../PreviewMusicButton'
-import { MusicWork } from '@/app/store/useExitStore'
+import { Music } from '@/app/services/musicService'
+import { format, parseISO, isValid } from 'date-fns'
 
 interface MusicCardProps {
-    object: MusicWork;
+    object: Music;
 }
 
 import {AnimatePresence, motion} from 'framer-motion'
@@ -18,6 +19,16 @@ export default function MusicCard({object} : MusicCardProps) {
 
     const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
     const transitionHoverSettings = {duration: 0.2}
+
+    const formatDisplayDate = (value: string) => {
+        try {
+            const date = parseISO(value);
+            if (!isValid(date)) return value;
+            return format(date, 'dd.MM.yyyy');
+        } catch {
+            return value;
+        }
+    };
 
     return (
         <motion.div
@@ -61,7 +72,7 @@ export default function MusicCard({object} : MusicCardProps) {
                                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                                         >
                                                             <h2>{object.name}</h2>
-                                                            <p className={styles.container__mainInfo__hoverMaterial__hoveredButtons__genres}>{object?.genre?.join(", ")}</p>
+                                                            <p className={styles.container__mainInfo__hoverMaterial__hoveredButtons__genres}>{object?.genre?.name || ""}</p>
                                                             <div className={styles.container__mainInfo__hoverMaterial__hoveredButtons__buttons}>
                                                                 <Button link={object.youtube} icon={'/images/icons/yt.svg'}/>
                                                                 <Button link={object.vkmusic} icon={'/images/icons/vkmusic.svg'}/>
@@ -90,7 +101,7 @@ export default function MusicCard({object} : MusicCardProps) {
                     (
                         <div className={styles.container__mainContent}>
                             <div className={styles.container__mainContent__stack}>
-                                {object?.genre?.join(", ")}
+                                {object?.genre?.name || ""}
                             </div>
                             <Button link={object.youtube} icon={'/images/icons/yt.svg'}/>
                             <Button link={object.spotify} icon={'/images/icons/spotify.svg'}/>
@@ -100,7 +111,7 @@ export default function MusicCard({object} : MusicCardProps) {
                             <PreviewMusicButton name={object.name} src={object?.preview}/>
 
                             <p className={styles.container__mainContent__date}>
-                                {object.date}
+                                {formatDisplayDate(object.date)}
                             </p>
                         </div>
                     )
