@@ -15,9 +15,12 @@
 
     &__header {
         background: var(--foreground);
-        display: grid;
-        grid-template-columns: 200px 1fr 1fr 1fr 100px 1.5fr;
-        width: 100%;
+
+        tr {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr 100px 1.5fr;
+            width: 100%;
+        }
 
         th {
             padding: 16px 12px;
