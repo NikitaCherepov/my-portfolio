@@ -1,33 +1,12 @@
 'use client';
-import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { useGenres } from '@/app/hooks/useGenres';
-import { useCreateGenre } from '@/app/hooks/useGenreMutations';
 import GenresTable from './components/GenresTable';
 import styles from './admin-genres.module.scss';
 
 export default function AdminGenresPage() {
+  const router = useRouter();
   const { data: genres, isLoading, isError, refetch } = useGenres();
-  const createGenreMutation = useCreateGenre();
-  const [newGenreName, setNewGenreName] = useState('');
-  const [isAddingGenre, setIsAddingGenre] = useState(false);
-
-  const handleAddGenre = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!newGenreName.trim()) return;
-
-    setIsAddingGenre(true);
-    try {
-      await createGenreMutation.mutateAsync({
-        name: newGenreName.trim(),
-        description: ''
-      });
-      setNewGenreName('');
-      refetch();
-    } finally {
-      setIsAddingGenre(false);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -54,24 +33,12 @@ export default function AdminGenresPage() {
     <div className={styles.genres}>
       <div className={styles.genres__header}>
         <h1>Управление жанрами</h1>
-        <div className={styles.genres__header_add}>
-          <form className={styles.genres__input} onSubmit={handleAddGenre}>
-            <input
-              type="text"
-              value={newGenreName}
-              onChange={(e) => setNewGenreName(e.target.value)}
-              placeholder="Название жанра"
-              disabled={isAddingGenre || createGenreMutation.isPending}
-            />
-            <button
-              type="submit"
-              className={styles.genres__addButton}
-              disabled={!newGenreName.trim() || isAddingGenre || createGenreMutation.isPending}
-            >
-              {isAddingGenre || createGenreMutation.isPending ? 'Добавление...' : 'Добавить'}
-            </button>
-          </form>
-        </div>
+        <button
+          onClick={() => router.push('/admin/genres/create')}
+          className={styles.genres__addButton}
+        >
+          ➕ Добавить жанр
+        </button>
       </div>
 
       <div className={styles.genres__content}>
@@ -80,6 +47,12 @@ export default function AdminGenresPage() {
         ) : (
           <div className={styles.genres__empty}>
             <p>Жанры не найдены</p>
+            <button
+              onClick={() => router.push('/admin/genres/create')}
+              className={styles.genres__addButton}
+            >
+              ➕ Создать первый жанр
+            </button>
           </div>
         )}
       </div>

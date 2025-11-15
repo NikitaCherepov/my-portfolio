@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import genresService from '../../../../services/genresService';
 import { Genre } from '../../../../services/genresService';
 import { format } from 'date-fns';
@@ -13,6 +14,7 @@ interface GenresTableProps {
 }
 
 export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
+    const router = useRouter();
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const handleDelete = async (id: string, name: string) => {
@@ -87,6 +89,12 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
                                     {formatDate(genre.createdAt)}
                                 </td>
                                 <td className={`${styles.table__cell} ${styles.table__cell_actions}`}>
+                                    <button
+                                        onClick={() => router.push(`/admin/genres/edit/${genre.id}`)}
+                                        className={`${styles.table__button} ${styles.table__button_edit}`}
+                                    >
+                                        ✏️ Редактировать
+                                    </button>
                                     <button
                                         onClick={() => handleDelete(genre.id, genre.name)}
                                         disabled={deletingId === genre.id}
