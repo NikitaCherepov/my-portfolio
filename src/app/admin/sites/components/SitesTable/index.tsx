@@ -60,14 +60,14 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
             <div className={styles.table__container}>
                 <table className={styles.table__wrapper}>
                     <thead className={styles.table__header}>
-                        <tr>
+
                             <th>Название</th>
                             <th>Прямая ссылка</th>
                             <th>GitHub</th>
                             <th>Стек</th>
                             <th>Дата</th>
                             <th>Действия</th>
-                        </tr>
+
                     </thead>
                     <tbody className={styles.table__body}>
                         {sites.map((site) => (
