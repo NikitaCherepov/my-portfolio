@@ -66,30 +66,35 @@ export default function MusicPage() {
                     {randomNotes.map((note, i) => {
                         // Создаем глубину для каждой ноты
                         const parallaxFactor = 0.3 + Math.random() * 0.7; // от 0.3 до 1.0
-                        const baseDuration = 12; // базовая длительность
-                        const duration = baseDuration / parallaxFactor; // дальние двигаются медленнее
 
                         return (
 
 <motion.div
   key={i}
   className={styles.head__background__note}
-  initial={{ opacity: 0, bottom: '-10%' }}
-  animate={{
-    bottom: ['-10%', '100%', '110%'],              // гарантируем уход за верх
-    y: [0, -80 * parallaxFactor, -160 * parallaxFactor], // локальное «плавание»
-    x: [0, (Math.random() - 0.5) * 60 * parallaxFactor],
-    opacity: [0, 1, 1, 0],
-  }}
-  transition={{
-    duration,
+  initial={{ opacity: 0 }}
+animate={{
+  x: [-10 * parallaxFactor, 10 * parallaxFactor],
+  y: [-20 * parallaxFactor, 20 * parallaxFactor],
+  opacity: [0, 1, 0],
+}}
+transition={{
+  x: { duration: 6 / parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+  y: { duration: 8 / parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+  opacity: {
+    duration: 8 + Math.random() * 12,  // у каждой ноты свой цикл
     repeat: Infinity,
-    delay: Math.random() * 3,
-    ease: 'easeInOut',
-  }}
+    repeatType: 'loop',
+    ease: 'linear',
+    repeatDelay: Math.random() * 5,    // и своя пауза
+  },
+}}
+
   style={{
     left: `${Math.random() * 100}%`,
-    scale: 0.2 + parallaxFactor * 0.5,
+    top: `${Math.random() * 100}%`,
+    scale: 0.2 + parallaxFactor * 0.9, // больше разница в размерах
+    opacity: 0.4 + parallaxFactor * 0.4 // дальние тусклее
   }}
 >
   <img src={note} alt={`Note ${i + 1}`} />
