@@ -20,6 +20,8 @@ export default function MusicPage() {
 
     const {music, loading} = useMusic();
 
+    const volume = 0.1;
+
     const notes = [
         '/images/icons/notes/1.svg',
         '/images/icons/notes/2.svg',
@@ -27,11 +29,16 @@ export default function MusicPage() {
         '/images/icons/notes/4.svg',
     ]
 
+    const soundFiles = [
+        '/sounds/do.mp3',
+    ];
+
     type NoteConfig = {
         src: string;
         left: number; // %
         top: number;  // %
         parallaxFactor: number;
+        soundSrc: string;
     };
 
     const [notesConfig, setNotesConfig] = useState<NoteConfig[]>([]);
@@ -50,6 +57,7 @@ export default function MusicPage() {
             min + Math.random() * (max - min);
 
         const generated: NoteConfig[] = [];
+        let soundIndex = 0;
 
         for (let i = 0; i < NOTE_COUNT; i++) {
             const src = notes[Math.floor(Math.random() * notes.length)];
@@ -93,11 +101,20 @@ export default function MusicPage() {
                 }
             }
 
-            generated.push({ src, left, top, parallaxFactor });
+            const soundSrc = soundFiles[soundIndex];
+            soundIndex = (soundIndex + 1) % soundFiles.length;
+
+            generated.push({ src, left, top, parallaxFactor, soundSrc });
         }
 
         setNotesConfig(generated);
     }, []);
+
+    const handleNoteClick = (soundSrc: string) => {
+        const audio = new Audio(soundSrc);
+        audio.volume = volume;
+        audio.play().catch(() => {});
+    };
 
     // Показываем loader во время загрузки
     if (loading) {
@@ -123,6 +140,7 @@ export default function MusicPage() {
                     {notesConfig.map((note, i) => (
                         <motion.div
                             key={i}
+                            onClick={() => handleNoteClick(note.soundSrc)}
                             className={styles.head__background__note}
                             initial={{ opacity: 0 }}
                             animate={{
