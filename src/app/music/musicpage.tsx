@@ -103,6 +103,9 @@ transition={{
                     })}
                 </div>
             </div>
+            <div className={styles.musicHeader}>
+                <h2>Музыка</h2>
+            </div>
           
                         
         </motion.div>     
