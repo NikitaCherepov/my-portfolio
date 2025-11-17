@@ -13,8 +13,12 @@
     &_music {
         // background: url('/images/pages/music/starsbackground.jpeg') center center no-repeat;
         // background-size: cover;
-        background: black;
-        position: sticky !important;
+        background: transparent;
+        position: fixed !important;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        backdrop-filter: blur(5px);
     }
     
     &__switcher {
