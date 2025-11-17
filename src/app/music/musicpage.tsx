@@ -27,19 +27,76 @@ export default function MusicPage() {
         '/images/icons/notes/4.svg',
     ]
 
-    const [randomNotes, setRandomNotes] = useState<string[]>([]);
+    type NoteConfig = {
+        src: string;
+        left: number; // %
+        top: number;  // %
+        parallaxFactor: number;
+    };
+
+    const [notesConfig, setNotesConfig] = useState<NoteConfig[]>([]);
 
     useEffect(() => {
-        const generateRandomNotes = () => {
-            const selectedNotes: string[] = [];
-            for (let i = 0; i < 20; i++) {
-                const randomIndex = Math.floor(Math.random() * notes.length);
-                selectedNotes.push(notes[randomIndex]);
-            }
-            setRandomNotes(selectedNotes);
-        };
+        const NOTE_COUNT = 20;
+        const LEFT_MIN = 0;
+        const LEFT_MAX = 100;
+        const TOP_MIN = 0;
+        const TOP_MAX = 90; // чтобы "bottom ~10%" оставался
+        const MIN_DIST = 25;  // минимальное расстояние в процентах
+        const MAX_DIST = 90; // максимальное расстояние до "соседа"
+        const MAX_ATTEMPTS = 25;
 
-        generateRandomNotes();
+        const randomInRange = (min: number, max: number) =>
+            min + Math.random() * (max - min);
+
+        const generated: NoteConfig[] = [];
+
+        for (let i = 0; i < NOTE_COUNT; i++) {
+            const src = notes[Math.floor(Math.random() * notes.length)];
+            const parallaxFactor = 0.3 + Math.random() * 0.7;
+
+            let left: number = randomInRange(LEFT_MIN, LEFT_MAX);
+            let top: number = randomInRange(TOP_MIN, TOP_MAX);
+
+            if (generated.length > 0) {
+                let placed = false;
+
+                for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+                    const anchor =
+                        generated[Math.floor(Math.random() * generated.length)];
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = MIN_DIST + Math.random() * (MAX_DIST - MIN_DIST);
+
+                    const candidateLeft = anchor.left + Math.cos(angle) * dist;
+                    const candidateTop = anchor.top + Math.sin(angle) * dist;
+
+                    if (
+                        candidateLeft < LEFT_MIN ||
+                        candidateLeft > LEFT_MAX ||
+                        candidateTop < TOP_MIN ||
+                        candidateTop > TOP_MAX
+                    ) {
+                        continue; // вылезли за right/bottom/top/left
+                    }
+
+                    left = candidateLeft;
+                    top = candidateTop;
+                    placed = true;
+                    break;
+                }
+
+                if (!placed) {
+                    // "если такой точки нет — то как получится"
+                    left = randomInRange(LEFT_MIN, LEFT_MAX);
+                    top = randomInRange(TOP_MIN, TOP_MAX);
+                }
+            }
+
+            generated.push({ src, left, top, parallaxFactor });
+        }
+
+        setNotesConfig(generated);
     }, []);
 
     // Показываем loader во время загрузки
@@ -63,44 +120,37 @@ export default function MusicPage() {
                 <p className={styles.head__motto}>Пишу музыку для игр и для себя. <br/>Хочешь трек? Напиши мне</p>
 
                 <div className={styles.head__background}>
-                    {randomNotes.map((note, i) => {
-                        // Создаем глубину для каждой ноты
-                        const parallaxFactor = 0.3 + Math.random() * 0.7; // от 0.3 до 1.0
-
-                        return (
-
-<motion.div
-  key={i}
-  className={styles.head__background__note}
-  initial={{ opacity: 0 }}
-animate={{
-  x: [-10 * parallaxFactor, 10 * parallaxFactor],
-  y: [-20 * parallaxFactor, 20 * parallaxFactor],
-  opacity: [0, 1, 0],
-}}
-transition={{
-  x: { duration: 6 / parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
-  y: { duration: 8 / parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
-  opacity: {
-    duration: 8 + Math.random() * 12,  // у каждой ноты свой цикл
-    repeat: Infinity,
-    repeatType: 'loop',
-    ease: 'linear',
-    repeatDelay: Math.random() * 5,    // и своя пауза
-  },
-}}
-
-  style={{
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    scale: 0.2 + parallaxFactor * 0.9, // больше разница в размерах
-    opacity: 0.4 + parallaxFactor * 0.4 // дальние тусклее
-  }}
->
-  <img src={note} alt={`Note ${i + 1}`} />
-</motion.div>
-                        )
-                    })}
+                    {notesConfig.map((note, i) => (
+                        <motion.div
+                            key={i}
+                            className={styles.head__background__note}
+                            initial={{ opacity: 0 }}
+                            animate={{
+                                x: [-10 * note.parallaxFactor, 10 * note.parallaxFactor],
+                                y: [-20 * note.parallaxFactor, 20 * note.parallaxFactor],
+                                opacity: [0, 1, 0],
+                            }}
+                            transition={{
+                                x: { duration: 6 / note.parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+                                y: { duration: 8 / note.parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+                                opacity: {
+                                    duration: 8 + Math.random() * 12,
+                                    repeat: Infinity,
+                                    repeatType: 'loop',
+                                    ease: 'linear',
+                                    repeatDelay: Math.random() * 5,
+                                },
+                            }}
+                            style={{
+                                left: `${note.left}%`,
+                                top: `${note.top}%`,
+                                scale: 0.2 + note.parallaxFactor * 0.9,
+                                opacity: 0.4 + note.parallaxFactor * 0.4
+                            }}
+                        >
+                            <img src={note.src} alt={`Note ${i + 1}`} />
+                        </motion.div>
+                    ))}
                 </div>
             </div>
             <div className={styles.musicHeader}>
