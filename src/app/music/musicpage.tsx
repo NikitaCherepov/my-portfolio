@@ -134,7 +134,7 @@ export default function MusicPage() {
 
         <PlayerWatcher/>
         <MusicPlayer/>
-        <motion.div transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} layout className={`mainContainer  ${styles.container}`}>
+        <motion.div className={`mainContainer  ${styles.container}`}>
             <div className={styles.head}>
                 <Image priority className={styles.head__logo} src='/images/logo.png' alt='Нота меню' width={450} height={400}/>
                 <p className={styles.head__motto}>Пишу музыку для игр и для себя. <br/>Хочешь трек? Напиши мне</p>
@@ -174,9 +174,9 @@ export default function MusicPage() {
                     ))}
                 </div>
             </div>
-            <div className={styles.musicHeader}>
+            {/* <div className={styles.musicHeader}>
                 <h2>Музыка</h2>
-            </div>
+            </div> */}
 
             {genres && genres.length > 0 ? (
                 genres.map((genre, index) => {
