@@ -8,19 +8,20 @@ import { useSortSitesStore } from "../store/useExitStore"
 import {motion} from 'framer-motion'
 import { usePagination } from "../store/useExitStore"
 import {useState, useEffect} from 'react'
-import MusicCard from "../components/Cards/MusicCard"
+import MusicCard from "../components/MusicCard/MusicCard"
 import Button from "../components/Cards/SiteCard/Button"
 import SortingComponentForList from "../components/SortingComponentForList"
 import PlayerWatcher from "../components/PlayerWatcher"
 import MusicPlayer from "../components/MusicPlayer"
 import { Music } from '../services/musicService'
+import { Genre } from '../services/genresService'
 import Image from 'next/image'
 
 
 export default function MusicPage() {
 
-    const {data: music, isLoading: loading} = useMusic();
-    const {data: genres, isLoading: genresLoading} = useGenres();
+    const {data: music, isLoading: isMusicLoading, isSuccess: isMusicSuccess} = useMusic();
+    const {data: genres, isLoading: isGenresLoading, isSuccess: isGenresSuccess} = useGenres();
 
     const volume = 0.1;
 
@@ -119,7 +120,7 @@ export default function MusicPage() {
     };
 
     // Показываем loader во время загрузки
-    if (loading) {
+    if (isMusicLoading && isGenresLoading) {
         return (
             <div className={styles.loading}>
                 <img src='/images/loaders/loader.svg' alt="Загрузка" />
@@ -176,9 +177,27 @@ export default function MusicPage() {
             <div className={styles.musicHeader}>
                 <h2>Музыка</h2>
             </div>
-          
-                        
-        </motion.div>     
+
+            {genres && genres.length > 0 ? (
+                genres.map((genre, index) => {
+                    // Фильтруем треки по текущему жанру
+                    const genreTracks = music?.filter((track) => track.genre.id === genre.id) || [];
+
+                    // Показываем жанр только если в нем есть треки
+                    if (genreTracks.length === 0) return null;
+
+                    return (
+                                <MusicCard music={genreTracks} genre={genre} index={index + 1} />
+                    );
+                })
+            ) : (
+                <div className={styles.noGenres}>
+                    <p>Жанры не найдены</p>
+                </div>
+            )}
+
+
+        </motion.div>
         </>
     )
 }

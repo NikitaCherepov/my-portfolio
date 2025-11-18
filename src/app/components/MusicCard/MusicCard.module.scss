@@ -1,0 +1,83 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 165px 133px 82px 133px;
+
+    &__backgroundImage {
+        position: absolute;
+        inset: 0;
+        object-fit: cover;
+        object-position: center;
+        top: 0;
+        filter:blur(20px);
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+    }
+    &__backgroundDark {
+        position: absolute;
+        inset: 0;
+        object-fit: cover;
+        object-position: center;
+        top: 0;
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+
+        background: rgba(19, 19, 19, 0.6);
+    }
+
+    &__head {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        z-index: 1;
+        &__albumContainer {
+            display: flex;
+            flex-direction: column;
+            max-width: 454px;
+            gap: 50px;
+            &__cover {
+                width: 454px;
+                height: 454px;
+            }
+            &__links {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+
+                &__link {
+                    width: 64px;
+                    cursor: pointer;
+                }
+
+            }
+        }
+        &__genreInfo {
+            display: flex;
+            gap: 50px;
+            flex-direction: column;
+            color: white;
+            max-width: 800px;
+
+            &__header {
+                font-size: 3.5rem;
+            }
+            &__description {
+                font-size: 2.5rem;
+            }
+        }
+    }
+}
+
+.rightish {
+    flex-direction: row;
+}
+
+.leftish {
+    flex-direction: row-reverse;
+}
