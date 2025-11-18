@@ -28,17 +28,17 @@
 
     padding: 22px 0px 0px 0px;
     // gap: 26px;
-    min-height: 100vh;
+    min-height: calc(100vh);
 
 }
 
 .head {
     display: flex;
-    height: calc(100vh);
+    height: calc(100vh - var(--header-height));
     width: 100%;
     align-items: center;
     justify-content: center;
-    padding-bottom: var(--header-height);
+    // padding-bottom: var(--header-height);
     flex-direction: column;
     gap: 80px;
     position: relative;
