@@ -9,6 +9,7 @@ import styles from './PageTransition.module.scss'
 import Header from '../Header'
 import Footer from '../Footer'
 import { Toaster } from 'sonner'
+import Lenis from "@studio-freight/lenis";
 
 
 export default function PageTransition({children} : {children: React.ReactNode}) {
@@ -46,6 +47,24 @@ export default function PageTransition({children} : {children: React.ReactNode})
           setTimeout(() => show(), 100)
         }
       }, [pathname, nextPage, isLeaving, setNextPage, turnOffLeaving])
+
+
+      useEffect(() => {
+        const lenis = new Lenis({
+          lerp: 0.13,
+        });
+
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        return () => {
+          lenis.destroy();
+        };
+      }, []);
 
 
       return (
