@@ -6,7 +6,7 @@ import MusicTable from './components/MusicTable';
 import styles from './admin-music.module.scss';
 
 export default function AdminMusicPage() {
-  const { music, loading, error, refreshMusic } = useMusic();
+  const { data: music, isLoading: loading, isError: error, refetch: refreshMusic } = useMusic();
   const { data: genres } = useGenres();
 
   if (loading) {
