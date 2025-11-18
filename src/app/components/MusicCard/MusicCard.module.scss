@@ -7,6 +7,10 @@
     flex-direction: column;
     padding: 165px 133px 82px 133px;
 
+    justify-content: center;
+
+    gap: 50px;
+
     &__backgroundImage {
         position: absolute;
         inset: 0;
@@ -17,6 +21,7 @@
         pointer-events: none;
         user-select: none;
         z-index: 0;
+        will-change: opacity; // Оптимизация для Framer Motion анимации
     }
     &__backgroundDark {
         position: absolute;
@@ -36,6 +41,8 @@
         width: 100%;
         justify-content: space-between;
         z-index: 1;
+        flex-wrap: wrap;
+        gap: 50px;
         &__albumContainer {
             display: flex;
             flex-direction: column;
@@ -44,6 +51,11 @@
             &__cover {
                 width: 454px;
                 height: 454px;
+                aspect-ratio: 1/1;
+                flex: 0;
+                object-fit: cover;
+                border-radius: var(--default-border-radius-small);
+                will-change: opacity, transform; // Оптимизация для Framer Motion анимации
             }
             &__links {
                 display: flex;
@@ -80,4 +92,98 @@
 
 .leftish {
     flex-direction: row-reverse;
+}
+
+// All Music Swiper
+.container__allMusic {
+    width: 100%;
+    position: relative;
+    padding: 40px 120px; // Место для стрелок
+
+    .allMusicSwiper {
+        width: 100%;
+    }
+
+    // .allMusicSlide {
+    //     width: auto !important; // Чтобы обложки были своего размера
+    // }
+
+    .allMusicCover {
+        // width: 128px;
+        // height: 128px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        &:hover {
+            transform: scale(0.95);
+        }
+
+        &.active {
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    // Кастомные стрелки
+    .customNav {
+        position: absolute;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 20;
+        transition: all 0.3s ease;
+        opacity: 1;
+
+        &:active {
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            transition: transform 0.2s ease;
+        }
+    }
+
+    // Disabled состояние стрелок
+    .customNav_disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+
+        // &:hover {
+        //     background: rgba(0, 0, 0, 0.7);
+        // }
+    }
+
+    .customPrev {
+        left: 10px;
+        transform: rotate(90deg);
+    }
+    .customPrev:hover {
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    .customNext {
+        right: 10px;
+        transform: rotate(-90deg);
+    }
+    .customNext:hover {
+        transform: scale(1.1) rotate(-90deg);
+    }
+}
+
+
+.navSlider {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    width: 100%;
 }
