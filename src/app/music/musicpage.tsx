@@ -1,6 +1,7 @@
 'use client'
 import styles from './music.module.scss'
 import { useMusic } from "../hooks/useMusic"
+import { useGenres } from "../hooks/useGenres"
 import { usePathname } from "next/navigation"
 import { useViewStore } from "../store/useExitStore"
 import { useSortSitesStore } from "../store/useExitStore"
@@ -19,6 +20,7 @@ import Image from 'next/image'
 export default function MusicPage() {
 
     const {music, loading} = useMusic();
+    const {data: genres, isLoading: genresLoading} = useGenres();
 
     const volume = 0.1;
 
