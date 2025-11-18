@@ -66,13 +66,17 @@
                 background: var(--foreground);
             }
         }
+
+        @media (max-width: 600px) {
+            display: none;
+        }
     }
 }
 @media (max-width: 800px) {
 
     .container {
         padding: 16px 25px 16px 0;
-        align-items: flex-start;
+        // align-items: flex-start;
 
         &__switcher {
             align-items: flex-start;

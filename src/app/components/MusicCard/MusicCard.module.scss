@@ -15,13 +15,13 @@
         position: absolute;
         inset: 0;
         object-fit: cover;
-        object-position: center;
+        object-position:center;
         top: 0;
         filter:blur(20px);
         pointer-events: none;
         user-select: none;
         z-index: 0;
-        will-change: opacity; // Оптимизация для Framer Motion анимации
+        will-change: opacity;
     }
     &__backgroundDark {
         position: absolute;
@@ -55,7 +55,7 @@
                 flex: 0;
                 object-fit: cover;
                 border-radius: var(--default-border-radius-small);
-                will-change: opacity, transform; // Оптимизация для Framer Motion анимации
+                will-change: opacity, transform;
             }
             &__links {
                 display: flex;

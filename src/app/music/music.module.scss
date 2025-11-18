@@ -42,9 +42,11 @@
     flex-direction: column;
     gap: 80px;
     position: relative;
+    padding: 0 15px;
     &__logo {
-        width: 450px;
+        // max-width: 450px;
         z-index: 1;
+        width: clamp(200px, 50vw, 450px);
     }
     &__motto {
         color: var(--white);
@@ -56,6 +58,8 @@
         inset: 0;
         position: absolute;
         z-index: 0;
+        overflow: hidden;
+        max-width: 100vw;
 
         &__note {
             position: absolute;
