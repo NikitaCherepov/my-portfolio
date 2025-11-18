@@ -160,6 +160,39 @@
     &__required {
         color: #dc3545;
     }
+
+    &__toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        border: 1px solid var(--button-darkest);
+        border-radius: var(--default-border-radius-small);
+        padding: 4px;
+        background: var(--background);
+
+        &__option {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--header-name-color);
+            border-radius: var(--default-border-radius-small);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+
+            &:hover {
+                background: rgba(var(--button-rgb), 0.1);
+            }
+
+            &_active {
+                background: var(--foreground);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
 }
 
 @keyframes fadeIn {
@@ -198,6 +231,12 @@
     .field {
         &__input {
             font-size: 0.875rem;
+        }
+
+        &__toggle {
+            &__option {
+                font-size: 0.75rem;
+            }
         }
     }
 }

@@ -32,7 +32,9 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         preview: {
             current?: string;
             file?: File | Blob;
+            url?: string;
             isChanged: boolean;
+            mode: 'file' | 'url';
         };
         date: string;
         mainImage: {
@@ -53,7 +55,9 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         preview: {
             current: initialData?.preview,
             file: undefined,
-            isChanged: false
+            url: initialData?.preview || '',
+            isChanged: false,
+            mode: initialData?.preview ? 'url' : 'file'
         },
         date: initialData?.date || new Date().toISOString().split('T')[0],
         mainImage: {
@@ -83,6 +87,29 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         if (errors.genreId) {
             setErrors(prev => ({ ...prev, genreId: '' }));
         }
+    };
+
+    const handlePreviewModeChange = (mode: 'file' | 'url') => {
+        setFormData(prev => ({
+            ...prev,
+            preview: {
+                ...prev.preview,
+                mode,
+                isChanged: true
+            }
+        }));
+    };
+
+    const handlePreviewUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setFormData(prev => ({
+            ...prev,
+            preview: {
+                ...prev.preview,
+                url: value,
+                isChanged: true
+            }
+        }));
     };
 
     // Обработчики для main image
@@ -210,8 +237,11 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     mainImage: formData.mainImage.file!,
                 };
 
-                if (formData.preview.file) {
+                // Обработка preview в зависимости от режима
+                if (formData.preview.mode === 'file' && formData.preview.file) {
                     createData.preview = formData.preview.file;
+                } else if (formData.preview.mode === 'url' && formData.preview.url) {
+                    createData.preview = formData.preview.url;
                 }
 
                 await createMusicMutation.mutateAsync(createData);
@@ -224,8 +254,14 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     updateData.mainImage = formData.mainImage.file;
                 }
 
-                if (formData.preview.file) {
+                // Обработка preview в зависимости от режима
+                if (formData.preview.mode === 'file' && formData.preview.file) {
                     updateData.preview = formData.preview.file;
+                } else if (formData.preview.mode === 'url' && formData.preview.isChanged && formData.preview.url) {
+                    updateData.preview = formData.preview.url;
+                } else if (formData.preview.current && !formData.preview.isChanged) {
+                    // Если пользователь не менял preview, оставляем текущее значение
+                    updateData.preview = formData.preview.current;
                 }
 
                 await updateMusicMutation.mutateAsync({
@@ -469,19 +505,50 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                         <label className={styles.field__label}>
                             Превью (аудио файл)
                         </label>
-                        <AudioTrimmer
-                            value={formData.preview.current}
-                            onChange={(file) => {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    preview: {
-                                        current: undefined, // Будет установлено после сохранения
-                                        file,
-                                        isChanged: true
-                                    }
-                                }));
-                            }}
-                        />
+
+                        {/* Переключатель режима */}
+                        <div className={styles.field__toggle}>
+                            <button
+                                type="button"
+                                className={`${styles.field__toggle__option} ${formData.preview.mode === 'file' ? styles.field__toggle__option_active : ''}`}
+                                onClick={() => handlePreviewModeChange('file')}
+                            >
+                                Загрузить файл
+                            </button>
+                            <button
+                                type="button"
+                                className={`${styles.field__toggle__option} ${formData.preview.mode === 'url' ? styles.field__toggle__option_active : ''}`}
+                                onClick={() => handlePreviewModeChange('url')}
+                            >
+                                Ввести URL
+                            </button>
+                        </div>
+
+                        {/* Контент в зависимости от режима */}
+                        {formData.preview.mode === 'file' ? (
+                            <AudioTrimmer
+                                value={formData.preview.current}
+                                onChange={(file) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        preview: {
+                                            ...prev.preview,
+                                            current: undefined, // Будет установлено после сохранения
+                                            file,
+                                            isChanged: true
+                                        }
+                                    }));
+                                }}
+                            />
+                        ) : (
+                            <input
+                                type="text"
+                                value={formData.preview.url || ''}
+                                onChange={handlePreviewUrlChange}
+                                placeholder="https://example.com/audio.mp3"
+                                className={`${styles.field__input} ${errors.preview ? styles.field__input_error : ''}`}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
