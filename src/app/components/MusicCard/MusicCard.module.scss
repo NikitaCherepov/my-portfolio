@@ -63,8 +63,49 @@
                 gap: 10px;
 
                 &__link {
-                    width: 64px;
+                    width: 75px;
+                    height: 75px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.1);
+                    transition: all 0.3s ease;
                     cursor: pointer;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.2);
+                        transform: scale(1.1);
+                    }
+
+                    &:active {
+                        transform: scale(0.95);
+                    }
+
+                    img {
+                        width: 40px;
+                        height: 40px;
+                        transition: filter 0.3s ease;
+                    }
+
+                    &:hover img {
+                        filter: brightness(1.2);
+                    }
+                }
+
+                &__link.disabled {
+                    opacity: 0.3;
+                    cursor: not-allowed;
+                    pointer-events: none;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                        transform: none;
+                    }
+
+                    &:hover img {
+                        filter: none;
+                    }
                 }
 
             }
