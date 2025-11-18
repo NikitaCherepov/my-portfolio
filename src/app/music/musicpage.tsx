@@ -19,7 +19,7 @@ import Image from 'next/image'
 
 export default function MusicPage() {
 
-    const {music, loading} = useMusic();
+    const {data: music, isLoading: loading} = useMusic();
     const {data: genres, isLoading: genresLoading} = useGenres();
 
     const volume = 0.1;

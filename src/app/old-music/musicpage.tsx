@@ -98,7 +98,7 @@ export default function MusicPage() {
     //     setShowModal((prev) => !prev);
     // }
 
-    const {music, loading} = useMusic();
+    const {data: music, isLoading: loading} = useMusic();
 
     // Показываем loader во время загрузки
     if (loading) {
@@ -123,10 +123,10 @@ export default function MusicPage() {
       };
       
 
-    const sortedMusic = [...music]
+    const sortedMusic = [...(music || [])]
     .sort(sortingMethods[pageKey][sortBy[pageKey]])
     .slice((pagination[pageKey].currentPage - 1) * pagination[pageKey].cardsPerPage, pagination[pageKey].currentPage * pagination[pageKey].cardsPerPage);
-    const totalPages = Math.ceil(music.length / pagination[pageKey].cardsPerPage);
+    const totalPages = Math.ceil((music || []).length / pagination[pageKey].cardsPerPage);
     const delta = 2;
 
     return (
