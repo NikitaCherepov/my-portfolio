@@ -93,22 +93,94 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
               />
             </AnimatePresence>
             <div className={styles.container__head__albumContainer__links}>
-              <img
-                src="/images/icons/musiccard/spotify_bw.svg"
-                className={styles.container__head__albumContainer__links__link}
-              />
-              <img
-                src="/images/icons/musiccard/ym_bw.svg"
-                className={styles.container__head__albumContainer__links__link}
-              />
-              <img
-                src="/images/icons/musiccard/yt_bw.svg"
-                className={styles.container__head__albumContainer__links__link}
-              />
-              <img
-                src="/images/icons/musiccard/vkmusic_bw.svg"
-                className={styles.container__head__albumContainer__links__link}
-              />
+              {currentMusicCard?.spotify ? (
+                <a
+                  href={currentMusicCard.spotify}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.container__head__albumContainer__links__link}
+                >
+                  <img
+                    src="/images/icons/musiccard/spotify_bw.svg"
+                    alt="Spotify"
+                  />
+                </a>
+              ) : (
+                <div
+                  className={`${styles.container__head__albumContainer__links__link} ${styles.disabled}`}
+                >
+                  <img
+                    src="/images/icons/musiccard/spotify_bw.svg"
+                    alt="Spotify"
+                  />
+                </div>
+              )}
+              {currentMusicCard?.ymusic ? (
+                <a
+                  href={currentMusicCard.ymusic}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.container__head__albumContainer__links__link}
+                >
+                  <img
+                    src="/images/icons/musiccard/ym_bw.svg"
+                    alt="Yandex Music"
+                  />
+                </a>
+              ) : (
+                <div
+                  className={`${styles.container__head__albumContainer__links__link} ${styles.disabled}`}
+                >
+                  <img
+                    src="/images/icons/musiccard/ym_bw.svg"
+                    alt="Yandex Music"
+                  />
+                </div>
+              )}
+              {currentMusicCard?.youtube ? (
+                <a
+                  href={currentMusicCard.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.container__head__albumContainer__links__link}
+                >
+                  <img
+                    src="/images/icons/musiccard/yt_bw.svg"
+                    alt="YouTube"
+                  />
+                </a>
+              ) : (
+                <div
+                  className={`${styles.container__head__albumContainer__links__link} ${styles.disabled}`}
+                >
+                  <img
+                    src="/images/icons/musiccard/yt_bw.svg"
+                    alt="YouTube"
+                  />
+                </div>
+              )}
+              {currentMusicCard?.vkmusic ? (
+                <a
+                  href={currentMusicCard.vkmusic}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.container__head__albumContainer__links__link}
+                >
+                  <img
+                    src="/images/icons/musiccard/vkmusic_bw.svg"
+                    alt="VK Music"
+                  />
+                </a>
+              ) : (
+                <div
+                  className={`${styles.container__head__albumContainer__links__link} ${styles.disabled}`}
+                >
+                  <img
+                    src="/images/icons/musiccard/vkmusic_bw.svg"
+                    alt="VK Music"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
