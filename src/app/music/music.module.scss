@@ -127,27 +127,51 @@
         overflow: hidden;
     }
 
-    &__sphere {
+    .albumCover {
         position: absolute;
-        border-radius: 50%;
+        border-radius: 12px;
         box-shadow:
-            0 4px 15px rgba(0, 0, 0, 0.1),
-            inset 0 -2px 5px rgba(0, 0, 0, 0.1),
-            inset 0 2px 5px rgba(255, 255, 255, 0.3);
+            0 8px 25px rgba(0, 0, 0, 0.15),
+            inset 0 -2px 8px rgba(0, 0, 0, 0.1),
+            inset 0 2px 8px rgba(255, 255, 255, 0.2);
         pointer-events: none;
         will-change: transform;
-        transform: translate(-50%, -50%); /* Центрируем шарик относительно позиции */
-
-        /* Добавляем красивый градиентный эффект */
-        background-image: radial-gradient(
-            circle at 30% 30%,
-            rgba(255, 255, 255, 0.3),
-            transparent 50%
-        );
-
-        /* Анимация пульсации для живости */
-        animation: pulse 4s ease-in-out infinite;
+        transform: translate(-50%, -50%); /* Центрируем обложку относительно позиции */
+        object-fit: cover;
+        object-position: center;
         z-index: 0;
+
+        /* Добавляем красивый блик для живости */
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.15),
+                transparent
+            );
+            border-radius: 12px 12px 0 0;
+            pointer-events: none;
+        }
+
+        /* Анимация плавного покачивания */
+        // animation: gentleFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+        0%, 100% {
+            transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        }
+        33% {
+            transform: translate(-50%, -50%) rotate(1deg) scale(1.01);
+        }
+        66% {
+            transform: translate(-50%, -50%) rotate(-1deg) scale(0.99);
+        }
     }
     // &__backgroundBlur {
     //     height: 100%;
@@ -158,7 +182,7 @@
 
     &__backgroundBlur {
         background: rgba(97, 97, 97, 0.29);
-        backdrop-filter: blur(50px);
+        backdrop-filter: blur(15px);
         border-radius: 20px;
         position: absolute;
         overflow: hidden;

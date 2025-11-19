@@ -17,43 +17,27 @@ import { Music } from '../services/musicService'
 import { Genre } from '../services/genresService'
 import Image from 'next/image'
 
-// Типы и константы для шариков
-type Sphere = {
-    id: number;
+// Типы и константы для обложек альбомов
+type AlbumCover = {
+    id: string;
     x: number;
     y: number;
     vx: number;
     vy: number;
     size: number;
-    color: string;
+    coverUrl: string;
     parallaxLayer: number;
 };
 
 // Константы для параллакс-слоев
 const PARALLAX_LAYERS = [
-    { layer: 0, speedMultiplier: 0.3, sizeRange: [15, 25], opacity: 0.3, blur: 1 }, // Дальний слой
-    { layer: 1, speedMultiplier: 0.5, sizeRange: [20, 45], opacity: 0.5, blur: 1 },   // Средне-дальний слой
-    { layer: 2, speedMultiplier: 0.7, sizeRange: [45, 65], opacity: 0.7, blur: 0.5 }, // Средний слой
-    { layer: 3, speedMultiplier: 1.0, sizeRange: [70, 108], opacity: 0.9, blur: 0 },   // Передний слой
+    { layer: 0, speedMultiplier: 0.3, sizeRange: [50, 100], opacity: 0.25, blur: 0 }, // Дальний слой
+    { layer: 1, speedMultiplier: 0.5, sizeRange: [100, 150], opacity: 0.4, blur: 0 },   // Средне-дальний слой
+    { layer: 2, speedMultiplier: 0.7, sizeRange: [150, 200], opacity: 0.6, blur: 0 }, // Средний слой
+    { layer: 3, speedMultiplier: 1.0, sizeRange: [200, 250], opacity: 0.8, blur: 0 },   // Передний слой
 ];
 
-// Цветовые палитры для разных слоев
-const LAYER_COLORS = [
-    // Дальний слой — холодные и нейтральные
-    ['#777985', '#B3ADAD', '#D9DDE0', '#E9E8E4'],
-
-    // Средне-дальний — мягкие тёплые пастельные
-    ['#C0B4A8', '#F7EFED', '#F7E6DE', '#EFD2C4'],
-
-    // Средний — светлые тёплые
-    ['#EBAA98', '#E9CBC0', '#F7E6DE', '#C0B4A8'],
-
-    // Передний — самые насыщённые и заметные из палитры
-    ['#EBAA98', '#777985', '#EFD2C4', '#E9CBC0'],
-];
-
-
-const SPHERE_COUNT = 15;
+const ALBUM_COUNT = 12;
 
 
 export default function MusicPage() {
@@ -83,7 +67,7 @@ export default function MusicPage() {
     };
 
     const [notesConfig, setNotesConfig] = useState<NoteConfig[]>([]);
-const [spheres, setSpheres] = useState<Sphere[]>([]);
+const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
 
     useEffect(() => {
       const NOTE_COUNT = 15;
@@ -176,51 +160,57 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
       setNotesConfig(generated);
     }, []);
 
-    // Генерация и анимация шариков
+    // Генерация и анимация обложек альбомов
     useEffect(() => {
-        // Функция генерации случайного шарика
-        const generateSphere = (id: number): Sphere => {
+        if (!music || music.length === 0) return;
+        // Получаем уникальные обложки из альбомов
+        const uniqueCovers = Array.from(new Set(music.map(item => item.mainImage).filter(url => url)));
+        const availableCovers = uniqueCovers.slice(0, ALBUM_COUNT);
+
+        if (availableCovers.length === 0) return;
+
+        // Функция генерации обложки альбома
+        const generateAlbumCover = (coverUrl: string, index: number): AlbumCover => {
             const layer = Math.floor(Math.random() * PARALLAX_LAYERS.length);
             const layerConfig = PARALLAX_LAYERS[layer];
-            const colors = LAYER_COLORS[layer];
 
             const size = layerConfig.sizeRange[0] + Math.random() * (layerConfig.sizeRange[1] - layerConfig.sizeRange[0]);
             const speed = (1 + Math.random() * 1.5) * layerConfig.speedMultiplier;
             const angle = Math.random() * Math.PI * 2;
 
             return {
-                id,
+                id: `cover-${index}-${coverUrl}`,
                 x: Math.random() * 100, // случайная позиция по X в процентах
                 y: Math.random() * 100, // случайная позиция по Y в процентах
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 size,
-                color: colors[Math.floor(Math.random() * colors.length)],
+                coverUrl,
                 parallaxLayer: layer,
             };
         };
 
-        // Генерируем начальные шарики
-        const initialSpheres = Array.from({ length: SPHERE_COUNT }, (_, i) => generateSphere(i));
-        setSpheres(initialSpheres);
+        // Генерируем начальные обложки
+        const initialAlbumCovers = availableCovers.map((coverUrl, index) => generateAlbumCover(coverUrl, index));
+        setAlbumCovers(initialAlbumCovers);
 
-        // Функция проверки столкновения между двумя шариками
-        const checkCollision = (sphere1: Sphere, sphere2: Sphere): boolean => {
-            const dx = sphere1.x - sphere2.x;
-            const dy = sphere1.y - sphere2.y;
+        // Функция проверки столкновения между двумя обложками
+        const checkCollision = (cover1: AlbumCover, cover2: AlbumCover): boolean => {
+            const dx = cover1.x - cover2.x;
+            const dy = cover1.y - cover2.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const minDistance = (sphere1.size + sphere2.size) / 10; // Преобразуем размер в проценты
+            const minDistance = (cover1.size + cover2.size) / 10; // Преобразуем размер в проценты
             return distance < minDistance;
         };
 
         // Функция обновления позиций
-        const updateSpheres = () => {
-            setSpheres(prevSpheres => {
-                const newSpheres = [...prevSpheres];
+        const updateAlbumCovers = () => {
+            setAlbumCovers(prevCovers => {
+                const newCovers = [...prevCovers];
 
-                // Обновляем позиции для всех шариков
-                newSpheres.forEach((sphere, index) => {
-                    let { x, y, vx, vy } = sphere;
+                // Обновляем позиции для всех обложек
+                newCovers.forEach((cover, index) => {
+                    let { x, y, vx, vy } = cover;
 
                     // Обновляем позицию
                     x += vx * 0.1;
@@ -236,19 +226,19 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
                         y = y <= 0 ? 0 : 100;
                     }
 
-                    newSpheres[index] = { ...sphere, x, y, vx, vy };
+                    newCovers[index] = { ...cover, x, y, vx, vy };
                 });
 
-                // Проверка столкновений между шариками
-                for (let i = 0; i < newSpheres.length; i++) {
-                    for (let j = i + 1; j < newSpheres.length; j++) {
-                        const sphere1 = newSpheres[i];
-                        const sphere2 = newSpheres[j];
+                // Проверка столкновений между обложками
+                for (let i = 0; i < newCovers.length; i++) {
+                    for (let j = i + 1; j < newCovers.length; j++) {
+                        const cover1 = newCovers[i];
+                        const cover2 = newCovers[j];
 
-                        if (checkCollision(sphere1, sphere2)) {
+                        if (checkCollision(cover1, cover2)) {
                             // Вычисляем вектор столкновения
-                            const dx = sphere2.x - sphere1.x;
-                            const dy = sphere2.y - sphere1.y;
+                            const dx = cover2.x - cover1.x;
+                            const dy = cover2.y - cover1.y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
 
                             if (distance > 0) {
@@ -257,30 +247,30 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
                                 const ny = dy / distance;
 
                                 // Относительная скорость
-                                const dvx = sphere2.vx - sphere1.vx;
-                                const dvy = sphere2.vy - sphere1.vy;
+                                const dvx = cover2.vx - cover1.vx;
+                                const dvy = cover2.vy - cover1.vy;
 
                                 // Скорость вдоль вектора столкновения
                                 const speed = dvx * nx + dvy * ny;
 
                                 if (speed < 0) {
-                                    // Шарики сближаются, меняем скорости
+                                    // Обложки сближаются, меняем скорости
                                     const impulse = 2 * speed / 2; // Предполагаем равную массу
 
-                                    newSpheres[i].vx += impulse * nx * 0.8; // Небольшой коэффициент упругости
-                                    newSpheres[i].vy += impulse * ny * 0.8;
-                                    newSpheres[j].vx -= impulse * nx * 0.8;
-                                    newSpheres[j].vy -= impulse * ny * 0.8;
+                                    newCovers[i].vx += impulse * nx * 0.8; // Небольшой коэффициент упругости
+                                    newCovers[i].vy += impulse * ny * 0.8;
+                                    newCovers[j].vx -= impulse * nx * 0.8;
+                                    newCovers[j].vy -= impulse * ny * 0.8;
 
-                                    // Раздвигаем шарики чтобы избежать залипания
-                                    const overlap = ((sphere1.size + sphere2.size) / 10) - distance;
+                                    // Раздвигаем обложки чтобы избежать залипания
+                                    const overlap = ((cover1.size + cover2.size) / 10) - distance;
                                     if (overlap > 0) {
                                         const separationX = nx * overlap * 0.5;
                                         const separationY = ny * overlap * 0.5;
-                                        newSpheres[i].x -= separationX;
-                                        newSpheres[i].y -= separationY;
-                                        newSpheres[j].x += separationX;
-                                        newSpheres[j].y += separationY;
+                                        newCovers[i].x -= separationX;
+                                        newCovers[i].y -= separationY;
+                                        newCovers[j].x += separationX;
+                                        newCovers[j].y += separationY;
                                     }
                                 }
                             }
@@ -288,15 +278,15 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
                     }
                 }
 
-                return newSpheres;
+                return newCovers;
             });
         };
 
         // Запускаем анимацию
-        const intervalId = setInterval(updateSpheres, 50); // 20 FPS
+        const intervalId = setInterval(updateAlbumCovers, 50); // 20 FPS
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [music]); // Добавляем music в зависимости, чтобы перегенерировать при изменении данных
 
     const handleNoteClick = (soundSrc: string) => {
         const audio = new Audio(soundSrc);
@@ -409,15 +399,17 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
           <div className={styles.contacts}>
             <div className={styles.contacts__backgroundWhite}></div>
             <div className={styles.contacts__spheres}>
-              {spheres.map((sphere) => {
-                const layerConfig = PARALLAX_LAYERS[sphere.parallaxLayer];
+              {albumCovers.map((albumCover) => {
+                const layerConfig = PARALLAX_LAYERS[albumCover.parallaxLayer];
                 return (
-                  <motion.div
-                    key={sphere.id}
-                    className={styles.contacts__sphere}
+                  <motion.img
+                    key={albumCover.id}
+                    src={albumCover.coverUrl}
+                    alt="Album cover"
+                    className={styles.albumCover}
                     animate={{
-                      left: `${sphere.x}%`,
-                      top: `${sphere.y}%`,
+                      left: `${albumCover.x}%`,
+                      top: `${albumCover.y}%`,
                       scale: 1,
                     }}
                     transition={{
@@ -426,12 +418,11 @@ const [spheres, setSpheres] = useState<Sphere[]>([]);
                       duration: 0.05,
                     }}
                     style={{
-                      width: `${sphere.size}px`,
-                      height: `${sphere.size}px`,
-                      backgroundColor: sphere.color,
+                      width: `${albumCover.size}px`,
+                      height: `${albumCover.size}px`,
                       opacity: layerConfig.opacity,
                       filter: `blur(${layerConfig.blur}px)`,
-                      zIndex: sphere.parallaxLayer,
+                      zIndex: albumCover.parallaxLayer,
                     }}
                   />
                 );
