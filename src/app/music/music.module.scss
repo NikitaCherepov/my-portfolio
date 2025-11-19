@@ -214,9 +214,18 @@
         &__losung {
             margin-top: 40px;
         }
+        &__buttonsInfo {
+            margin-top: 60px;
+        }
         p {
             text-align: center;
             font-size: 2rem;
+        }
+        &__contactButtons {
+            display: flex;
+            flex-direction: row;
+            color: black;
+            gap: 20px;
         }
     }
 }
