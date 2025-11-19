@@ -17,6 +17,44 @@ import { Music } from '../services/musicService'
 import { Genre } from '../services/genresService'
 import Image from 'next/image'
 
+// Типы и константы для шариков
+type Sphere = {
+    id: number;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    color: string;
+    parallaxLayer: number;
+};
+
+// Константы для параллакс-слоев
+const PARALLAX_LAYERS = [
+    { layer: 0, speedMultiplier: 0.3, sizeRange: [15, 25], opacity: 0.3, blur: 1 }, // Дальний слой
+    { layer: 1, speedMultiplier: 0.5, sizeRange: [20, 45], opacity: 0.5, blur: 1 },   // Средне-дальний слой
+    { layer: 2, speedMultiplier: 0.7, sizeRange: [45, 65], opacity: 0.7, blur: 0.5 }, // Средний слой
+    { layer: 3, speedMultiplier: 1.0, sizeRange: [70, 108], opacity: 0.9, blur: 0 },   // Передний слой
+];
+
+// Цветовые палитры для разных слоев
+const LAYER_COLORS = [
+    // Дальний слой — холодные и нейтральные
+    ['#777985', '#B3ADAD', '#D9DDE0', '#E9E8E4'],
+
+    // Средне-дальний — мягкие тёплые пастельные
+    ['#C0B4A8', '#F7EFED', '#F7E6DE', '#EFD2C4'],
+
+    // Средний — светлые тёплые
+    ['#EBAA98', '#E9CBC0', '#F7E6DE', '#C0B4A8'],
+
+    // Передний — самые насыщённые и заметные из палитры
+    ['#EBAA98', '#777985', '#EFD2C4', '#E9CBC0'],
+];
+
+
+const SPHERE_COUNT = 15;
+
 
 export default function MusicPage() {
 
@@ -45,6 +83,7 @@ export default function MusicPage() {
     };
 
     const [notesConfig, setNotesConfig] = useState<NoteConfig[]>([]);
+const [spheres, setSpheres] = useState<Sphere[]>([]);
 
     useEffect(() => {
       const NOTE_COUNT = 15;
@@ -137,6 +176,128 @@ export default function MusicPage() {
       setNotesConfig(generated);
     }, []);
 
+    // Генерация и анимация шариков
+    useEffect(() => {
+        // Функция генерации случайного шарика
+        const generateSphere = (id: number): Sphere => {
+            const layer = Math.floor(Math.random() * PARALLAX_LAYERS.length);
+            const layerConfig = PARALLAX_LAYERS[layer];
+            const colors = LAYER_COLORS[layer];
+
+            const size = layerConfig.sizeRange[0] + Math.random() * (layerConfig.sizeRange[1] - layerConfig.sizeRange[0]);
+            const speed = (1 + Math.random() * 1.5) * layerConfig.speedMultiplier;
+            const angle = Math.random() * Math.PI * 2;
+
+            return {
+                id,
+                x: Math.random() * 100, // случайная позиция по X в процентах
+                y: Math.random() * 100, // случайная позиция по Y в процентах
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                size,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                parallaxLayer: layer,
+            };
+        };
+
+        // Генерируем начальные шарики
+        const initialSpheres = Array.from({ length: SPHERE_COUNT }, (_, i) => generateSphere(i));
+        setSpheres(initialSpheres);
+
+        // Функция проверки столкновения между двумя шариками
+        const checkCollision = (sphere1: Sphere, sphere2: Sphere): boolean => {
+            const dx = sphere1.x - sphere2.x;
+            const dy = sphere1.y - sphere2.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const minDistance = (sphere1.size + sphere2.size) / 10; // Преобразуем размер в проценты
+            return distance < minDistance;
+        };
+
+        // Функция обновления позиций
+        const updateSpheres = () => {
+            setSpheres(prevSpheres => {
+                const newSpheres = [...prevSpheres];
+
+                // Обновляем позиции для всех шариков
+                newSpheres.forEach((sphere, index) => {
+                    let { x, y, vx, vy } = sphere;
+
+                    // Обновляем позицию
+                    x += vx * 0.1;
+                    y += vy * 0.1;
+
+                    // Проверка столкновений со стенами
+                    if (x <= 0 || x >= 100) {
+                        vx = -vx * 0.9; // Небольшое затухание при отскоке
+                        x = x <= 0 ? 0 : 100;
+                    }
+                    if (y <= 0 || y >= 100) {
+                        vy = -vy * 0.9; // Небольшое затухание при отскоке
+                        y = y <= 0 ? 0 : 100;
+                    }
+
+                    newSpheres[index] = { ...sphere, x, y, vx, vy };
+                });
+
+                // Проверка столкновений между шариками
+                for (let i = 0; i < newSpheres.length; i++) {
+                    for (let j = i + 1; j < newSpheres.length; j++) {
+                        const sphere1 = newSpheres[i];
+                        const sphere2 = newSpheres[j];
+
+                        if (checkCollision(sphere1, sphere2)) {
+                            // Вычисляем вектор столкновения
+                            const dx = sphere2.x - sphere1.x;
+                            const dy = sphere2.y - sphere1.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance > 0) {
+                                // Нормализуем вектор
+                                const nx = dx / distance;
+                                const ny = dy / distance;
+
+                                // Относительная скорость
+                                const dvx = sphere2.vx - sphere1.vx;
+                                const dvy = sphere2.vy - sphere1.vy;
+
+                                // Скорость вдоль вектора столкновения
+                                const speed = dvx * nx + dvy * ny;
+
+                                if (speed < 0) {
+                                    // Шарики сближаются, меняем скорости
+                                    const impulse = 2 * speed / 2; // Предполагаем равную массу
+
+                                    newSpheres[i].vx += impulse * nx * 0.8; // Небольшой коэффициент упругости
+                                    newSpheres[i].vy += impulse * ny * 0.8;
+                                    newSpheres[j].vx -= impulse * nx * 0.8;
+                                    newSpheres[j].vy -= impulse * ny * 0.8;
+
+                                    // Раздвигаем шарики чтобы избежать залипания
+                                    const overlap = ((sphere1.size + sphere2.size) / 10) - distance;
+                                    if (overlap > 0) {
+                                        const separationX = nx * overlap * 0.5;
+                                        const separationY = ny * overlap * 0.5;
+                                        newSpheres[i].x -= separationX;
+                                        newSpheres[i].y -= separationY;
+                                        newSpheres[j].x += separationX;
+                                        newSpheres[j].y += separationY;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return newSpheres;
+            });
+        };
+
+        // Запускаем анимацию
+        const intervalId = setInterval(updateSpheres, 50); // 20 FPS
+
+        return () => clearInterval(intervalId);
+    }, []);
+
     const handleNoteClick = (soundSrc: string) => {
         const audio = new Audio(soundSrc);
         audio.volume = volume;
@@ -154,74 +315,151 @@ export default function MusicPage() {
     }
 
     return (
-        <>
-
-        <PlayerWatcher/>
-        <MusicPlayer/>
+      <>
+        <PlayerWatcher />
+        <MusicPlayer />
         <div className={`mainContainer  ${styles.container}`}>
-            <div className={styles.head}>
-                <Image priority className={styles.head__logo} src='/images/logo.png' alt='Нота меню' width={450} height={400}/>
-                <p className={styles.head__motto}>Пишу музыку для игр и для себя. <br/>Хочешь трек? Напиши мне</p>
+          <div className={styles.head}>
+            <Image
+              priority
+              className={styles.head__logo}
+              src="/images/logo.png"
+              alt="Нота меню"
+              width={450}
+              height={400}
+            />
+            <p className={styles.head__motto}>
+              Пишу музыку для игр и для себя. <br />
+              Хочешь трек? Напиши мне
+            </p>
 
-                <div className={styles.head__background}>
-                    {notesConfig.map((note, i) => (
-                        <motion.div
-                            key={i}
-                            onClick={() => handleNoteClick(note.soundSrc)}
-                            className={styles.head__background__note}
-                            initial={{ opacity: 0 }}
-                            animate={{
-                                x: [-10 * note.parallaxFactor, 10 * note.parallaxFactor],
-                                y: [-20 * note.parallaxFactor, 20 * note.parallaxFactor],
-                                opacity: [0, 1, 0],
-                            }}
-                            transition={{
-                                x: { duration: 6 / note.parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
-                                y: { duration: 8 / note.parallaxFactor, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
-                                opacity: {
-                                    duration: 8 + Math.random() * 12,
-                                    repeat: Infinity,
-                                    repeatType: 'loop',
-                                    ease: 'linear',
-                                    repeatDelay: Math.random() * 5,
-                                },
-                            }}
-                            style={{
-                                left: `${note.left}%`,
-                                top: `${note.top}%`,
-                                scale: 0.2 + note.parallaxFactor * 0.9,
-                                opacity: 0.4 + note.parallaxFactor * 0.4
-                            }}
-                        >
-                            <img src={note.src} alt={`Note ${i + 1}`} />
-                        </motion.div>
-                    ))}
-                </div>
+            <div className={styles.head__background}>
+              {notesConfig.map((note, i) => (
+                <motion.div
+                  key={i}
+                  onClick={() => handleNoteClick(note.soundSrc)}
+                  className={styles.head__background__note}
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    x: [-10 * note.parallaxFactor, 10 * note.parallaxFactor],
+                    y: [-20 * note.parallaxFactor, 20 * note.parallaxFactor],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    x: {
+                      duration: 6 / note.parallaxFactor,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                      ease: "easeInOut",
+                    },
+                    y: {
+                      duration: 8 / note.parallaxFactor,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                      ease: "easeInOut",
+                    },
+                    opacity: {
+                      duration: 8 + Math.random() * 12,
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      ease: "linear",
+                      repeatDelay: Math.random() * 5,
+                    },
+                  }}
+                  style={{
+                    left: `${note.left}%`,
+                    top: `${note.top}%`,
+                    scale: 0.2 + note.parallaxFactor * 0.9,
+                    opacity: 0.4 + note.parallaxFactor * 0.4,
+                  }}
+                >
+                  <img src={note.src} alt={`Note ${i + 1}`} />
+                </motion.div>
+              ))}
             </div>
-            {/* <div className={styles.musicHeader}>
+          </div>
+          {/* <div className={styles.musicHeader}>
                 <h2>Музыка</h2>
             </div> */}
 
-            {genres && genres.length > 0 ? (
-                genres.map((genre, index) => {
-                    // Фильтруем треки по текущему жанру
-                    const genreTracks = music?.filter((track) => track.genre.id === genre.id) || [];
+          {genres && genres.length > 0 ? (
+            genres.map((genre, index) => {
+              // Фильтруем треки по текущему жанру
+              const genreTracks =
+                music?.filter((track) => track.genre.id === genre.id) || [];
 
-                    // Показываем жанр только если в нем есть треки
-                    if (genreTracks.length === 0) return null;
+              // Показываем жанр только если в нем есть треки
+              if (genreTracks.length === 0) return null;
 
-                    return (
-                                <MusicCard key={`music-card ${genre.name}`} music={genreTracks} genre={genre} index={index + 1} />
-                    );
-                })
-            ) : (
-                <div className={styles.noGenres}>
-                    <p>Жанры не найдены</p>
-                </div>
-            )}
+              return (
+                <MusicCard
+                  key={`music-card ${genre.name}`}
+                  music={genreTracks}
+                  genre={genre}
+                  index={index + 1}
+                />
+              );
+            })
+          ) : (
+            <div className={styles.noGenres}>
+              <p>Жанры не найдены</p>
+            </div>
+          )}
 
+          <div className={styles.contacts}>
+            <div className={styles.contacts__backgroundWhite}></div>
+            <div className={styles.contacts__spheres}>
+              {spheres.map((sphere) => {
+                const layerConfig = PARALLAX_LAYERS[sphere.parallaxLayer];
+                return (
+                  <motion.div
+                    key={sphere.id}
+                    className={styles.contacts__sphere}
+                    animate={{
+                      left: `${sphere.x}%`,
+                      top: `${sphere.y}%`,
+                      scale: 1,
+                    }}
+                    transition={{
+                      type: "tween",
+                      ease: "linear",
+                      duration: 0.05,
+                    }}
+                    style={{
+                      width: `${sphere.size}px`,
+                      height: `${sphere.size}px`,
+                      backgroundColor: sphere.color,
+                      opacity: layerConfig.opacity,
+                      filter: `blur(${layerConfig.blur}px)`,
+                      zIndex: sphere.parallaxLayer,
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div className={styles.contacts__backgroundBlur}></div>
 
+            <div className={styles.contacts__content}>
+              <h2 className={styles.contacts__content__header}>Контакты</h2>
+              <p className={styles.contacts__content__losung}>
+                Хочешь трек для игры?
+                <br />
+                Или ты работаешь над анимацией?
+                <br />А может, просто хочешь поделиться мыслями?
+              </p>
+              <p>Вот, где меня можно найти:</p>
+              {/* <div className={styles.contacts__content__contactButtons}>
+
+                                        <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
+                                        <Button link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
+                                        <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
+
+                    </div> */}
+              <p>Мои соцсети:</p>
+              <div className={styles.contacts__content__contactButtons}></div>
+            </div>
+          </div>
         </div>
-        </>
-    )
+      </>
+    );
 }
