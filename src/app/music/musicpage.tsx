@@ -47,70 +47,94 @@ export default function MusicPage() {
     const [notesConfig, setNotesConfig] = useState<NoteConfig[]>([]);
 
     useEffect(() => {
-        const NOTE_COUNT = 20;
-        const LEFT_MIN = 0;
-        const LEFT_MAX = 100;
-        const TOP_MIN = 0;
-        const TOP_MAX = 90; // чтобы "bottom ~10%" оставался
-        const MIN_DIST = 25;  // минимальное расстояние в процентах
-        const MAX_DIST = 90; // максимальное расстояние до "соседа"
-        const MAX_ATTEMPTS = 25;
+      const NOTE_COUNT = 15;
+      const LEFT_MIN = 0;
+      const LEFT_MAX = 100;
+      const TOP_MIN = 0;
+      const TOP_MAX = 90; // чтобы "bottom ~10%" оставался
+      const MIN_DIST = 25; // минимальное расстояние в процентах
+      const MAX_DIST = 90; // максимальное расстояние до "соседа"
+      const MAX_ATTEMPTS = 25;
 
-        const randomInRange = (min: number, max: number) =>
-            min + Math.random() * (max - min);
+      const randomInRange = (min: number, max: number) =>
+        min + Math.random() * (max - min);
 
-        const generated: NoteConfig[] = [];
-        let soundIndex = 0;
+      const generated: NoteConfig[] = [];
+      let soundIndex = 0;
 
-        for (let i = 0; i < NOTE_COUNT; i++) {
-            const src = notes[Math.floor(Math.random() * notes.length)];
-            const parallaxFactor = 0.3 + Math.random() * 0.7;
+      const EDGE_MIN_MARGIN = 5;
+      const EDGE_MAX_MARGIN = 15;
 
-            let left: number = randomInRange(LEFT_MIN, LEFT_MAX);
-            let top: number = randomInRange(TOP_MIN, TOP_MAX);
+      for (let i = 0; i < NOTE_COUNT; i++) {
+        const src = notes[Math.floor(Math.random() * notes.length)];
+        const parallaxFactor = 0.3 + Math.random() * 0.7;
 
-            if (generated.length > 0) {
-                let placed = false;
+        // границы области с учётом отступа от краёв
+        const marginX =
+          EDGE_MIN_MARGIN + Math.random() * (EDGE_MAX_MARGIN - EDGE_MIN_MARGIN);
+        const marginY =
+          EDGE_MIN_MARGIN + Math.random() * (EDGE_MAX_MARGIN - EDGE_MIN_MARGIN);
 
-                for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-                    const anchor =
-                        generated[Math.floor(Math.random() * generated.length)];
+        const effectiveLeftMin = LEFT_MIN + marginX;
+        const effectiveLeftMax = LEFT_MAX - marginX;
+        const effectiveTopMin = TOP_MIN + marginY;
+        const effectiveTopMax = TOP_MAX - marginY;
 
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = MIN_DIST + Math.random() * (MAX_DIST - MIN_DIST);
+        let left = randomInRange(effectiveLeftMin, effectiveLeftMax);
+        let top = randomInRange(effectiveTopMin, effectiveTopMax);
 
-                    const candidateLeft = anchor.left + Math.cos(angle) * dist;
-                    const candidateTop = anchor.top + Math.sin(angle) * dist;
+        if (generated.length > 0) {
+          const CANDIDATE_ATTEMPTS = 40;
 
-                    if (
-                        candidateLeft < LEFT_MIN ||
-                        candidateLeft > LEFT_MAX ||
-                        candidateTop < TOP_MIN ||
-                        candidateTop > TOP_MAX
-                    ) {
-                        continue; // вылезли за right/bottom/top/left
-                    }
+          let bestLeft = left;
+          let bestTop = top;
+          let bestMinDist = -Infinity;
 
-                    left = candidateLeft;
-                    top = candidateTop;
-                    placed = true;
-                    break;
-                }
+          for (let attempt = 0; attempt < CANDIDATE_ATTEMPTS; attempt++) {
+            const candidateLeft = randomInRange(
+              effectiveLeftMin,
+              effectiveLeftMax
+            );
+            const candidateTop = randomInRange(
+              effectiveTopMin,
+              effectiveTopMax
+            );
 
-                if (!placed) {
-                    // "если такой точки нет — то как получится"
-                    left = randomInRange(LEFT_MIN, LEFT_MAX);
-                    top = randomInRange(TOP_MIN, TOP_MAX);
-                }
+            let minDistToExisting = Infinity;
+
+            for (const other of generated) {
+              const dx = candidateLeft - other.left;
+              const dy = candidateTop - other.top;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < minDistToExisting) minDistToExisting = dist;
             }
 
-            const soundSrc = soundFiles[soundIndex];
-            soundIndex = (soundIndex + 1) % soundFiles.length;
+            // ищем точку, у которой расстояние до ближайшей ноты максимальное
+            if (minDistToExisting > bestMinDist) {
+              bestMinDist = minDistToExisting;
+              bestLeft = candidateLeft;
+              bestTop = candidateTop;
+            }
+          }
 
-            generated.push({ src, left, top, parallaxFactor, soundSrc });
+          // проверка "коллизии" как раньше — не ближе MIN_DIST
+          if (bestMinDist >= MIN_DIST) {
+            left = bestLeft;
+            top = bestTop;
+          } else {
+            // если не нашли хорошей — просто рандом в безопасной зоне
+            left = randomInRange(effectiveLeftMin, effectiveLeftMax);
+            top = randomInRange(effectiveTopMin, effectiveTopMax);
+          }
         }
 
-        setNotesConfig(generated);
+        const soundSrc = soundFiles[soundIndex];
+        soundIndex = (soundIndex + 1) % soundFiles.length;
+
+        generated.push({ src, left, top, parallaxFactor, soundSrc });
+      }
+
+      setNotesConfig(generated);
     }, []);
 
     const handleNoteClick = (soundSrc: string) => {
