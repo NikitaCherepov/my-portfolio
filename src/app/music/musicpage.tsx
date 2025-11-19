@@ -9,7 +9,6 @@ import {motion} from 'framer-motion'
 import { usePagination } from "../store/useExitStore"
 import {useState, useEffect} from 'react'
 import MusicCard from "../components/MusicCard/MusicCard"
-import Button from "../components/Cards/SiteCard/Button"
 import SortingComponentForList from "../components/SortingComponentForList"
 import PlayerWatcher from "../components/PlayerWatcher"
 import MusicPlayer from "../components/MusicPlayer"
@@ -440,15 +439,70 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
               </p>
               <p className={styles.contacts__content__buttonsInfo}>Вот, где меня можно найти:</p>
               <div className={styles.contacts__content__contactButtons}>
-
-                                        <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
-                                        <Button  link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
-                                        <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
-
-                    </div>
+                <a
+                  href="https://t.me/hoursen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/tg.svg" alt="Telegram" />
+                  <p className="text">Telegram</p>
+                </a>
+                <a
+                  href="mailto:mkxvk@yandex.ru"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/email.svg" alt="E-mail" />
+                  <p className="text">E-mail</p>
+                </a>
+                <a
+                  href="https://vk.com/nikita_cherepov"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/vk.svg" alt="VK" />
+                  <p className="text">ВКонтакте</p>
+                </a>
+              </div>
               <p>Мои соцсети:</p>
-              <div className={styles.contacts__content__contactButtons}></div>
+              <div className={styles.contacts__content__contactButtons}>
+                <a
+                  href="https://www.youtube.com/@nikitacherepov"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/yt.svg" alt="Youtube" />
+                  <p className="text">Youtube</p>
+                </a>
+                <a
+                  href="https://t.me/+7JUAL4jfnTUzMjBi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/tg.svg" alt="Telegram" />
+                  <p className="text">Telegram</p>
+                </a>
+                <a
+                  href="https://vk.com/hitchhikersimagination"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.contacts__content__contactButtons__button}
+                >
+                  <img src="/images/icons/vk.svg" alt="VK" />
+                  <p className="text">ВКонтакте</p>
+                </a>
+              </div>
+
+                <div className={styles.contacts__content__footer}>
+                    © 2025 Nikita Cherepov | Music
+                </div>
             </div>
+
           </div>
         </div>
       </>
