@@ -86,7 +86,10 @@ export default function PageTransition({children} : {children: React.ReactNode})
                         <>
                                           <Header/>
                                           {children}
+                                          {pathname === '/sites' && (
                                           <Footer/>
+                                          )}
+
                                           </>
                     ) : children}
                 </motion.div>
