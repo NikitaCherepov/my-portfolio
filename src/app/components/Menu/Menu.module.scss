@@ -5,6 +5,8 @@
 
     border-radius: 50%;
 
+
+
     &__sidebar {
         position: absolute;
         top: 0;
@@ -68,7 +70,14 @@
             &_disactive {
                 box-shadow: none;
             }
+
+            &_music {
+            }
         }
+
+            &_music {
+        background: #ffffff0f !important;
+    }
 
 
     }
