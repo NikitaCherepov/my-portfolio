@@ -14,6 +14,27 @@ export default function Header() {
     const pathname = usePathname();
     const {view} = useViewStore();
 
+    const handleScroll = (address: string) => {
+        if (pathname !== '/music') return;
+
+        let elementId: string;
+        switch(address) {
+            case '/music':
+                elementId = 'music';
+                break;
+            case '/contacts':
+                elementId = 'contacts';
+                break;
+            default:
+                elementId = 'head';
+        }
+
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const musicMenuOptions = [
         {
             name: 'Главная',
@@ -55,7 +76,12 @@ export default function Header() {
                 <div className={styles.container__musicMenu}>
                     {
                         musicMenuOptions.map((object, index) => (
-                            <div key={`music-menu-header ${index}`} className={`${styles.container__musicMenu__option} ${object.chosen ? styles.container__musicMenu__option_chosen : styles.container__musicMenu__option_notChosen}`}>
+                            <div
+                                key={`music-menu-header ${index}`}
+                                className={`${styles.container__musicMenu__option} ${object.chosen ? styles.container__musicMenu__option_chosen : styles.container__musicMenu__option_notChosen}`}
+                                onClick={() => handleScroll(object.address)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 {object.name}
                             </div>
                         ))

@@ -308,7 +308,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
         <PlayerWatcher />
         <MusicPlayer />
         <div className={`mainContainer  ${styles.container}`}>
-          <div className={styles.head}>
+          <div className={styles.head} id="head">
             <Image
               priority
               className={styles.head__logo}
@@ -371,6 +371,9 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                 <h2>Музыка</h2>
             </div> */}
 
+          {/* Фиктивный блок для скролла к музыке */}
+          <div id="music" style={{ height: 0 }}></div>
+
           {genres && genres.length > 0 ? (
             genres.map((genre, index) => {
               // Фильтруем треки по текущему жанру
@@ -395,7 +398,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
             </div>
           )}
 
-          <div className={styles.contacts}>
+          <div className={styles.contacts} id="contacts">
             <div className={styles.contacts__backgroundWhite}></div>
             <div className={styles.contacts__spheres}>
               {albumCovers.map((albumCover) => {
