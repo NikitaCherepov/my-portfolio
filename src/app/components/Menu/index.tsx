@@ -96,15 +96,15 @@ export default function Menu() {
         transition={{duration: 0.3}}
         ref={containerRef}
         custom={height}
-        className={styles.container}>
-            <motion.div className={`${styles.container__sidebar} dropShadow`} variants={sidebarVariants} style={{background: backgroundFix}}>
-                <button onClick={() =>  initiateExit("/")} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
+        className={`${styles.container}`}>
+            <motion.div className={`${styles.container__sidebar} dropShadow  ${pathname === '/music' ? styles.container__sidebar_music : ''}`} variants={sidebarVariants} style={{background: backgroundFix}}>
+                <button onClick={() =>  initiateExit("/")} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}  ${pathname === '/music' ? styles.container__sidebar__option_music : ''}`}>
                     Главная
                 </button>
-                <button onClick={() => {if (pathname!= '/sites') {toggleOpen(); initiateExit('/sites')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/sites' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
+                <button onClick={() => {if (pathname!= '/sites') {toggleOpen(); initiateExit('/sites')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/sites' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive} ${pathname === '/music' ? styles.container__sidebar__option_music : ''}`}>
                     Сайты
                 </button>
-                <button onClick={() => {if (pathname !='/music') {toggleOpen(); initiateExit('/music')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_music} ${pathname != '/music' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}`}>
+                <button onClick={() => {if (pathname !='/music') {toggleOpen(); initiateExit('/music')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_music} ${pathname != '/music' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive} ${pathname === '/music' ? styles.container__sidebar__option_music : ''}`}>
                     Музыка
                 </button>
             </motion.div>
