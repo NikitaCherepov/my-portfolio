@@ -54,8 +54,8 @@ export default function Header() {
             {pathname === '/music' && (
                 <div className={styles.container__musicMenu}>
                     {
-                        musicMenuOptions.map((object) => (
-                            <div className={`${styles.container__musicMenu__option} ${object.chosen ? styles.container__musicMenu__option_chosen : styles.container__musicMenu__option_notChosen}`}>
+                        musicMenuOptions.map((object, index) => (
+                            <div key={`music-menu-header ${index}`} className={`${styles.container__musicMenu__option} ${object.chosen ? styles.container__musicMenu__option_chosen : styles.container__musicMenu__option_notChosen}`}>
                                 {object.name}
                             </div>
                         ))

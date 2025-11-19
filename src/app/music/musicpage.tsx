@@ -158,7 +158,7 @@ export default function MusicPage() {
 
         <PlayerWatcher/>
         <MusicPlayer/>
-        <motion.div className={`mainContainer  ${styles.container}`}>
+        <div className={`mainContainer  ${styles.container}`}>
             <div className={styles.head}>
                 <Image priority className={styles.head__logo} src='/images/logo.png' alt='Нота меню' width={450} height={400}/>
                 <p className={styles.head__motto}>Пишу музыку для игр и для себя. <br/>Хочешь трек? Напиши мне</p>
@@ -211,7 +211,7 @@ export default function MusicPage() {
                     if (genreTracks.length === 0) return null;
 
                     return (
-                                <MusicCard music={genreTracks} genre={genre} index={index + 1} />
+                                <MusicCard key={`music-card ${genre.name}`} music={genreTracks} genre={genre} index={index + 1} />
                     );
                 })
             ) : (
@@ -221,7 +221,7 @@ export default function MusicPage() {
             )}
 
 
-        </motion.div>
+        </div>
         </>
     )
 }
