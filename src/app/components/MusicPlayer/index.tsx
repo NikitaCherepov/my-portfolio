@@ -97,7 +97,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
         
         ref={setNodeRef} style={style}  className={`${styles.container} dropShadow ${onDragging ? 'hoverEffect' : ''}`}>
           <div className={styles.container__buttons}>
-            <img alt='Нажмите, чтобы тянуть' style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/move.png'></img>
+            <img alt='Нажмите, чтобы тянуть' style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/MusicPlayer/move.svg'></img>
             {<AnimatePresence>
               {
                 show || (!show && hovering) ? (
@@ -107,7 +107,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
                     setShow();
                     setHovering(false);
                     setTimeout(() => {setClosing(false)}, 500)
-                  }} className={`${styles.container__buttons__minimize}`} src={show ? '/images/icons/minimize.png' : '/images/icons/maximize.png'}></motion.img>
+                  }} className={`${styles.container__buttons__minimize}`} src={show ? '/images/icons/MusicPlayer/minimize.svg' : '/images/icons/MusicPlayer/maximize.svg'}></motion.img>
                 ) : ''
               }
 
@@ -117,7 +117,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
           <p className={`${styles.container__name}`}>{name || 'Не выбрано'}</p>
 
           <div className={styles.container__musicControl}>
-            <img alt='Управление состоянием проигрывателя' onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/play.png' : isPlaying ? '/images/icons/pause.png' : '/images/icons/play.png'}/>
+            <img alt='Управление состоянием проигрывателя' onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/MusicPlayer/play.svg' : isPlaying ? '/images/icons/MusicPlayer/pause.svg' : '/images/icons/MusicPlayer/play.svg'}/>
 
             <motion.div onMouseMove={(e) => {
               
@@ -144,7 +144,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
                   {onTimelineHovering && (
                   <div style={{left: cursorX - 20 || 0}} className={styles.container__musicControl__timeline__currentTime}>
                     <div className={styles.container__musicControl__timeline__currentTime__wrapper}>
-                                      <img alt='background' src='/images/icons/currentTime.svg'></img>
+                                      <img alt='background' src='/images/icons/MusicPlayer/currentTime.svg'></img>
                                       <p>{hoverTime?.toFixed(0)}</p>
                     </div>
                   </div>
@@ -163,7 +163,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
             </motion.div>
 
             <motion.div onHoverStart={() => setSoundHovering(true)} onHoverEnd={() => setSoundHovering(false)} className={styles.sound}>
-                <img alt='Регулировка звука' src={'/images/icons/sound.svg'} />
+                <img alt='Регулировка звука' src={'/images/icons/MusicPlayer/sound.svg'} />
                 <AnimatePresence>
                     {soundHovering ? (
                         <motion.div initial={{opacity: 0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.2}} className={styles.sound__edit}>

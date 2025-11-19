@@ -65,7 +65,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
           />
         </AnimatePresence>
         <div className={styles.container__backgroundDark}></div>
@@ -86,9 +86,9 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{
-                  duration: 0.4,
+                  duration: 0.3,
                   ease: "easeInOut",
-                  scale: { duration: 0.4 },
+                  scale: { duration: 0.3 },
                 }}
               />
             </AnimatePresence>
@@ -198,7 +198,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={20}
-            slidesPerView={12}
+            slidesPerView={'auto'}
             navigation={{
               // если хочешь свой disabled‑класс:
               disabledClass: styles.customNav_disabled,
@@ -208,12 +208,12 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
               swiper.params.navigation.nextEl = nextRef.current;
             }}
             className={styles.allMusicSwiper}
-            breakpoints={{
-              320: { slidesPerView: 3 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 7 },
-              1800: { slidesPerView: 12 },
-            }}
+            // breakpoints={{
+            //   320: { slidesPerView: 3 },
+            //   768: { slidesPerView: 3 },
+            //   1024: { slidesPerView: 7 },
+            //   1800: { slidesPerView: 12 },
+            // }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
             }}
