@@ -438,14 +438,14 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                 Или ты работаешь над анимацией?
                 <br />А может, просто хочешь поделиться мыслями?
               </p>
-              <p>Вот, где меня можно найти:</p>
-              {/* <div className={styles.contacts__content__contactButtons}>
+              <p className={styles.contacts__content__buttonsInfo}>Вот, где меня можно найти:</p>
+              <div className={styles.contacts__content__contactButtons}>
 
                                         <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
-                                        <Button link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
+                                        <Button  link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
                                         <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
 
-                    </div> */}
+                    </div>
               <p>Мои соцсети:</p>
               <div className={styles.contacts__content__contactButtons}></div>
             </div>
