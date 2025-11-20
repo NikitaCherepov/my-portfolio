@@ -440,7 +440,8 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                 Или ты работаешь над анимацией?
                 <br />А может, просто хочешь поделиться мыслями?
               </p>
-              <p className={styles.contacts__content__buttonsInfo}>Вот, где меня можно найти:</p>
+              <div style={{display: 'flex', flexDirection: 'column', gap: '50px', marginTop: '70px'}}>
+              <p className={styles.contacts__content__buttonsInfo}>Вот, где мне можно написать:</p>
               <div className={styles.contacts__content__contactButtons}>
                 <a
                   href="https://t.me/hoursen"
@@ -448,7 +449,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/tg.svg" alt="Telegram" />
+                  <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
                   <p className="text">Telegram</p>
                 </a>
                 <a
@@ -457,7 +458,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/email.svg" alt="E-mail" />
+                  <img src="/images/icons/socialbuttons/email.svg" alt="E-mail" />
                   <p className="text">E-mail</p>
                 </a>
                 <a
@@ -466,10 +467,12 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/vk.svg" alt="VK" />
+                  <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
                   <p className="text">ВКонтакте</p>
                 </a>
               </div>
+                            </div>
+                                          <div style={{display: 'flex', flexDirection: 'column', gap: '50px', marginTop: '70px'}}>
               <p>Мои соцсети:</p>
               <div className={styles.contacts__content__contactButtons}>
                 <a
@@ -478,7 +481,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/yt.svg" alt="Youtube" />
+                  <img src="/images/icons/socialbuttons/yt.svg" alt="Youtube" />
                   <p className="text">Youtube</p>
                 </a>
                 <a
@@ -487,7 +490,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/tg.svg" alt="Telegram" />
+                  <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
                   <p className="text">Telegram</p>
                 </a>
                 <a
@@ -496,9 +499,10 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   rel="noopener noreferrer"
                   className={styles.contacts__content__contactButtons__button}
                 >
-                  <img src="/images/icons/vk.svg" alt="VK" />
+                  <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
                   <p className="text">ВКонтакте</p>
                 </a>
+              </div>
               </div>
 
                 <div className={styles.contacts__content__footer}>
