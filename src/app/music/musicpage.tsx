@@ -54,7 +54,13 @@ export default function MusicPage() {
     ]
 
     const soundFiles = [
-        '/sounds/do.mp3',
+      "/sounds/do.mp3",
+      "/sounds/re.mp3",
+      "/sounds/mi.mp3",
+      // "/sounds/fa.mp3",
+      "/sounds/sol.mp3",
+      "/sounds/la.mp3",
+      // "/sounds/c.mp3",
     ];
 
     type NoteConfig = {
