@@ -47,6 +47,8 @@
         // max-width: 450px;
         z-index: 1;
         width: clamp(200px, 50vw, 450px);
+        pointer-events: none;
+        user-select: none;
     }
     &__motto {
         color: var(--white);
@@ -70,6 +72,7 @@
             pointer-events: all;
             cursor: pointer;
             transition: transform 0.2s linear;
+            user-select: none;
 
             img {
             width: auto;
