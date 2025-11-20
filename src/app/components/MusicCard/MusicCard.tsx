@@ -6,6 +6,7 @@ import {Genre} from '@/app/services/genresService'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePlayerStateStore } from '@/app/store/useExitStore'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -19,13 +20,36 @@ interface MusicCardProps {
 
 export default function MusicCard({music, genre, index} : MusicCardProps) {
     const [currentMusicCard, setCurrenMusicCard] = useState<Music>();
+    const [isHovering, setIsHovering] = useState(false);
     const prevRef = useRef<HTMLDivElement | null>(null);
     const nextRef = useRef<HTMLDivElement | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
+    const { audio, setAudio, currentTime, currentSrc, isPlaying, play, pause, duration, setDuration, setName } = usePlayerStateStore();
 
     useEffect(() => {
         setCurrenMusicCard(music[0])
     }, [])
+
+    const handlePlayPause = () => {
+        if (!currentMusicCard?.preview) return;
+
+        if (currentMusicCard.name) {
+            setName(currentMusicCard.name);
+        }
+
+        if (currentSrc !== currentMusicCard.preview) {
+            pause();
+            setAudio(currentMusicCard.preview);
+            play();
+            setDuration(audio?.duration);
+        } else if (duration === currentTime) {
+            play();
+        } else if (!isPlaying) {
+            play();
+        } else if (isPlaying) {
+            pause();
+        }
+    }
 
 
     const handlePrevClick = () => {
@@ -77,11 +101,9 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
         >
           <div className={styles.container__head__albumContainer}>
             <AnimatePresence mode="wait">
-              <motion.img
+              <motion.div
                 key={currentMusicCard?.id}
-                src={currentMusicCard?.mainImage}
-                alt={currentMusicCard?.name}
-                className={styles.container__head__albumContainer__cover}
+                className={styles.container__head__albumContainer__coverWrapper}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
@@ -90,7 +112,49 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                   ease: "easeInOut",
                   scale: { duration: 0.3 },
                 }}
-              />
+                onHoverStart={() => setIsHovering(true)}
+                onHoverEnd={() => setIsHovering(false)}
+              >
+                <motion.img
+                  src={currentMusicCard?.mainImage}
+                  alt={currentMusicCard?.name}
+                  className={styles.container__head__albumContainer__cover}
+                />
+                <AnimatePresence>
+                  {isHovering && currentMusicCard?.preview && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className={styles.container__head__albumContainer__playButton}
+                    >
+                      <img
+                        src={
+                          currentSrc === currentMusicCard.preview && duration === currentTime
+                            ? '/images/icons/MusicPlayer/play.svg'
+                            : currentSrc === currentMusicCard.preview && isPlaying
+                            ? '/images/icons/MusicPlayer/pause.svg'
+                            : '/images/icons/MusicPlayer/play.svg'
+                        }
+                        alt="Play/Pause"
+                        onClick={handlePlayPause}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {isHovering && currentMusicCard?.preview && (
+                                                            <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className={styles.container__head__albumContainer__playButtonContainer}
+                    ></motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </AnimatePresence>
             <div className={styles.container__head__albumContainer__links}>
               {currentMusicCard?.spotify ? (
