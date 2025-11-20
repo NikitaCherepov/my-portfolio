@@ -6,7 +6,7 @@ import {Genre} from '@/app/services/genresService'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { motion, AnimatePresence } from 'framer-motion'
-import { usePlayerStateStore } from '@/app/store/useExitStore'
+import { usePlayerStateStore, usePlayerStore } from '@/app/store/useExitStore'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -25,6 +25,7 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
     const nextRef = useRef<HTMLDivElement | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
     const { audio, setAudio, currentTime, currentSrc, isPlaying, play, pause, duration, setDuration, setName } = usePlayerStateStore();
+    const { showPlayer, setShowPlayer } = usePlayerStore();
 
     useEffect(() => {
         setCurrenMusicCard(music[0])
@@ -35,6 +36,11 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
 
         if (currentMusicCard.name) {
             setName(currentMusicCard.name);
+        }
+
+        // Если плеер закрыт, открываем его
+        if (!showPlayer) {
+            setShowPlayer();
         }
 
         if (currentSrc !== currentMusicCard.preview) {
