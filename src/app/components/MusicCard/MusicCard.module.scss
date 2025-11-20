@@ -52,14 +52,65 @@
             flex-direction: column;
             max-width: 454px;
             gap: 50px;
-            &__cover {
+            &__playButtonContainer {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(19, 19, 19, 0.2);
+                pointer-events: none;
+                z-index: 0;
+                border-radius: var(--default-border-radius-small);
+            }
+            &__coverWrapper {
+                position: relative;
                 width: 454px;
                 height: 454px;
+                aspect-ratio: 1/1;
+                cursor: pointer;
+
+                // &:hover {
+                //     .container__head__albumContainer__cover {
+                //         background: rgba(255,255,255,0.1);
+                //         backdrop-filter: blur(5px);
+                //     }
+                // }
+            }
+            &__cover {
+                width: 100%;
+                height: 100%;
                 aspect-ratio: 1/1;
                 flex: 0;
                 object-fit: cover;
                 border-radius: var(--default-border-radius-small);
                 will-change: opacity, transform;
+                transition: filter 0.3s ease;
+            }
+            &__playButton {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+                background: rgba(255,255,255,0.1);
+                backdrop-filter: blur(10px);
+                z-index: 1;
+
+                &:hover {
+                    transform: translate(-50%, -50%) scale(1.1);
+                }
+
+                img {
+                    width: 80px;
+                    height: 80px;
+                }
             }
             &__links {
                 display: flex;
