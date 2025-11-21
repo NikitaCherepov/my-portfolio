@@ -60,7 +60,16 @@ export default function AdminLoginPage() {
 
   return (
     <div className={styles.login}>
-      <form onSubmit={handleSubmit(handleLogin)} className={styles.login__form}>
+      <div className={styles.login__formWrapper}>
+        <form onSubmit={handleSubmit(handleLogin)} className={styles.login__form}>
+          
+                  <button
+          type="button"
+          onClick={() => router.push('/')}
+          className={styles.login__backButton}
+        >
+          ← Назад к сайтам
+        </button>
           <h1 className={styles.login__title}>Админ-панель</h1>
           <p className={styles.login__subtitle}>Войдите для доступа к управлению</p>
 
@@ -119,9 +128,8 @@ export default function AdminLoginPage() {
               Ошибка: {(loginMutation.error as any)?.error || 'Ошибка входа'}
             </div>
           )}
-      </form>
 
-      <div className={styles.login__guestContainer}>
+                <div className={styles.login__guestContainer}>
           <h2 className={styles.login__guestTitle}>Гостевые параметры</h2>
           <div className={styles.login__guestInfo}>
             <div className={styles.login__guestCredentials}>
@@ -141,6 +149,11 @@ export default function AdminLoginPage() {
             Быстрый вход
           </button>
         </div>
+        </form>
+
+
+      </div>
+
     </div>
   );
 }

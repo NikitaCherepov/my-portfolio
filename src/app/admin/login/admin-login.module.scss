@@ -7,10 +7,14 @@
     padding: 22px;
     position: relative;
 
+    &__formWrapper {
+        position: relative;
+    }
+
     &__form {
         max-width: 400px;
         width: 100%;
-        margin: 50px auto;
+        // margin: 50px auto;
         padding: 32px;
         border: 1px solid var(--button-darkest);
         border-radius: var(--default-border-radius-small);
@@ -31,6 +35,36 @@
         color: var(--header-name-color);
         text-align: center;
         opacity: 0.8;
+    }
+
+    &__backButton {
+        position: absolute;
+        top: 0px;
+        right: 105%;
+        padding: 12px 20px;
+        background: white;
+        color: var(--header-name-color);
+        border: none;
+        border: 1px solid var(--button-darkest);
+        border-radius: var(--default-border-radius-small);
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+            background: var(--button-darkest);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     }
 
     &__field {
@@ -125,8 +159,8 @@
 
     &__guestContainer {
         position: absolute;
-        right: 100px;
-        top: 20%;
+        right: -100%;
+        top: 00%;
         width: 280px;
         padding: 24px;
         border: 1px solid var(--button-darkest);
@@ -243,6 +277,13 @@
 
         &__title {
             font-size: 1.5rem;
+        }
+
+        &__backButton {
+            position: static;
+            margin-bottom: 16px;
+            width: 100%;
+            font-size: 0.8rem;
         }
 
         &__guestContainer {
