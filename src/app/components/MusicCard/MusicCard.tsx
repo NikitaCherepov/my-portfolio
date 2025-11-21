@@ -38,21 +38,29 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
             setName(currentMusicCard.name);
         }
 
-        // Если плеер закрыт, открываем его
-        if (!showPlayer) {
-            setShowPlayer();
-        }
-
         if (currentSrc !== currentMusicCard.preview) {
+            // Новый трек - открываем плеер и начинаем играть
+            if (!showPlayer) {
+                setShowPlayer();
+            }
             pause();
             setAudio(currentMusicCard.preview);
             play();
             setDuration(audio?.duration);
         } else if (duration === currentTime) {
+            // Трек закончился - заново играем, открываем плеер
+            if (!showPlayer) {
+                setShowPlayer();
+            }
             play();
         } else if (!isPlaying) {
+            // Продолжаем играть паузу - открываем плеер
+            if (!showPlayer) {
+                setShowPlayer();
+            }
             play();
         } else if (isPlaying) {
+            // Ставим на паузу - НЕ открываем плеер
             pause();
         }
     }
