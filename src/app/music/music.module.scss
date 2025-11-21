@@ -34,7 +34,8 @@
 
 .head {
     display: flex;
-    height: calc(100vh - var(--header-height));
+    // height: calc(100vh - var(--header-height));
+    height: 100vh;
     width: 100%;
     align-items: center;
     justify-content: center;
