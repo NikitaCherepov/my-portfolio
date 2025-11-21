@@ -5,6 +5,7 @@
     justify-content: center;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
     padding: 22px;
+    position: relative;
 
     &__form {
         max-width: 400px;
@@ -121,6 +122,87 @@
         color: var(--header-name-color);
         font-size: 1.125rem;
     }
+
+    &__guestContainer {
+        position: absolute;
+        right: 100px;
+        top: 20%;
+        width: 280px;
+        padding: 24px;
+        border: 1px solid var(--button-darkest);
+        border-radius: var(--default-border-radius-small);
+        background: var(--white);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.6s ease-in-out;
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+        z-index: 10;
+    }
+
+    &__guestTitle {
+        font-size: 1.25rem;
+        margin-bottom: 16px;
+        color: var(--header-name-color);
+        text-align: center;
+        font-weight: bold;
+    }
+
+    &__guestInfo {
+        margin-bottom: 20px;
+    }
+
+    &__guestCredentials {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: var(--default-border-radius-small);
+        border: 1px solid var(--button-darkest);
+    }
+
+    &__guestLabel {
+        font-weight: bold;
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        margin: 0;
+    }
+
+    &__guestValue {
+        color: var(--header-name-color);
+        font-family: 'JetBrains Mono', monospace;
+        margin: 0;
+        opacity: 0.8;
+        font-size: 0.9rem;
+        word-break: break-all;
+    }
+
+    &__guestButton {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--button-dark);
+        color: var(--header-name-color);
+        border: none;
+        border-radius: var(--default-border-radius-small);
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+
+        &:hover {
+            background: var(--button-darkest);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    }
 }
 
 @keyframes fadeIn {
@@ -140,6 +222,18 @@
     75% { transform: translateX(5px); }
 }
 
+@media (max-width: 1200px) {
+    .login {
+        &__guestContainer {
+            position: static;
+            transform: none;
+            width: 100%;
+            max-width: 400px;
+            margin: 24px auto 0;
+        }
+    }
+}
+
 @media (max-width: 480px) {
     .login {
         &__form {
@@ -149,6 +243,18 @@
 
         &__title {
             font-size: 1.5rem;
+        }
+
+        &__guestContainer {
+            padding: 20px 16px;
+        }
+
+        &__guestTitle {
+            font-size: 1.1rem;
+        }
+
+        &__guestValue {
+            font-size: 0.8rem;
         }
     }
 }
