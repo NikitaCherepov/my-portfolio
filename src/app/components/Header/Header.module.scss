@@ -74,8 +74,20 @@
         }
         &__option:hover {
             background: var(--foreground);
-            color: black;
         }
+
+            &__option {
+                border-radius: var(--min-border-radius);
+                color: white;
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0);
+            }
+            &__option:hover {
+                transform: scale(1.05);
+                                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.2);
+                                backdrop-filter: blur(10px);
+            }
 
         @media (max-width: 600px) {
             display: none;
