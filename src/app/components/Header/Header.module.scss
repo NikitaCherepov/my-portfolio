@@ -23,8 +23,8 @@
         transition: all 0.2s ease-in-out;
     }
     &_music:hover {
-        backdrop-filter: blur(5px);
-        background: #ffffff0f;
+        backdrop-filter: blur(10px);
+        // background: #ffffff0f;
     }
     
     &__switcher {

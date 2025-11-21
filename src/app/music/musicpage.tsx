@@ -439,76 +439,80 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
             <div className={styles.contacts__backgroundBlur}></div>
 
             <div className={styles.contacts__content}>
-              <h2 className={styles.contacts__content__header}>Контакты</h2>
-              <p className={styles.contacts__content__losung}>
-                Хочешь трек для игры?
-                <br />
-                Или ты работаешь над анимацией?
-                <br />А может, просто хочешь поделиться мыслями?
-              </p>
-              <div style={{display: 'flex', flexDirection: 'column', gap: '50px', marginTop: '70px'}}>
-              <p className={styles.contacts__content__buttonsInfo}>Вот, где мне можно написать:</p>
-              <div className={styles.contacts__content__contactButtons}>
-                <a
-                  href="https://t.me/hoursen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
-                  <p className="text">Telegram</p>
-                </a>
-                <a
-                  href="mailto:mkxvk@yandex.ru"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/email.svg" alt="E-mail" />
-                  <p className="text">E-mail</p>
-                </a>
-                <a
-                  href="https://vk.com/nikita_cherepov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
-                  <p className="text">ВКонтакте</p>
-                </a>
+              <div className={styles.contacts__content__headerContainer}>
+                <h2 className={styles.contacts__content__headerContainer__header}>Контакты</h2>
+                <p className={styles.contacts__content__losung}>
+                  Хочешь трек для игры?
+                  <br />
+                  Или ты работаешь над анимацией?
+                  <br />А может, просто хочешь поделиться мыслями?
+                </p>
               </div>
-                            </div>
-                                          <div style={{display: 'flex', flexDirection: 'column', gap: '50px', marginTop: '70px'}}>
-              <p>Мои соцсети:</p>
-              <div className={styles.contacts__content__contactButtons}>
-                <a
-                  href="https://www.youtube.com/@nikitacherepov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/yt.svg" alt="Youtube" />
-                  <p className="text">Youtube</p>
-                </a>
-                <a
-                  href="https://t.me/+7JUAL4jfnTUzMjBi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
-                  <p className="text">Telegram</p>
-                </a>
-                <a
-                  href="https://vk.com/hitchhikersimagination"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.contacts__content__contactButtons__button}
-                >
-                  <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
-                  <p className="text">ВКонтакте</p>
-                </a>
-              </div>
+              <div className={styles.contacts__content__buttonsContainer}>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '40px'}}>
+                  <p className={styles.contacts__content__buttonsInfo}>Вот, где мне можно написать:</p>
+                  <div className={styles.contacts__content__contactButtons}>
+                    <a
+                      href="https://t.me/hoursen"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
+                      <p className="text">Telegram</p>
+                    </a>
+                    <a
+                      href="mailto:mkxvk@yandex.ru"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/email.svg" alt="E-mail" />
+                      <p className="text">E-mail</p>
+                    </a>
+                    <a
+                      href="https://vk.com/nikita_cherepov"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
+                      <p className="text">ВКонтакте</p>
+                    </a>
+                  </div>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '40px'}}>
+                  <p>Мои соцсети:</p>
+                  <div className={styles.contacts__content__contactButtons}>
+                    <a
+                      href="https://www.youtube.com/@nikitacherepov"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/yt.svg" alt="Youtube" />
+                      <p className="text">Youtube</p>
+                    </a>
+                    <a
+                      href="https://t.me/+7JUAL4jfnTUzMjBi"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/tg.svg" alt="Telegram" />
+                      <p className="text">Telegram</p>
+                    </a>
+                    <a
+                      href="https://vk.com/hitchhikersimagination"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.contacts__content__contactButtons__button}
+                    >
+                      <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
+                      <p className="text">ВКонтакте</p>
+                    </a>
+                  </div>
+                </div>
               </div>
 
                 <div className={styles.contacts__content__footer}>

@@ -213,12 +213,25 @@
 
         gap: 20px;
         padding: 4% 10% 1% 10%;
-        &__header {
-            font-size: 3.5rem;
+        &__headerContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &__header {
+                font-size: 3.5rem;
+            }
         }
         &__losung {
             margin-top: 20px;
         }
+        &__buttonsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 70px;
+        }
+
         &__buttonsInfo {
             margin-top: 20px;
         }

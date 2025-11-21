@@ -71,8 +71,19 @@
                 box-shadow: none;
             }
 
-            &_music {
+            &_musicPage {
+                border-radius: var(--min-border-radius);
+                background: #ffffff0f;
+                color: white;
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.2);
             }
+            &_musicPage:hover {
+                transform: scale(1.05);
+                background: rgba(255, 255, 255, 0.2);
+            }
+
         }
 
             &_music {
