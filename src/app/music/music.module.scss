@@ -319,7 +319,55 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 789px) and (max-width: 1400px) {
+    .head {
+        &__motto {
+            font-size: 2.2rem;
+        }
+
+        &__background {
+            &__note {
+                width: 80px;
+                height: 80px;
+
+                img {
+                    height: 80px;
+                }
+            }
+        }
+    }
+
+    .contacts {
+        &__content {
+            &__headerContainer {
+                &__header {
+                    font-size: 3rem;
+                }
+            }
+
+            p {
+                font-size: 1.8rem;
+            }
+
+            &__contactButtons {
+                &__button {
+                    width: 175px;
+
+                    img {
+                        width: 35px;
+                        height: 35px;
+                    }
+
+                    p {
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 788px) {
     .head {
         &__motto {
             font-size: 1.8rem;

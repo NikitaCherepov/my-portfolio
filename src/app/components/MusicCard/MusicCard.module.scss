@@ -403,3 +403,93 @@
         }
     }
 }
+
+@media (min-width: 1801px) {
+    .container {
+        padding: 200px 180px 100px 180px;
+
+        &__head {
+            &__albumContainer {
+                max-width: 500px;
+
+                &__coverWrapper {
+                    width: 500px;
+                    height: 500px;
+                }
+
+                &__links {
+                    &__link {
+                        width: 85px;
+                        height: 85px;
+
+                        img {
+                            width: 45px;
+                            height: 45px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .container__allMusic {
+        padding: 50px 160px;
+
+        .allMusicCover {
+            width: 140px;
+            height: 140px;
+        }
+
+        .customNav {
+            img {
+                width: 90px;
+                height: 90px;
+            }
+        }
+    }
+}
+
+@media (min-width: 789px) and (max-width: 1400px) {
+    .container {
+        padding: 140px 100px 70px 100px;
+
+        &__head {
+            &__albumContainer {
+                max-width: 400px;
+
+                &__coverWrapper {
+                    width: 400px;
+                    height: 400px;
+                }
+
+                &__links {
+                    &__link {
+                        width: 65px;
+                        height: 65px;
+
+                        img {
+                            width: 32px;
+                            height: 32px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .container__allMusic {
+        padding: 35px 90px;
+
+        .allMusicCover {
+            width: 110px;
+            height: 110px;
+        }
+
+        .customNav {
+            img {
+                width: 65px;
+                height: 65px;
+            }
+        }
+    }
+}
