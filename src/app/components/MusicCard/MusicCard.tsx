@@ -21,15 +21,80 @@ interface MusicCardProps {
 export default function MusicCard({music, genre, index} : MusicCardProps) {
     const [currentMusicCard, setCurrenMusicCard] = useState<Music>();
     const [isHovering, setIsHovering] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+    const [isSwipeAnimating, setIsSwipeAnimating] = useState(false);
     const prevRef = useRef<HTMLDivElement | null>(null);
     const nextRef = useRef<HTMLDivElement | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
+
+    // Определение мобильных устройств
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
     const { audio, setAudio, currentTime, currentSrc, isPlaying, play, pause, duration, setDuration, setName } = usePlayerStateStore();
     const { showPlayer, setShowPlayer } = usePlayerStore();
 
     useEffect(() => {
         setCurrenMusicCard(music[0])
     }, [])
+
+    // Обработчики свайпов для мобильных устройств
+    const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (!isMobile) return;
+        touchStartPos.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY
+        };
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (!isMobile || !touchStartPos.current) return;
+
+        const currentX = e.touches[0].clientX;
+        const deltaX = currentX - touchStartPos.current.x;
+
+        // Показываем визуальную индикацию свайпа
+        if (Math.abs(deltaX) > 20) {
+            setSwipeDirection(deltaX > 0 ? 'right' : 'left');
+        } else {
+            setSwipeDirection(null);
+        }
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (!isMobile || !touchStartPos.current) return;
+
+        const endX = e.changedTouches[0].clientX;
+        const deltaX = endX - touchStartPos.current.x;
+        const threshold = 50; // Минимальное расстояние для свайпа
+
+        if (Math.abs(deltaX) > threshold) {
+            setIsSwipeAnimating(true);
+            if (deltaX > 0) {
+                // Свайп вправо - предыдущий трек
+                handlePrevClick();
+            } else {
+                // Свайп влево - следующий трек
+                handleNextClick();
+            }
+
+            setTimeout(() => {
+                setIsSwipeAnimating(false);
+            }, 300);
+        }
+
+        // Сбрасываем состояние
+        touchStartPos.current = null;
+        setSwipeDirection(null);
+    };
 
     const handlePlayPause = () => {
         if (!currentMusicCard?.preview) return;
@@ -128,6 +193,9 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                 }}
                 onHoverStart={() => setIsHovering(true)}
                 onHoverEnd={() => setIsHovering(false)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 <motion.img
                   src={currentMusicCard?.mainImage}
@@ -135,7 +203,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                   className={styles.container__head__albumContainer__cover}
                 />
                 <AnimatePresence>
-                  {isHovering && currentMusicCard?.preview && (
+                  {(isHovering || isMobile) && currentMusicCard?.preview && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -158,14 +226,40 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                   )}
                 </AnimatePresence>
                 <AnimatePresence>
-                  {isHovering && currentMusicCard?.preview && (
-                                                            <motion.div
+                  {(isHovering || isMobile) && currentMusicCard?.preview && (
+                    <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                       className={styles.container__head__albumContainer__playButtonContainer}
                     ></motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Индикатор свайпа для мобильных */}
+                <AnimatePresence>
+                  {swipeDirection && isMobile && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className={styles.container__head__albumContainer__swipeIndicator}
+                      style={{
+                        [swipeDirection === 'left' ? 'right' : 'left']: 20,
+                      }}
+                    >
+                      <img
+                        src="/images/icons/musiccard/arrow_right.svg"
+                        alt={swipeDirection === 'left' ? "Next" : "Previous"}
+                        className={`${styles.swipeArrow} ${
+                          swipeDirection === 'left'
+                            ? styles.swipeArrowPrev
+                            : styles.swipeArrowNext
+                        }`}
+                      />
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </motion.div>

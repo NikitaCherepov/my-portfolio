@@ -387,7 +387,7 @@
         }
 
         .container__allMusic {
-            padding: 15px 50px;
+            padding: 15px 60px;
 
             .allMusicCover {
                 width: 70px;
@@ -452,6 +452,9 @@
 @media (min-width: 789px) and (max-width: 1400px) {
     .container {
         padding: 140px 100px 70px 100px;
+        max-height: auto;
+        min-height: 100vh;
+        height: auto;
 
         &__head {
             &__albumContainer {
@@ -491,5 +494,65 @@
                 height: 65px;
             }
         }
+    }
+}
+
+.container__head__albumContainer {
+    &__swipeIndicator {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        pointer-events: none;
+
+        .swipeArrow {
+            width: 80px;
+            height: 40px;
+            filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+            animation: swipePulse 1s infinite;
+        }
+
+        .swipeArrowPrev {
+            // Свайп вправо = предыдущий трек
+            transform: rotate(90deg);
+            animation: swipePulsePrev 1s infinite;
+        }
+
+        .swipeArrowNext {
+            // Свайп влево = следующий трек
+            transform: rotate(-90deg);
+            animation: swipePulseNext 1s infinite;
+        }
+
+        .swipeArrow {
+            width: 80px;
+            height: 40px;
+            filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+    }
+}
+
+@keyframes swipePulsePrev {
+    0%, 100% {
+        transform: rotate(-90deg) scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: rotate(-90deg) scale(1.2);
+        opacity: 1;
+    }
+}
+
+@keyframes swipePulseNext {
+    0%, 100% {
+        transform: rotate(90deg) scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: rotate(90deg) scale(1.2);
+        opacity: 1;
     }
 }
