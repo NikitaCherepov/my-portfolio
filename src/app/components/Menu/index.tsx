@@ -1,10 +1,10 @@
 'use client'
 
-import {useEffect, useRef, useState} from 'react'
+import { useRef } from 'react'
 import styles from './Menu.module.scss'
 import Image from 'next/image'
 
-import {motion, useCycle} from 'framer-motion'
+import {motion} from 'framer-motion'
 
 import {usePathname} from 'next/navigation'
 
@@ -12,8 +12,7 @@ import { useDimensions } from '@/app/hooks/useDimensions'
 
 import { useInitiateExit } from '@/app/hooks/useInitiateExit'
 
-export default function Menu() {
-    const [isOpen, toggleOpen] = useCycle(false, true);
+export default function Menu({ isOpen, toggleOpen }: { isOpen: boolean; toggleOpen: () => void }) {
     const containerRef = useRef(null);
     const {height} = useDimensions(containerRef);
 
@@ -71,19 +70,7 @@ export default function Menu() {
         }
     }
 
-    const [backgroundFix, setBackgroundFix] = useState<String>();
-
-    useEffect(() => {
-        if (!isOpen) {
-            setTimeout(() => {
-                if (!isOpen) setBackgroundFix('transparent');
-            }, 400)
-        }
-        else {
-            setBackgroundFix('var(--menu-slides-background)');
-        }
-    }, [isOpen, backgroundFix])
-
+    
       
 
 
@@ -97,7 +84,7 @@ export default function Menu() {
         ref={containerRef}
         custom={height}
         className={`${styles.container}`}>
-            <motion.div className={`${styles.container__sidebar} dropShadow  ${pathname === '/music' ? styles.container__sidebar_music : ''}`} variants={sidebarVariants} style={{background: backgroundFix}}>
+            <motion.div className={`${styles.container__sidebar} dropShadow  ${pathname === '/music' ? styles.container__sidebar_music : ''}`} variants={sidebarVariants}>
                 <button onClick={() =>  initiateExit("/")} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}  ${pathname === '/music' ? styles.container__sidebar__option_musicPage : ''}`}>
                     Главная
                 </button>

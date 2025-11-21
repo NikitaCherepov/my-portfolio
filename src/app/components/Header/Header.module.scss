@@ -31,6 +31,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
         }
+        .container__menuBackdrop {
+                backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+        // background: rgba(255, 255, 255, 0.1);
+        }
     }
     
     &__switcher {
@@ -110,5 +115,26 @@
             align-items: flex-start;
             justify-content: flex-end;
         }
+
+            &__menuBackdrop {
+        width: 300px;
+    }
+    }
+
+}
+
+.container__menuBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 365px;
+    height: 500px;
+    border-radius: var(--min-border-radius);
+    z-index: 4;
+    transition: all 0.3s ease;
+    pointer-events: none;
+
+    @media (max-width: 450px) {
+        width: 300px;
     }
 }

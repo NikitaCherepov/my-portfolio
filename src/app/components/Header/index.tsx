@@ -6,7 +6,7 @@ import Switcher from '../Switcher'
 import SortingComponent from '../SortingComponent'
 import { usePathname } from 'next/navigation'
 import { useViewStore } from '@/app/store/useExitStore'
-import {AnimatePresence, motion} from 'framer-motion'
+import {AnimatePresence, motion, useCycle} from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 
@@ -15,6 +15,27 @@ export default function Header() {
     const {view} = useViewStore();
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const [isMenuOpen, toggleMenuOpen] = useCycle(false, true);
+    const [showBackdrop, setShowBackdrop] = useState(false);
+
+    // Управление подложкой для backdrop-filter
+    useEffect(() => {
+        if (pathname !== '/music') {
+            setShowBackdrop(false);
+            return;
+        }
+
+        if (isMenuOpen) {
+            // Показываем подложку с задержкой после начала открытия меню
+            const timer = setTimeout(() => {
+                if (isMenuOpen) setShowBackdrop(true);
+            }, 250); // Задержка 150мс
+            return () => clearTimeout(timer);
+        } else {
+            // Скрываем подложку мгновенно при закрытии
+            setShowBackdrop(false);
+        }
+    }, [isMenuOpen, pathname]);
 
     // Отслеживание скролла только для страницы music
     useEffect(() => {
@@ -97,7 +118,19 @@ export default function Header() {
                 duration: 0.3
             }}
         >
-            <Menu/>
+            <Menu isOpen={isMenuOpen} toggleOpen={toggleMenuOpen}/>
+            {/* Блок-подложка для backdrop-filter на music странице */}
+            <AnimatePresence>
+                {pathname === '/music' && showBackdrop && (
+                    <motion.div
+                        className={styles.container__menuBackdrop}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                    />
+                )}
+            </AnimatePresence>
             {pathname === '/sites' && (
                 <div className={styles.container__switcher}>
                     <Switcher/>
