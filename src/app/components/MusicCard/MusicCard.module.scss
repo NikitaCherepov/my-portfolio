@@ -5,9 +5,12 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 165px 133px 82px 133px;
+    padding: 165px 133px 60px 133px;
 
     justify-content: center;
+        //     max-height: auto;
+        // min-height: 100vh;
+        // height: auto;
 
     gap: 50px;
 
@@ -404,27 +407,31 @@
     }
 }
 
-@media (min-width: 1801px) {
+
+@media (min-width: 1401px) and (max-width: 1800px) {
     .container {
-        padding: 200px 180px 100px 180px;
+        padding: 165px 133px 82px 133px;
+        max-height: auto;
+        min-height: 100vh;
+        height: auto;
 
         &__head {
             &__albumContainer {
-                max-width: 500px;
+                max-width: 454px;
 
                 &__coverWrapper {
-                    width: 500px;
-                    height: 500px;
+                    width: 454px;
+                    height: 454px;
                 }
 
                 &__links {
                     &__link {
-                        width: 85px;
-                        height: 85px;
+                        width: 75px;
+                        height: 75px;
 
                         img {
-                            width: 45px;
-                            height: 45px;
+                            width: 40px;
+                            height: 40px;
                         }
                     }
                 }
@@ -433,17 +440,17 @@
     }
 
     .container__allMusic {
-        padding: 50px 160px;
+        padding: 40px 120px;
 
         .allMusicCover {
-            width: 140px;
-            height: 140px;
+            width: 128px;
+            height: 128px;
         }
 
         .customNav {
             img {
-                width: 90px;
-                height: 90px;
+                width: 80px;
+                height: 80px;
             }
         }
     }
@@ -525,12 +532,6 @@
             // Свайп влево = следующий трек
             transform: rotate(-90deg);
             animation: swipePulseNext 1s infinite;
-        }
-
-        .swipeArrow {
-            width: 80px;
-            height: 40px;
-            filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
         }
     }
 }
