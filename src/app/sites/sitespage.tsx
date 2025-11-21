@@ -226,6 +226,8 @@ export default function SitesPage() {
             </motion.div>
             
             
+            <Button onClick={() => router.push('/admin')} background={'#AFAFAF'} className={styles.adminPanel} text={'Админ-панель'}/>
+
             {/* <Button onClick={() => toggleModal(sites?.find((el: any) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/> */}
             <Button onClick={() => router.push('/sites/site?id=cmhs79ftu0002uck0p5j2qm8k')} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
 

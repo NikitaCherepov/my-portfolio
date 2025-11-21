@@ -151,6 +151,14 @@
     }
 }
 
+.adminPanel {
+    display: flex;
+    position: absolute;
+    left: 25px;
+    bottom: calc(var(--footer-height) + 10px);
+    max-width: 220px !important;
+}
+
 .about {
     display: flex;
     position: absolute;
@@ -169,6 +177,11 @@
         }
     }
     .about {
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
+    }
+    .adminPanel {
         opacity: 0;
         user-select: none;
         pointer-events: none;
