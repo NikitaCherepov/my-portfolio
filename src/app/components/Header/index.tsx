@@ -6,13 +6,41 @@ import Switcher from '../Switcher'
 import SortingComponent from '../SortingComponent'
 import { usePathname } from 'next/navigation'
 import { useViewStore } from '@/app/store/useExitStore'
-import {AnimatePresence} from 'framer-motion'
-import { useState } from 'react'
+import {AnimatePresence, motion} from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 
 export default function Header() {
     const pathname = usePathname();
     const {view} = useViewStore();
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    // Отслеживание скролла только для страницы music
+    useEffect(() => {
+        if (pathname !== '/music') return;
+
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Показываем хедер при скролле вверх или если находимся вверху страницы
+            if (currentScrollY < lastScrollY || currentScrollY < 100) {
+                setIsVisible(true);
+            }
+            // Скрываем хедер при скролле вниз
+            else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                setIsVisible(false);
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScrollY, pathname]);
 
     const handleScroll = (address: string) => {
         if (pathname !== '/music') return;
@@ -56,7 +84,19 @@ export default function Header() {
     ];
 
     return (
-        <div className={`${styles.container} ${pathname === '/sites' ? styles.container_sites : styles.container_music}`}>
+        <motion.div
+            className={`${styles.container} ${pathname === '/sites' ? styles.container_sites : styles.container_music}`}
+            initial={{ y: 0 }}
+            animate={{
+                y: pathname === '/music' ? (isVisible ? 0 : '-100%') : 0
+            }}
+            transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                duration: 0.3
+            }}
+        >
             <Menu/>
             {pathname === '/sites' && (
                 <div className={styles.container__switcher}>
@@ -88,6 +128,6 @@ export default function Header() {
                     }
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }
