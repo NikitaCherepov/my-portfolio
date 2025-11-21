@@ -43,12 +43,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!user.admin) {
-      return NextResponse.json(
-        { authenticated: false, error: 'Доступ запрещен' },
-        { status: 403 }
-      );
-    }
+    // if (!user.admin) {
+    //   return NextResponse.json(
+    //     { authenticated: false, error: 'Доступ запрещен' },
+    //     { status: 403 }
+    //   );
+    // }
 
     return NextResponse.json({
       authenticated: true,

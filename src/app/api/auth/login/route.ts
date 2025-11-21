@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!user.admin) {
-      return NextResponse.json(
-        { error: 'Доступ запрещен' },
-        { status: 403 }
-      );
-    }
+    // if (!user.admin) {
+    //   return NextResponse.json(
+    //     { error: 'Доступ запрещен' },
+    //     { status: 403 }
+    //   );
+    // }
 
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
