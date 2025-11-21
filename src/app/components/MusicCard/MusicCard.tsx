@@ -203,7 +203,8 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                   className={styles.container__head__albumContainer__cover}
                 />
                 <AnimatePresence>
-                  {(isHovering || isMobile) && currentMusicCard?.preview && (
+                  {/* ((isHovering || isMobile) && currentMusicCard?.preview) ||  */}
+                  {true && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -213,9 +214,9 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
                     >
                       <img
                         src={
-                          currentSrc === currentMusicCard.preview && duration === currentTime
+                          currentSrc === currentMusicCard?.preview && duration === currentTime
                             ? '/images/icons/MusicPlayer/play.svg'
-                            : currentSrc === currentMusicCard.preview && isPlaying
+                            : currentSrc === currentMusicCard?.preview && isPlaying
                             ? '/images/icons/MusicPlayer/pause.svg'
                             : '/images/icons/MusicPlayer/play.svg'
                         }
