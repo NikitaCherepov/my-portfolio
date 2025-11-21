@@ -13,6 +13,7 @@ import ModalSites from "../components/ModalSites"
 import SortingComponentForList from "../components/SortingComponentForList"
 import Button from "../components/Cards/SiteCard/Button"
 import { SiteWork } from '../store/useExitStore'
+import { useRouter } from 'next/navigation'
 
 
 export default function SitesPage() {
@@ -35,6 +36,7 @@ export default function SitesPage() {
     // }, [])
 
     const {pagination, setCurrentPage} = usePagination();
+    const router = useRouter();
 
     const [scrollDir, setScrollDir] = useState<"up" | "down" | 'idle'>('idle');
     const scrollVariants = {
@@ -165,6 +167,7 @@ export default function SitesPage() {
             layout
 
             ref={scrollRef}
+            data-lenis-prevent-wheel
             transition={{type: 'tween', stiffness: 150, damping: 20, duration: 0.3}} 
             className={`${styles.container__cards} 
             ${view === 'grid' ? styles.container__cards_grid : styles.container__cards_list}
@@ -223,7 +226,9 @@ export default function SitesPage() {
             </motion.div>
             
             
-            <Button onClick={() => toggleModal(sites?.find((el: any) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
+            {/* <Button onClick={() => toggleModal(sites?.find((el: any) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/> */}
+            <Button onClick={() => router.push('/sites/site?id=cmhs79ftu0002uck0p5j2qm8k')} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
+
 
 
         </motion.div>
