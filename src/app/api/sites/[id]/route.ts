@@ -44,10 +44,6 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const galleryFiles = formData.getAll('gallery') as File[];
     const removeGallery = JSON.parse(formData.get('removeGallery') as string || '[]');
 
-    // Логирование перед валидацией
-    console.log('mainImage', mainImageFile?.name, mainImageFile?.size);
-    console.log('gallery count', galleryFiles.length);
-
     // Валидация обязательных полей
     if (!name || !directLink || !description || !date) {
       return NextResponse.json(
