@@ -15,6 +15,7 @@ export interface UploadedFile {
  * Сохраняет загруженный файл и возвращает информацию о нем
  */
 export async function saveUploadedFile(file: File | Blob, subfolder: string = ''): Promise<UploadedFile> {
+  console.log('saveUploadedFile start', { subfolder, uploadDir: UPLOAD_DIR });
   try {
     // Создаем директорию для загрузки, если она не существует
     const fullPath = join(process.cwd(), UPLOAD_DIR, subfolder);
@@ -33,6 +34,7 @@ export async function saveUploadedFile(file: File | Blob, subfolder: string = ''
 
     // Сохраняем файл
     const filepath = join(fullPath, filename);
+    console.log('target path', filepath);
     await writeFile(filepath, buffer);
 
     // Возвращаем URL для доступа к файлу
@@ -44,7 +46,7 @@ export async function saveUploadedFile(file: File | Blob, subfolder: string = ''
       url
     };
   } catch (error) {
-    console.error('Error saving file:', error);
+    console.error('saveUploadedFile error', error);
     throw new Error('Failed to save file');
   }
 }
