@@ -592,20 +592,32 @@ export const usePlayerStateStore = create<PlayerState>((set, get) => {
         try {
           await audio.play();
           set({ isPlaying: true });
+          return true;
         } catch (err) {
           console.warn('Audio play failed', err);
+          return false;
         }
       };
 
-      if (audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
-        const onCanPlay = () => {
-          audio.removeEventListener('canplaythrough', onCanPlay);
-          start();
-        };
-        audio.addEventListener('canplaythrough', onCanPlay, { once: true });
-      } else {
-        start();
+      if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        await start();
+        return;
       }
+
+      let started = false;
+      const onCanPlay = async () => {
+        if (started) return;
+        started = await start();
+      };
+
+      audio.addEventListener('canplay', onCanPlay, { once: true });
+
+      setTimeout(async () => {
+        if (!started) {
+          audio.removeEventListener('canplay', onCanPlay);
+          await start();
+        }
+      }, 1500);
     },
     pause: () => {
       const state = get();
