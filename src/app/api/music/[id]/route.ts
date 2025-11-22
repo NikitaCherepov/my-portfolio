@@ -3,14 +3,6 @@ import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
 import { saveUploadedFile, validateImageFile, saveAudioFile, validateAudioFile } from '@/utils/fileUpload';
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '20mb',
-    },
-  },
-};
-
 const prisma = new PrismaClient();
 
 interface Params {
