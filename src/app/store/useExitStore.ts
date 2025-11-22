@@ -568,18 +568,6 @@ export const usePlayerStateStore = create<PlayerState>((set, get) => {
       audio.currentTime = 0;
       audio.load();
 
-      const nudgePlayback = () => {
-        if (!audio) return;
-        const wasPlaying = !audio.paused;
-        audio.currentTime = Math.max(0, audio.currentTime - 0.05);
-        if (wasPlaying) audio.play().catch(() => {});
-      };
-
-      audio.removeEventListener('waiting', nudgePlayback);
-      audio.addEventListener('waiting', nudgePlayback);
-      audio.removeEventListener('stalled', nudgePlayback);
-      audio.addEventListener('stalled', nudgePlayback);
-
       set({
         audio,
         currentSrc: src,
