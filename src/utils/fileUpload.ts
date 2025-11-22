@@ -18,7 +18,6 @@ export interface UploadedFile {
  * Сохраняет загруженный файл и возвращает информацию о нем
  */
 export async function saveUploadedFile(file: File | Blob, subfolder = ''): Promise<UploadedFile> {
-  console.log('saveUploadedFile start', { subfolder, uploadDir: UPLOAD_DIR });
   try {
     const fullPath = buildPath(UPLOAD_DIR, subfolder);
     await mkdir(fullPath, { recursive: true });
@@ -33,7 +32,6 @@ export async function saveUploadedFile(file: File | Blob, subfolder = ''): Promi
     const buffer = Buffer.from(bytes);
 
     const filepath = `${fullPath}/${filename}`;
-    console.log('target path', filepath);
     await writeFile(filepath, buffer);
 
     const url = `/uploads/sites/${subfolder ? `${subfolder}/` : ''}${filename}`;

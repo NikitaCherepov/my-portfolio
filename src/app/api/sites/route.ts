@@ -43,10 +43,6 @@ export async function POST(request: NextRequest) {
     const mainImageFile = formData.get('mainImage') as File;
     const galleryFiles = formData.getAll('gallery') as File[];
 
-    // Логирование перед валидацией
-    console.log('mainImage', mainImageFile?.name, mainImageFile?.size);
-    console.log('gallery count', galleryFiles.length);
-
     // Валидация обязательных полей
     if (!name || !directLink || !description || !date || !mainImageFile) {
       return NextResponse.json(
