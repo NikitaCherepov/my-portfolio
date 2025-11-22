@@ -535,41 +535,86 @@ interface PlayerState {
     setName: (name: string) => void
 }
 export const usePlayerStateStore = create<PlayerState>((set, get) => {
-    return {
-        audio: null,
-        currentSrc: '',
-        setAudio: (src) => {
-            set({audio: new Audio(src), currentSrc: src});
-        },
+  const createAudioElement = (src?: string) => {
+    if (typeof Audio === 'undefined') return null;
+    const el = new Audio(src ?? '');
+    el.preload = 'auto';
+    el.crossOrigin = 'anonymous';
+    return el;
+  };
+
+  const ensureAudio = () => {
+    const state = get();
+    if (state.audio) return state.audio;
+    const el = createAudioElement();
+    set({ audio: el });
+    return el;
+  };
+
+  return {
+    audio: createAudioElement(),
+    currentSrc: '',
+    setAudio: (src) => {
+      if (!src) return;
+      const audio = ensureAudio();
+      if (!audio) return;
+
+      // если новый трек — сбрасываем и подгружаем
+      if (!audio.src?.includes(src)) {
+        audio.pause();
+        audio.src = src;
+      }
+      audio.preload = 'auto';
+      audio.currentTime = 0;
+      audio.load();
+
+      set({
+        audio,
+        currentSrc: src,
         currentTime: 0,
-        setCurrentTime: (currentTime) => {
-            set({currentTime: currentTime});
-        },
-        isPlaying: false,
-        play: () => {
-            const state = get();
-            if (state.audio && !state.isPlaying) {
-                set({ isPlaying: true });
-                state.audio.play();
-            }
-            else if (state.isPlaying && state.duration === state.currentTime) {
-                state?.audio?.play();
-            }
-        },
-        pause: () => {
-            const state = get();
-            if (state.audio && state.isPlaying) {
-                set({ isPlaying: false });
-                state.audio.pause();
-            }
-        },
         duration: 0,
-        setDuration: (duration) => {
-            set({duration: duration});
-        },
-        name: '',
-        setName: (name) => {
-            set({name: name});
+        isPlaying: false,
+      });
+    },
+    currentTime: 0,
+    setCurrentTime: (currentTime) => set({ currentTime }),
+    isPlaying: false,
+    play: async () => {
+      const state = get();
+      const audio = ensureAudio();
+      if (!audio) return;
+
+      if (state.duration && state.currentTime >= state.duration) {
+        audio.currentTime = 0;
+      }
+
+      const start = async () => {
+        try {
+          await audio.play();
+          set({ isPlaying: true });
+        } catch (err) {
+          console.warn('Audio play failed', err);
         }
-    }
-})
+      };
+
+      if (audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
+        const onCanPlay = () => {
+          audio.removeEventListener('canplaythrough', onCanPlay);
+          start();
+        };
+        audio.addEventListener('canplaythrough', onCanPlay, { once: true });
+      } else {
+        start();
+      }
+    },
+    pause: () => {
+      const state = get();
+      if (state.audio) state.audio.pause();
+      if (state.isPlaying) set({ isPlaying: false });
+    },
+    duration: 0,
+    setDuration: (duration) => set({ duration: duration ?? 0 }),
+    name: '',
+    setName: (name) => set({ name }),
+  };
+});
