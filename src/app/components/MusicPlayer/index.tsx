@@ -38,8 +38,10 @@ export default function MusicPlayer() {
     const [isSwipeAnimating, setIsSwipeAnimating] = useState(false);
     const touchStartPos = useRef<{ x: number; y: number } | null>(null);
 
-    const {position, setPosition, showPlayer, setShowPlayer} = usePlayerStore();
+    const {position, setPosition, showPlayer, setShowPlayer, volume, setVolume} = usePlayerStore();
     const hasHydrated = useHasHydrated(usePlayerStore);
+    const previousDesktopVolume = useRef<number | null>(null);
+    const mobileVolumeForced = useRef(false);
 
     // Определение мобильных устройств и начальная настройка
     useEffect(() => {
@@ -61,6 +63,26 @@ export default function MusicPlayer() {
             }
         }
     }, [isMobile, hasHydrated, showPlayer, setShowPlayer]);
+
+    useEffect(() => {
+      if (!hasHydrated) return;
+
+      if (isMobile) {
+        if (previousDesktopVolume.current === null) {
+          previousDesktopVolume.current = volume;
+        }
+        if (!mobileVolumeForced.current) {
+          setVolume(0.5);
+          mobileVolumeForced.current = true;
+        }
+      } else {
+        mobileVolumeForced.current = false;
+        if (previousDesktopVolume.current !== null && previousDesktopVolume.current !== volume) {
+          setVolume(previousDesktopVolume.current);
+        }
+        previousDesktopVolume.current = null;
+      }
+    }, [isMobile, hasHydrated, setVolume, volume]);
 
     // Position validation only for desktop
     useEffect(() => {
