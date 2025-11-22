@@ -2,8 +2,8 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-const UPLOAD_DIR = 'public/uploads/sites';
-const AUDIO_UPLOAD_DIR = 'public/uploads/audio';
+const UPLOAD_DIR = '/var/www/uploadsportfolio/sites';
+const AUDIO_UPLOAD_DIR = '/var/www/uploadsportfolio/audio';
 
 export interface UploadedFile {
   filename: string;
