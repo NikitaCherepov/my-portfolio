@@ -1,9 +1,12 @@
 import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 const UPLOAD_DIR = '/var/www/uploadsportfolio/sites';
 const AUDIO_UPLOAD_DIR = '/var/www/uploadsportfolio/audio';
+
+function buildPath(base: string, subfolder: string) {
+  return subfolder ? `${base}/${subfolder}` : base;
+}
 
 export interface UploadedFile {
   filename: string;
@@ -14,37 +17,27 @@ export interface UploadedFile {
 /**
  * Сохраняет загруженный файл и возвращает информацию о нем
  */
-export async function saveUploadedFile(file: File | Blob, subfolder: string = ''): Promise<UploadedFile> {
+export async function saveUploadedFile(file: File | Blob, subfolder = ''): Promise<UploadedFile> {
   console.log('saveUploadedFile start', { subfolder, uploadDir: UPLOAD_DIR });
   try {
-    // Создаем директорию для загрузки, если она не существует
-    const fullPath = join(process.cwd(), UPLOAD_DIR, subfolder);
+    const fullPath = buildPath(UPLOAD_DIR, subfolder);
     await mkdir(fullPath, { recursive: true });
 
-    // Генерируем уникальное имя файла
     const timestamp = Date.now();
     const uniqueId = uuidv4().slice(0, 8);
     const originalName = (file as File).name || 'file';
     const extension = originalName.split('.').pop() || 'jpg';
     const filename = `${timestamp}_${uniqueId}.${extension}`;
 
-    // Получаем файл как буфер
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Сохраняем файл
-    const filepath = join(fullPath, filename);
+    const filepath = `${fullPath}/${filename}`;
     console.log('target path', filepath);
     await writeFile(filepath, buffer);
 
-    // Возвращаем URL для доступа к файлу
-    const url = `/uploads/sites/${subfolder ? subfolder + '/' : ''}${filename}`;
-
-    return {
-      filename,
-      filepath,
-      url
-    };
+    const url = `/uploads/sites/${subfolder ? `${subfolder}/` : ''}${filename}`;
+    return { filename, filepath, url };
   } catch (error) {
     console.error('saveUploadedFile error', error);
     throw new Error('Failed to save file');
@@ -54,13 +47,12 @@ export async function saveUploadedFile(file: File | Blob, subfolder: string = ''
 /**
  * Сохраняет несколько файлов и возвращает массив URL
  */
-export async function saveMultipleFiles(files: File[] | Blob[], subfolder: string = ''): Promise<string[]> {
+export async function saveMultipleFiles(files: File[] | Blob[], subfolder = ''): Promise<string[]> {
   try {
-    const uploadedFiles = await Promise.all(
-      files.map(file => saveUploadedFile(file, subfolder))
-    );
-
-    return uploadedFiles.map(file => file.url);
+    const fullPath = buildPath(UPLOAD_DIR, subfolder);
+    await mkdir(fullPath, { recursive: true });
+    const uploaded = await Promise.all(files.map(file => saveUploadedFile(file, subfolder)));
+    return uploaded.map(f => f.url);
   } catch (error) {
     console.error('Error saving multiple files:', error);
     throw new Error('Failed to save files');
@@ -105,26 +97,21 @@ export function validateMultipleFiles(files: File[]): boolean {
  */
 export async function saveAudioFile(file: File | Blob): Promise<UploadedFile> {
   try {
-    // Создаем директорию для аудио, если она не существует
-    const fullPath = join(process.cwd(), AUDIO_UPLOAD_DIR);
+    const fullPath = AUDIO_UPLOAD_DIR;
     await mkdir(fullPath, { recursive: true });
 
-    // Генерируем уникальное имя файла
     const timestamp = Date.now();
     const uniqueId = uuidv4().slice(0, 8);
     const originalName = (file as File).name || 'audio';
     const extension = originalName.split('.').pop() || 'mp3';
     const filename = `${timestamp}_${uniqueId}.${extension}`;
 
-    // Получаем файл как буфер
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Сохраняем файл
-    const filepath = join(fullPath, filename);
+    const filepath = `${fullPath}/${filename}`;
     await writeFile(filepath, buffer);
 
-    // Возвращаем URL для доступа к файлу
     const url = `/uploads/audio/${filename}`;
 
     return {
