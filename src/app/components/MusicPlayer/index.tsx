@@ -72,7 +72,7 @@ export default function MusicPlayer() {
           previousDesktopVolume.current = volume;
         }
         if (!mobileVolumeForced.current) {
-          setVolume(0.5);
+          setVolume(1);
           mobileVolumeForced.current = true;
         }
       } else {
