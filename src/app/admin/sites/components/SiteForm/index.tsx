@@ -7,6 +7,11 @@ import { CreateSiteData, UpdateSiteData } from '@/app/hooks/useSiteMutations';
 import { Site } from '@/app/hooks/useSiteMutations';
 import styles from './SiteForm.module.scss';
 
+const formatDateInput = (value?: string) => {
+    if (!value) return new Date().toISOString().split('T')[0];
+    return new Date(value).toISOString().split('T')[0];
+};
+
 interface SiteFormProps {
     mode: 'create' | 'edit';
     initialData?: Site;
@@ -47,7 +52,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         directLink: initialData?.directLink || '',
         github: initialData?.github || '',
         description: initialData?.description || '',
-        date: initialData?.date || new Date().toISOString().split('T')[0],
+        date: formatDateInput(initialData?.date),
         stack: initialData?.stack || [],
         features: initialData?.features || [],
         mainImage: {

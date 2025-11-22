@@ -8,6 +8,11 @@ import { CreateMusicData, UpdateMusicData, Music } from '@/app/hooks/useMusicMut
 import AudioTrimmer from '@/app/components/AudioTrimmer';
 import styles from './MusicForm.module.scss';
 
+const formatDateInput = (value?: string) => {
+    if (!value) return new Date().toISOString().split('T')[0];
+    return new Date(value).toISOString().split('T')[0];
+};
+
 interface MusicFormProps {
     mode: 'create' | 'edit';
     initialData?: Music;
@@ -59,7 +64,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
             isChanged: false,
             mode: initialData?.preview ? 'url' : 'file'
         },
-        date: initialData?.date || new Date().toISOString().split('T')[0],
+        date: formatDateInput(initialData?.date),
         mainImage: {
             current: initialData?.mainImage,
             file: undefined,
