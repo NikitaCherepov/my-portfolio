@@ -3,6 +3,14 @@ import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
 import { saveUploadedFile, saveMultipleFiles, validateImageFile, validateMultipleFiles } from '@/utils/fileUpload';
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
+};
+
 const prisma = new PrismaClient();
 
 export async function GET() {
