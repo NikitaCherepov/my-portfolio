@@ -99,33 +99,21 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
     const handlePlayPause = () => {
         if (!currentMusicCard?.preview) return;
 
-        if (currentMusicCard.name) {
-            setName(currentMusicCard.name);
-        }
+        if (currentMusicCard.name) setName(currentMusicCard.name);
 
         if (currentSrc !== currentMusicCard.preview) {
-            // Новый трек - открываем плеер и начинаем играть
-            if (!showPlayer) {
-                setShowPlayer();
-            }
+            if (!showPlayer) setShowPlayer();
             pause();
             setAudio(currentMusicCard.preview);
             play();
-            setDuration(audio?.duration);
+            // duration придет из PlayerWatcher (loadedmetadata)
         } else if (duration === currentTime) {
-            // Трек закончился - заново играем, открываем плеер
-            if (!showPlayer) {
-                setShowPlayer();
-            }
+            if (!showPlayer) setShowPlayer();
             play();
         } else if (!isPlaying) {
-            // Продолжаем играть паузу - открываем плеер
-            if (!showPlayer) {
-                setShowPlayer();
-            }
+            if (!showPlayer) setShowPlayer();
             play();
         } else if (isPlaying) {
-            // Ставим на паузу - НЕ открываем плеер
             pause();
         }
     }

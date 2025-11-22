@@ -17,27 +17,18 @@ export default function PreviewMusicButton({src, name}: PreviewMusicButtonProps)
 
 
     const playMusic = () => {
-        console.log(duration);
-        console.log(currentTime);
-        if (name) {
-            setName(name);
-        }
-        if (currentSrc != src) {
+        if (name) setName(name);
+
+        if (currentSrc !== src) {
             pause();
             setAudio(src);
             play();
-            setDuration(audio?.duration);
-        }
-        else if (duration === currentTime) {
+        } else if (duration === currentTime) {
             play();
-        }
-        else if (!isPlaying) {
+        } else if (!isPlaying) {
             play();
-            console.log(1)
-        }
-        else if (isPlaying) {
+        } else {
             pause();
-            console.log(20)
         }
     }
 
