@@ -588,6 +588,14 @@ export const usePlayerStateStore = create<PlayerState>((set, get) => {
         audio.currentTime = 0;
       }
 
+      const MIN_BUFFER_SEC = 1.5;
+
+      const hasBuffered = () => {
+        if (!audio.buffered?.length) return false;
+        const end = audio.buffered.end(audio.buffered.length - 1);
+        return end - audio.currentTime >= MIN_BUFFER_SEC;
+      };
+
       const start = async () => {
         try {
           await audio.play();
@@ -599,24 +607,29 @@ export const usePlayerStateStore = create<PlayerState>((set, get) => {
         }
       };
 
-      if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && hasBuffered()) {
         await start();
         return;
       }
 
       let started = false;
-      const onCanPlay = async () => {
+      const tryStart = async () => {
         if (started) return;
+        if (!hasBuffered()) return;
         started = await start();
       };
 
-      audio.addEventListener('canplay', onCanPlay, { once: true });
+      audio.addEventListener('canplay', tryStart);
+      audio.addEventListener('progress', tryStart);
+      audio.addEventListener('canplaythrough', tryStart);
 
       setTimeout(async () => {
-        if (!started) {
-          audio.removeEventListener('canplay', onCanPlay);
+        if (!started && hasBuffered()) {
           await start();
         }
+        audio.removeEventListener('canplay', tryStart);
+        audio.removeEventListener('progress', tryStart);
+        audio.removeEventListener('canplaythrough', tryStart);
       }, 3000);
     },
     pause: () => {
