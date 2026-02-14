@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const genres = await prisma.genre.findMany({
       orderBy: {
-        name: 'asc'
+        order: 'asc'
       }
     });
 

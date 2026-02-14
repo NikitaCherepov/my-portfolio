@@ -5,6 +5,7 @@ export interface Genre {
   id: string;
   name: string;
   description: string | null;
+  order: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,6 +18,11 @@ export interface CreateGenreData {
 export interface UpdateGenreData {
   name?: string;
   description?: string;
+}
+
+export interface GenreOrder {
+  id: string;
+  order: number;
 }
 
 class GenresService {
@@ -84,6 +90,20 @@ class GenresService {
     } catch (error: any) {
       console.error('Error deleting genre:', error);
       throw error.response?.data || { error: 'Failed to delete genre' };
+    }
+  }
+
+  async updateGenresOrder(genres: GenreOrder[]): Promise<void> {
+    try {
+      await axios.put('/api/genres/reorder', { genres }, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...this.getAuthHeaders(),
+        },
+      });
+    } catch (error: any) {
+      console.error('Error updating genres order:', error);
+      throw error.response?.data || { error: 'Failed to update genres order' };
     }
   }
 }
