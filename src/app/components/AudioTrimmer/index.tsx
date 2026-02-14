@@ -150,7 +150,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
 
   // Обрезка аудио
   const handleTrim = async () => {
-    if (!audioFile || !startTime || !endTime || isTrimming) return;
+    if (!audioFile || startTime < 0 || endTime <= 0 || startTime >= endTime || isTrimming) return;
 
     setIsTrimming(true);
     try {
@@ -277,7 +277,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                   <button
                     type="button"
                     onClick={handleTrim}
-                    disabled={disabled || isTrimming || startTime >= endTime}
+                    disabled={disabled || isTrimming || startTime >= endTime || endTime === 0 || !audioFile}
                     className={styles.audioTrimmer__trimButton}
                   >
                     {isTrimming ? 'Обрезка...' : '✂️ Обрезать'}
