@@ -19,52 +19,64 @@
     &__badge {
         display: inline-flex;
         align-items: center;
-        min-height: 25px;
-        padding: 4px 9px;
-        border: 1px solid rgba(255, 255, 255, 0.38);
-        border-radius: 999px;
-        background: rgba(0, 0, 0, 0.78);
-        color: #fff;
+        justify-content: center;
+        min-height: 23px;
+        padding: 3px 8px 2px;
+        border: 1px solid var(--header-name-color);
+        border-radius: 0;
+        background: var(--background);
+        color: var(--header-name-color);
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.7rem;
+        font-size: 0.625rem;
+        font-weight: 700;
         line-height: 1;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         text-decoration: none;
         white-space: nowrap;
-        z-index: 3;
+        box-shadow: 3px 3px 0 var(--header-name-color);
+        z-index: 4;
 
         &_grid {
             position: absolute;
-            top: 7px;
-            left: 7px;
+            top: 6px;
+            left: 6px;
         }
 
         &_list {
-            position: relative;
+            position: absolute;
+            top: 9px;
+            left: 7px;
             flex-shrink: 0;
         }
 
         &__tooltip {
             position: absolute;
-            top: calc(100% + 7px);
+            top: calc(100% + 6px);
             left: 0;
             max-width: min(280px, 75vw);
-            padding: 6px 9px;
-            border-radius: 4px;
-            background: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            font-size: 0.7rem;
+            padding: 7px 9px;
+            border: 1px solid var(--header-name-color);
+            border-radius: 0;
+            background: var(--background);
+            color: var(--header-name-color);
+            font-size: 0.625rem;
+            font-weight: 500;
             line-height: 1.35;
+            letter-spacing: 0;
+            text-transform: none;
             opacity: 0;
             pointer-events: none;
             transform: translateY(-3px);
             transition: opacity 0.15s ease, transform 0.15s ease;
             white-space: normal;
             width: max-content;
+            box-shadow: 3px 3px 0 var(--header-name-color);
         }
 
         &:hover,
         &:focus-visible {
-            background: #000;
+            background: var(--white);
 
             .container__badge__tooltip {
                 opacity: 1;
