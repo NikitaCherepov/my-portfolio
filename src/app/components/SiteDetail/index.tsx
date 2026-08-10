@@ -26,6 +26,8 @@ interface SiteDetailProps {
     github?: string;
     directLink?: string;
     date: string;
+    companyName?: string | null;
+    companyUrl?: string | null;
   }
 }
 
@@ -198,7 +200,25 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
               <h1 className={styles.sidebar__title}>{siteData.name}</h1>
             </div>
 
-                        {/* Кнопки действий */}
+            {siteData.companyName && (
+              <div className={styles.contribution}>
+                <div className={styles.contribution__label}>Участие в проекте</div>
+                {siteData.companyUrl ? (
+                  <a
+                    href={siteData.companyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.contribution__company}
+                  >
+                    {siteData.companyName}
+                  </a>
+                ) : (
+                  <div className={styles.contribution__company}>{siteData.companyName}</div>
+                )}
+              </div>
+            )}
+
+            {/* Кнопки действий */}
             <div className={styles.actions}>
               {siteData.github && (
                 <Button

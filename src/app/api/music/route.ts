@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
-import { saveUploadedFile, validateImageFile, saveAudioFile, validateAudioFile } from '@/utils/fileUpload';
+import { saveOptimizedImage, validateImageFile, saveAudioFile, validateAudioFile } from '@/utils/fileUpload';
 
 const prisma = new PrismaClient();
 
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Сохраняем обложку
-    const mainImageData = await saveUploadedFile(mainImageFile, 'music');
+    const mainImageData = await saveOptimizedImage(mainImageFile, 'music');
 
     // Сохраняем превью если есть
     let previewUrl = preview || '';

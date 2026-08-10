@@ -31,6 +31,8 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         github: string;
         description: string;
         date: string;
+        companyName: string;
+        companyUrl: string;
         stack: string[];
         features: string[];
         mainImage: {
@@ -53,6 +55,8 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         github: initialData?.github || '',
         description: initialData?.description || '',
         date: formatDateInput(initialData?.date),
+        companyName: initialData?.companyName || '',
+        companyUrl: initialData?.companyUrl || '',
         stack: initialData?.stack || [],
         features: initialData?.features || [],
         mainImage: {
@@ -121,12 +125,13 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
     };
 
     const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
+        const file = e.target.files?.[0];
+        if (file) {
             setFormData(prev => ({
                 ...prev,
                 mainImage: {
                     ...prev.mainImage,
-                    file: e.target.files[0],
+                    file,
                     isChanged: true
                 }
             }));
@@ -323,7 +328,13 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
         try {
             const submitData = {
-                ...formData,
+                name: formData.name,
+                directLink: formData.directLink,
+                github: formData.github,
+                description: formData.description,
+                date: formData.date,
+                companyName: formData.companyName,
+                companyUrl: formData.companyUrl,
                 stack: formData.stack.filter(tag => tag.trim()),
                 features: formData.features.filter(feature => feature.trim()),
             };
@@ -707,6 +718,32 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                             className={`${styles.field__input} ${errors.date ? styles.field__input_error : ''}`}
                         />
                         {errors.date && <div className={styles.field__error}>{errors.date}</div>}
+                    </div>
+
+                    {/* Company Name */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>Компания (если не ваш проект)</label>
+                        <input
+                            type="text"
+                            name="companyName"
+                            value={formData.companyName}
+                            onChange={handleInputChange}
+                            className={styles.field__input}
+                            placeholder="Название компании или студии"
+                        />
+                    </div>
+
+                    {/* Company URL */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>Ссылка на компанию</label>
+                        <input
+                            type="url"
+                            name="companyUrl"
+                            value={formData.companyUrl}
+                            onChange={handleInputChange}
+                            className={styles.field__input}
+                            placeholder="https://..."
+                        />
                     </div>
 
                     {/* Stack */}

@@ -1,8 +1,9 @@
 import { writeFile, mkdir } from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
+import sharp from 'sharp';
 
-const UPLOAD_DIR = '/var/www/uploadsportfolio/sites';
-const AUDIO_UPLOAD_DIR = '/var/www/uploadsportfolio/audio';
+const UPLOAD_DIR = process.env.PORTFOLIO_UPLOAD_DIR || '/var/www/uploadsportfolio/sites';
+const AUDIO_UPLOAD_DIR = process.env.PORTFOLIO_AUDIO_UPLOAD_DIR || '/var/www/uploadsportfolio/audio';
 
 function buildPath(base: string, subfolder: string) {
   return subfolder ? `${base}/${subfolder}` : base;
@@ -146,4 +147,40 @@ export function validateAudioFile(file: File): boolean {
   }
 
   return true;
+}
+
+/**
+ * Saves a web-friendly image. Music covers use this path so large source files
+ * never reach the public uploads directory unchanged.
+ */
+export async function saveOptimizedImage(file: File | Blob, subfolder = ''): Promise<UploadedFile> {
+  try {
+    const fullPath = buildPath(UPLOAD_DIR, subfolder);
+    await mkdir(fullPath, { recursive: true });
+
+    const timestamp = Date.now();
+    const uniqueId = uuidv4().slice(0, 8);
+    const filename = `${timestamp}_${uniqueId}.webp`;
+    const filepath = `${fullPath}/${filename}`;
+    const source = Buffer.from(await file.arrayBuffer());
+
+    const optimized = await sharp(source)
+      .rotate()
+      .resize({
+        width: 1200,
+        height: 1200,
+        fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .webp({ quality: 78, effort: 4 })
+      .toBuffer();
+
+    await writeFile(filepath, optimized);
+
+    const url = `/uploads/sites/${subfolder ? `${subfolder}/` : ''}${filename}`;
+    return { filename, filepath, url };
+  } catch (error) {
+    console.error('saveOptimizedImage error', error);
+    throw new Error('Failed to optimize and save image');
+  }
 }

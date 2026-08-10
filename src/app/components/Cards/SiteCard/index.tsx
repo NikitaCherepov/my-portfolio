@@ -18,7 +18,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
     const {view} = useViewStore();
     const router = useRouter();
 
-    const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
+    const transitionSettings = { type: "spring" as const, stiffness: 150, damping: 20 };
     const transitionHoverSettings = {duration: 0.2}
 
     const formatDisplayDate = (value: string) => {
@@ -42,6 +42,33 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
         layout
         transition={transitionSettings}
         >
+                {object.companyName && (
+                    object.companyUrl ? (
+                        <a
+                            href={object.companyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${styles.container__badge} ${view === 'list' ? styles.container__badge_list : styles.container__badge_grid}`}
+                            aria-label={`Участие в проекте компании ${object.companyName}`}
+                        >
+                            <span>Участие</span>
+                            <span className={styles.container__badge__tooltip} role="tooltip">
+                                {object.companyName}
+                            </span>
+                        </a>
+                    ) : (
+                        <span
+                            className={`${styles.container__badge} ${view === 'list' ? styles.container__badge_list : styles.container__badge_grid}`}
+                            aria-label={`Участие в проекте компании ${object.companyName}`}
+                            tabIndex={0}
+                        >
+                            <span>Участие</span>
+                            <span className={styles.container__badge__tooltip} role="tooltip">
+                                {object.companyName}
+                            </span>
+                        </span>
+                    )
+                )}
                                 <motion.button onClick={handleNavigateToDetail} className={`${styles.container__fullButton} ${view === 'grid' ? 'opacity-100' : 'opacity-0'}`} transition={transitionSettings} layout>
                                 <motion.img transition={transitionSettings} layout src='/images/icons/square.svg'></motion.img>
                             </motion.button>

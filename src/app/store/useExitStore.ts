@@ -226,7 +226,9 @@ export interface SiteWork {
     description: string,
     features: string[],
     date: string,
-    id: string
+    id: string,
+    companyName?: string | null,
+    companyUrl?: string | null
 }
 
 export interface MusicWork {
@@ -305,7 +307,9 @@ export const useWorkStore = create<WorkStore>(() => ({
                     'API-подключения'
                 ],
                 date: "2022-05-23",
-                id: uuidv4()
+                id: uuidv4(),
+                companyName: 'Rene',
+                companyUrl: 'https://responsiveagent.bubbleapps.io/version-test/'
             }            
         ],
         music: [

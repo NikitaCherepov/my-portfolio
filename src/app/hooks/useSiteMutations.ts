@@ -14,6 +14,8 @@ export interface Site {
   features: string[];
   gallery: string[];
   date: string;
+  companyName?: string | null;
+  companyUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,6 +29,8 @@ export interface CreateSiteData {
   stack: string[];
   features: string[];
   date: string;
+  companyName?: string;
+  companyUrl?: string;
   gallery?: File[];
 }
 
@@ -39,6 +43,8 @@ export interface UpdateSiteData {
   stack?: string[];
   features?: string[];
   date?: string;
+  companyName?: string;
+  companyUrl?: string;
   gallery?: File[];
   removeGallery?: string[];
 }

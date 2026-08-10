@@ -81,7 +81,7 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
-      &__icon {
+      > .navigation__backButton__icon {
         transform: rotate(180deg) translateX(-3px);
       }
     }
@@ -476,6 +476,36 @@
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     }
   }
+}
+
+.contribution {
+  padding: 24px 30px;
+  border: 1px solid rgba(175, 175, 175, 0.14);
+  border-radius: var(--default-border-radius-big);
+  background: var(--foreground);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  &__label {
+    margin-bottom: 8px;
+    color: var(--header-name-color);
+    font-size: 0.8rem;
+    opacity: 0.62;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__company {
+    color: var(--header-name-color);
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__company[href]:hover,
+  &__company[href]:focus-visible {
+    text-decoration: underline;
+  }
+
 }
 
 // Кнопки действий - Flexbox

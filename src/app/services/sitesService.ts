@@ -33,12 +33,13 @@ class SitesService {
     stack: string[];
     features: string[];
     date: string;
+    companyName?: string;
+    companyUrl?: string;
     gallery?: File[];
   }) {
     try {
       const formData = new FormData();
 
-      // Добавляем текстовые поля
       formData.append('name', data.name);
       formData.append('directLink', data.directLink);
       formData.append('github', data.github || '');
@@ -46,8 +47,9 @@ class SitesService {
       formData.append('stack', JSON.stringify(data.stack));
       formData.append('features', JSON.stringify(data.features));
       formData.append('date', data.date);
+      if (data.companyName) formData.append('companyName', data.companyName);
+      if (data.companyUrl) formData.append('companyUrl', data.companyUrl);
 
-      // Добавляем файлы
       formData.append('mainImage', data.mainImage);
 
       if (data.gallery && data.gallery.length > 0) {
@@ -79,13 +81,14 @@ class SitesService {
     stack?: string[];
     features?: string[];
     date?: string;
+    companyName?: string;
+    companyUrl?: string;
     gallery?: File[];
     removeGallery?: string[];
   }) {
     try {
       const formData = new FormData();
 
-      // Добавляем текстовые поля, если они есть
       if (data.name !== undefined) formData.append('name', data.name);
       if (data.directLink !== undefined) formData.append('directLink', data.directLink);
       if (data.github !== undefined) formData.append('github', data.github);
@@ -93,9 +96,10 @@ class SitesService {
       if (data.stack !== undefined) formData.append('stack', JSON.stringify(data.stack));
       if (data.features !== undefined) formData.append('features', JSON.stringify(data.features));
       if (data.date !== undefined) formData.append('date', data.date);
+      if (data.companyName !== undefined) formData.append('companyName', data.companyName);
+      if (data.companyUrl !== undefined) formData.append('companyUrl', data.companyUrl);
       if (data.removeGallery !== undefined) formData.append('removeGallery', JSON.stringify(data.removeGallery));
 
-      // Добавляем файлы, если они есть
       if (data.mainImage !== undefined) {
         formData.append('mainImage', data.mainImage);
       }

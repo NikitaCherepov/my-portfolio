@@ -38,6 +38,8 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const stack = JSON.parse(formData.get('stack') as string || '[]');
     const features = JSON.parse(formData.get('features') as string || '[]');
     const date = formData.get('date') as string;
+    const companyName = (formData.get('companyName') as string || '').trim();
+    const companyUrl = (formData.get('companyUrl') as string || '').trim();
 
     // Получаем файлы
     const mainImageFile = formData.get('mainImage') as File | null;
@@ -61,6 +63,8 @@ export async function PUT(request: NextRequest, { params }: Params) {
       stack,
       features,
       date: new Date(date),
+      companyName: companyName || null,
+      companyUrl: companyUrl || null,
     };
 
     // Обрабатываем главное изображение, если оно было загружено

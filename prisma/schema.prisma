@@ -28,6 +28,8 @@ model Site {
   features      String[]  // Массив особенностей: ["Дизайн", "Анимации", "Адаптивность"]
   gallery       String[]  // Массив изображений галереи
   date          DateTime
+  companyName   String?
+  companyUrl    String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
-import { saveUploadedFile, validateImageFile, saveAudioFile, validateAudioFile } from '@/utils/fileUpload';
+import { saveOptimizedImage, validateImageFile, saveAudioFile, validateAudioFile } from '@/utils/fileUpload';
 
 const prisma = new PrismaClient();
 
@@ -82,7 +82,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     // Обрабатываем обложку, если она была загружена
     if (mainImageFile && mainImageFile.size > 0) {
       validateImageFile(mainImageFile);
-      const mainImageData = await saveUploadedFile(mainImageFile, 'music');
+      const mainImageData = await saveOptimizedImage(mainImageFile, 'music');
       updateData.mainImage = mainImageData.url;
     }
 
