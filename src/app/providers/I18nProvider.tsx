@@ -3,15 +3,40 @@
 import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import Cookies from 'js-cookie';
-import i18n, { LANGUAGE_COOKIE, LANGUAGE_STORAGE_KEY, isLocale } from '@/i18n';
+import i18n, { LANGUAGE_COOKIE, LANGUAGE_STORAGE_KEY, defaultLocale, isLocale } from '@/i18n';
 
 export default function I18nProvider({ children }: { children: React.ReactNode }) {
-  // Восстанавливаем сохранённый язык после гидратации,
-  // чтобы не было расхождения SSR (ru) и клиента
+  // Определяем язык после гидратации (не в рендере — иначе рассинхрон с SSR):
+  // 1. localStorage / cookie — явный выбор пользователя
+  // 2. Язык браузера — автоопределение при первом визите
+  // 3. Дефолт — русский
   useEffect(() => {
-    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (isLocale(saved) && saved !== i18n.language) {
-      i18n.changeLanguage(saved);
+    const savedStorage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const savedCookie = Cookies.get(LANGUAGE_COOKIE);
+
+    const saved = isLocale(savedStorage)
+      ? savedStorage
+      : isLocale(savedCookie)
+        ? savedCookie
+        : null;
+
+    let lng: string;
+    if (saved) {
+      lng = saved;
+    } else {
+      // Первый визит — автоопределение по языку браузера
+      const browserLangs = navigator.languages?.length
+        ? navigator.languages
+        : [navigator.language];
+      lng = browserLangs.some((l) => (l || '').toLowerCase().startsWith('en'))
+        ? 'en'
+        : defaultLocale;
+    }
+
+    // Держим оба хранилища заполненными (cookie нужен серверу для метадаты)
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);
+    if (lng !== i18n.language) {
+      i18n.changeLanguage(lng);
     }
   }, []);
 
