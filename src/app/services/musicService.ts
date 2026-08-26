@@ -4,7 +4,9 @@ import Cookies from 'js-cookie';
 export interface Genre {
   id: string;
   name: string;
+  nameEn?: string | null;
   description: string | null;
+  descriptionEn?: string | null;
   order: number;
   createdAt: string;
   updatedAt: string;
@@ -13,6 +15,7 @@ export interface Genre {
 export interface Music {
   id: string;
   name: string;
+  nameEn?: string | null;
   mainImage: string;
   youtube: string;
   spotify: string;
@@ -28,25 +31,27 @@ export interface Music {
 
 export interface CreateMusicData {
   name: string;
+  nameEn?: string;
   mainImage: File;
   genreId: string;
   youtube?: string;
   spotify?: string;
   vkmusic?: string;
   ymusic?: string;
-  preview?: string | File;
+  preview?: string | File | Blob;
   date: string;
 }
 
 export interface UpdateMusicData {
   name?: string;
+  nameEn?: string;
   mainImage?: File;
   genreId?: string;
   youtube?: string;
   spotify?: string;
   vkmusic?: string;
   ymusic?: string;
-  preview?: string | File;
+  preview?: string | File | Blob;
   date?: string;
 }
 
@@ -79,6 +84,7 @@ class MusicService {
 
       // Добавляем текстовые поля
       formData.append('name', data.name);
+      formData.append('nameEn', data.nameEn || '');
       formData.append('genreId', data.genreId);
       formData.append('youtube', data.youtube || '');
       formData.append('spotify', data.spotify || '');
@@ -110,6 +116,7 @@ class MusicService {
 
       // Добавляем текстовые поля, если они есть
       if (data.name !== undefined) formData.append('name', data.name);
+      if (data.nameEn !== undefined) formData.append('nameEn', data.nameEn);
       if (data.genreId !== undefined) formData.append('genreId', data.genreId);
       if (data.youtube !== undefined) formData.append('youtube', data.youtube);
       if (data.spotify !== undefined) formData.append('spotify', data.spotify);

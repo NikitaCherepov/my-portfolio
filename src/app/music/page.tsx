@@ -1,30 +1,24 @@
 import MusicPage from "./musicpage";
+import { getServerLocale } from '@/i18n/server';
+import ru from '@/i18n/locales/ru/translation.json';
+import en from '@/i18n/locales/en/translation.json';
 
-export const metadata = {
-    title: "Создание музыки",
-    description:
-      "Пишу музыку: электроника, джаз, рок, саундтреки для игр и фильмов. Экспериментирую со звуком, делаю музыку на заказ.",
-    keywords: [
-      "Никита Черепов",
-      "музыка",
-      "электронная музыка",
-      "саундтреки",
-      "джаз",
-      "блюз",
-      "музыка для игр",
-      "музыка для фильмов",
-      "авторская музыка",
-      "музыка на заказ",
-      "экспериментальная музыка",
-    ],
-    openGraph: {
-      title: "Создание музыки",
-      description:
-        "Электроника, джаз-блюз, саундтреки, эксперименты со звуком и музыка на заказ.",
-    },
-  };
-  
-  
+export async function generateMetadata() {
+    const lang = await getServerLocale();
+    const meta = lang === 'en' ? en.metadata.music : ru.metadata.music;
+
+    return {
+        title: meta.title,
+        description: meta.description,
+        keywords: meta.keywords,
+        openGraph: {
+            title: meta.ogTitle,
+            description: meta.ogDescription,
+        },
+    };
+}
+
+
 
 export default function Music() {
     return <MusicPage/>

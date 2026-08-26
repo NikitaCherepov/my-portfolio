@@ -35,6 +35,10 @@ class SitesService {
     date: string;
     companyName?: string;
     companyUrl?: string;
+    nameEn?: string;
+    descriptionEn?: string;
+    featuresEn?: string[];
+    companyNameEn?: string;
     gallery?: File[];
   }) {
     try {
@@ -49,6 +53,10 @@ class SitesService {
       formData.append('date', data.date);
       if (data.companyName) formData.append('companyName', data.companyName);
       if (data.companyUrl) formData.append('companyUrl', data.companyUrl);
+      if (data.nameEn) formData.append('nameEn', data.nameEn);
+      if (data.descriptionEn) formData.append('descriptionEn', data.descriptionEn);
+      if (data.featuresEn) formData.append('featuresEn', JSON.stringify(data.featuresEn));
+      if (data.companyNameEn) formData.append('companyNameEn', data.companyNameEn);
 
       formData.append('mainImage', data.mainImage);
 
@@ -83,6 +91,10 @@ class SitesService {
     date?: string;
     companyName?: string;
     companyUrl?: string;
+    nameEn?: string;
+    descriptionEn?: string;
+    featuresEn?: string[];
+    companyNameEn?: string;
     gallery?: File[];
     removeGallery?: string[];
   }) {
@@ -98,6 +110,10 @@ class SitesService {
       if (data.date !== undefined) formData.append('date', data.date);
       if (data.companyName !== undefined) formData.append('companyName', data.companyName);
       if (data.companyUrl !== undefined) formData.append('companyUrl', data.companyUrl);
+      if (data.nameEn !== undefined) formData.append('nameEn', data.nameEn);
+      if (data.descriptionEn !== undefined) formData.append('descriptionEn', data.descriptionEn);
+      if (data.featuresEn !== undefined) formData.append('featuresEn', JSON.stringify(data.featuresEn));
+      if (data.companyNameEn !== undefined) formData.append('companyNameEn', data.companyNameEn);
       if (data.removeGallery !== undefined) formData.append('removeGallery', JSON.stringify(data.removeGallery));
 
       if (data.mainImage !== undefined) {

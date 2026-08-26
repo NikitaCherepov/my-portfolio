@@ -13,6 +13,7 @@ import SortingComponentForList from "../components/SortingComponentForList"
 import PlayerWatcher from "../components/PlayerWatcher"
 import MusicPlayer from "../components/MusicPlayer"
 import { Music } from '../services/musicService'
+import { useTranslation } from 'react-i18next'
 
 
 export default function MusicPage() {
@@ -99,13 +100,14 @@ export default function MusicPage() {
     // }
 
     const {data: music, isLoading: loading} = useMusic();
+    const { t, i18n } = useTranslation();
 
     // Показываем loader во время загрузки
     if (loading) {
         return (
             <div className={styles.loading}>
-                <img src='/images/loaders/loader.svg' alt="Загрузка" />
-                <p>Загрузка музыки...</p>
+                <img src='/images/loaders/loader.svg' alt={t('common.loadingAlt')} />
+                <p>{t('oldMusicPage.loadingMusic')}</p>
             </div>
         );
     }
@@ -114,10 +116,10 @@ export default function MusicPage() {
         music: {
             newest: (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
             oldest: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-            genreFromA: (a, b) => a.genre.name.localeCompare(b.genre.name, "ru"),
-            genreFromZ: (a, b) => b.genre.name.localeCompare(a.genre.name, "ru"),
-            nameFromA: (a, b) => a.name.localeCompare(b.name, "ru"),
-            nameFromZ: (a, b) => b.name.localeCompare(a.name, "ru"),
+            genreFromA: (a, b) => a.genre.name.localeCompare(b.genre.name, i18n.language),
+            genreFromZ: (a, b) => b.genre.name.localeCompare(a.genre.name, i18n.language),
+            nameFromA: (a, b) => a.name.localeCompare(b.name, i18n.language),
+            nameFromZ: (a, b) => b.name.localeCompare(a.name, i18n.language),
         }
 
       };
@@ -229,44 +231,44 @@ export default function MusicPage() {
         <div className={styles.myServices} id="services">
 
             <div className={styles.myServices__background}>
-                <img src='/images/backgroundStars.webp' alt={'бэкграунд'}/>
+                <img src='/images/backgroundStars.webp' alt={t('oldMusicPage.backgroundAlt')}/>
             </div>
 
             <div className={styles.myServices__content}>
 
 
-            <h2>Мои услуги:</h2>
-            <h3>Пишу музыку для игр, видео и медиа</h3>
+            <h2>{t('oldMusicPage.services')}</h2>
+            <h3>{t('oldMusicPage.servicesDesc')}</h3>
 
-            <h4>Работаю в жанрах:</h4>
+            <h4>{t('oldMusicPage.genresTitle')}</h4>
 
             <div className={styles.myServices__genres}>
                 <ul>
-                    <li>джаз</li>
-                    <li>lo-fi</li>
-                    <li>рок</li>
-                    <li>ambient</li>
-                    <li>электроника</li>
+                    <li>{t('oldMusicPage.genreJazz')}</li>
+                    <li>{t('oldMusicPage.genreLofi')}</li>
+                    <li>{t('oldMusicPage.genreRock')}</li>
+                    <li>{t('oldMusicPage.genreAmbient')}</li>
+                    <li>{t('oldMusicPage.genreElectronic')}</li>
                 </ul>
                 <ul>
-                    <li>средневековая музыка</li>
-                    <li>блюз</li>
-                    <li>джаз-рок</li>
-                    <li>блюз-рок</li>
-                    <li>метал</li>
+                    <li>{t('oldMusicPage.genreMedieval')}</li>
+                    <li>{t('oldMusicPage.genreBlues')}</li>
+                    <li>{t('oldMusicPage.genreJazzRock')}</li>
+                    <li>{t('oldMusicPage.genreBluesRock')}</li>
+                    <li>{t('oldMusicPage.genreMetal')}</li>
                 </ul>
             </div>
 
-            <p>И многих других! (люблю эксперименты)</p>
+            <p>{t('oldMusicPage.manyOthers')}</p>
 
-            <h3>Если у вас есть интересная идея и проект для работы:</h3>
+            <h3>{t('oldMusicPage.idea')}</h3>
 
             <div className={styles.myServices__buttons}>
 
-                <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={"Телеграм"} icon={'/images/icons/tg.svg'}/>
+                <Button link='https://t.me/hoursen' size="big" background={'#fff'} text={t('oldMusicPage.telegram')} icon={'/images/icons/tg.svg'}/>
                 <Button link='mailto:mkxvk@yandex.ru' size="big"  background={'#fff'} text={'E-mail'} icon={'/images/icons/email.svg'}/>
-                <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={'ВКонтакте'} icon={'/images/icons/vk.svg'}/>
-                <p>Псс... саундтрек нужен?</p>
+                <Button link='https://vk.com/nikita_cherepov' size="big"  background={'#fff'} text={t('oldMusicPage.vk')} icon={'/images/icons/vk.svg'}/>
+                <p>{t('oldMusicPage.soundtrack')}</p>
 
             </div>
             </div>

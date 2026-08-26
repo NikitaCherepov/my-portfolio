@@ -14,6 +14,8 @@ import PlayerWatcher from "../components/PlayerWatcher"
 import MusicPlayer from "../components/MusicPlayer"
 import { Music } from '../services/musicService'
 import { Genre } from '../services/genresService'
+import { pickLocale } from '../utilities/pickLocale'
+import { useTranslation } from 'react-i18next'
 import Image from 'next/image'
 
 // Типы и константы для обложек альбомов
@@ -43,6 +45,7 @@ export default function MusicPage() {
 
     const {data: music, isLoading: isMusicLoading, isSuccess: isMusicSuccess} = useMusic();
     const {data: genres, isLoading: isGenresLoading, isSuccess: isGenresSuccess} = useGenres();
+    const { t, i18n } = useTranslation();
 
     const volume = 0.1;
 
@@ -303,8 +306,8 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
     if (isMusicLoading && isGenresLoading) {
         return (
             <div className={styles.loading}>
-                <img src='/images/loaders/loader.svg' alt="Загрузка" />
-                <p>Загрузка музыки...</p>
+                <img src='/images/loaders/loader.svg' alt={t('common.loadingAlt')} />
+                <p>{t('musicPage.loadingMusic')}</p>
             </div>
         );
     }
@@ -319,13 +322,13 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
               priority
               className={styles.head__logo}
               src="/images/logo.png"
-              alt="Нота меню"
+              alt={t('musicPage.noteAlt')}
               width={450}
               height={400}
             />
             <p className={styles.head__motto}>
-              Пишу музыку для игр и для себя. <br />
-              Хочешь трек? Напиши мне
+              {t('musicPage.mottoLine1')} <br />
+              {t('musicPage.mottoLine2')}
             </p>
 
             <div className={styles.head__background}>
@@ -400,7 +403,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
             })
           ) : (
             <div className={styles.noGenres}>
-              <p>Жанры не найдены</p>
+              <p>{t('musicPage.genresNotFound')}</p>
             </div>
           )}
 
@@ -413,7 +416,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                   <motion.img
                     key={albumCover.id}
                     src={albumCover.coverUrl}
-                    alt="Album cover"
+                    alt={t('musicPage.albumCoverAlt')}
                     className={styles.albumCover}
                     animate={{
                       left: `${albumCover.x}%`,
@@ -440,17 +443,17 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
 
             <div className={styles.contacts__content}>
               <div className={styles.contacts__content__headerContainer}>
-                <h2 className={styles.contacts__content__headerContainer__header}>Контакты</h2>
+                <h2 className={styles.contacts__content__headerContainer__header}>{t('musicPage.contacts')}</h2>
                 <p className={styles.contacts__content__losung}>
-                  Хочешь трек для игры?
+                  {t('musicPage.sloganLine1')}
                   <br />
-                  Или ты работаешь над анимацией?
-                  <br />А может, просто хочешь поделиться мыслями?
+                  {t('musicPage.sloganLine2')}
+                  <br />{t('musicPage.sloganLine3')}
                 </p>
               </div>
               <div className={styles.contacts__content__buttonsContainer}>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '40px'}}>
-                  <p className={styles.contacts__content__buttonsInfo}>Вот, где мне можно написать:</p>
+                  <p className={styles.contacts__content__buttonsInfo}>{t('musicPage.whereToWrite')}</p>
                   <div className={styles.contacts__content__contactButtons}>
                     <a
                       href="https://t.me/hoursen"
@@ -477,12 +480,12 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                       className={styles.contacts__content__contactButtons__button}
                     >
                       <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
-                      <p className="text">ВКонтакте</p>
+                      <p className="text">{t('musicPage.vk')}</p>
                     </a>
                   </div>
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '40px'}}>
-                  <p>Мои соцсети:</p>
+                  <p>{t('musicPage.mySocials')}</p>
                   <div className={styles.contacts__content__contactButtons}>
                     <a
                       href="https://www.youtube.com/@nikitacherepov"
@@ -509,7 +512,7 @@ const [albumCovers, setAlbumCovers] = useState<AlbumCover[]>([]);
                       className={styles.contacts__content__contactButtons__button}
                     >
                       <img src="/images/icons/socialbuttons/vk.svg" alt="VK" />
-                      <p className="text">ВКонтакте</p>
+                      <p className="text">{t('musicPage.vk')}</p>
                     </a>
                   </div>
                 </div>

@@ -5,6 +5,8 @@ import styles from './SiteCard.module.scss'
 import Button from './Button'
 import { SiteWork, useViewStore } from '@/app/store/useExitStore'
 import { format, parseISO, isValid } from 'date-fns'
+import { useTranslation } from 'react-i18next'
+import { pickLocale } from '@/app/utilities/pickLocale'
 
 import {AnimatePresence, motion} from 'framer-motion'
 
@@ -17,6 +19,10 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
     const router = useRouter();
+    const { t, i18n } = useTranslation();
+
+    const displayName = pickLocale(object.name, object.nameEn, i18n.language);
+    const displayCompanyName = pickLocale(object.companyName, object.companyNameEn, i18n.language);
 
     const transitionSettings = { type: "spring" as const, stiffness: 150, damping: 20 };
     const transitionHoverSettings = {duration: 0.2}
@@ -49,22 +55,22 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`${styles.container__badge} ${view === 'list' ? styles.container__badge_list : styles.container__badge_grid}`}
-                            aria-label={`Участие в проекте компании ${object.companyName}`}
+                            aria-label={t('siteCard.participationAria', { company: displayCompanyName ?? object.companyName })}
                         >
-                            <span>Участие</span>
+                            <span>{t('siteCard.participation')}</span>
                             <span className={styles.container__badge__tooltip} role="tooltip">
-                                {object.companyName}
+                                {displayCompanyName ?? object.companyName}
                             </span>
                         </a>
                     ) : (
                         <span
                             className={`${styles.container__badge} ${view === 'list' ? styles.container__badge_list : styles.container__badge_grid}`}
-                            aria-label={`Участие в проекте компании ${object.companyName}`}
+                            aria-label={t('siteCard.participationAria', { company: displayCompanyName ?? object.companyName })}
                             tabIndex={0}
                         >
-                            <span>Участие</span>
+                            <span>{t('siteCard.participation')}</span>
                             <span className={styles.container__badge__tooltip} role="tooltip">
-                                {object.companyName}
+                                {displayCompanyName ?? object.companyName}
                             </span>
                         </span>
                     )
@@ -114,12 +120,12 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                                         className={styles.container__mainInfo__hoverMaterial__hoveredButtons}
                                         style={object?.github === '' || object?.directLink === '' ? {justifyContent: 'flex-end', gap: '25px'} : undefined}
                                         >
-                                            <Button onClick={handleNavigateToDetail} text={"Подробнее"}></Button>
+                                            <Button onClick={handleNavigateToDetail} text={t('siteCard.details')}></Button>
                                             {object?.github != '' && (
                                                 <Button link={object.github} icon={'/images/icons/github.svg'}  text={"GitHub"}></Button>
                                             )}
                                             {object?.directLink != '' && (
-                                                <Button link={object.directLink} icon={'/images/icons/link.svg'}  text={"Перейти"}></Button>
+                                                <Button link={object.directLink} icon={'/images/icons/link.svg'}  text={t('siteCard.go')}></Button>
                                             )}
 
                                         </motion.div>
@@ -143,7 +149,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                         </div>
                     
 
-                    <motion.h2 transition={transitionSettings} layout className={`${styles.container__mainInfo__header} ${view === 'grid' ? styles.container__mainInfo__header_grid : styles.container__mainInfo__header_list}`}>{object.name}</motion.h2>
+                    <motion.h2 transition={transitionSettings} layout className={`${styles.container__mainInfo__header} ${view === 'grid' ? styles.container__mainInfo__header_grid : styles.container__mainInfo__header_list}`}>{displayName}</motion.h2>
 
 
                 </motion.div>
@@ -160,7 +166,7 @@ export default function SiteCard({object, toggleModal} : SiteCardProps) {
                             {object?.directLink != '' && (
                             <Button link={object.directLink} icon={'/images/icons/link.svg'}/>
                             )}
-                            <Button onClick={handleNavigateToDetail} text={'Подробнее'}/>
+                            <Button onClick={handleNavigateToDetail} text={t('siteCard.details')}/>
 
                             <p className={styles.container__mainContent__date}>
                                 {formatDisplayDate(object.date)}

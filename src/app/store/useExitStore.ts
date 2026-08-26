@@ -228,7 +228,11 @@ export interface SiteWork {
     date: string,
     id: string,
     companyName?: string | null,
-    companyUrl?: string | null
+    companyUrl?: string | null,
+    nameEn?: string | null,
+    descriptionEn?: string | null,
+    featuresEn?: string[] | null,
+    companyNameEn?: string | null
 }
 
 export interface MusicWork {
@@ -241,7 +245,8 @@ export interface MusicWork {
     ymusic: string,
     date: string,
     id: string,
-    preview: string
+    preview: string,
+    nameEn?: string | null
 }
 
 interface WorkStore {

@@ -4,6 +4,7 @@ import { useLoginMutation } from '../../hooks/useLoginMutation';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAuth } from '../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 import styles from './admin-login.module.scss';
 
 interface LoginFormData {
@@ -15,6 +16,7 @@ export default function AdminLoginPage() {
   const { isAuthenticated, user, isLoading } = useAuth();
   const router = useRouter();
   const loginMutation = useLoginMutation();
+  const { t } = useTranslation();
 
   const {
     register,
@@ -29,11 +31,11 @@ export default function AdminLoginPage() {
       {
         onError: (error: any) => {
           console.error(error);
-          toast.error(error.error || 'Ошибка входа');
+          toast.error(error.error || t('admin.login.loginError'));
         },
         onSuccess: (data) => {
           console.log(data);
-          toast.success('Успешный вход');
+          toast.success(t('admin.login.loginSuccess'));
           router.push('/admin/catalog');
         }
       }
@@ -53,7 +55,7 @@ export default function AdminLoginPage() {
   if (isLoading) {
     return (
       <div className={styles.login__loading}>
-        Проверка аутентификации...
+        {t('admin.checkingAuth')}
       </div>
     );
   }
@@ -68,21 +70,21 @@ export default function AdminLoginPage() {
           onClick={() => router.push('/')}
           className={styles.login__backButton}
         >
-          ← Назад к сайтам
+          ← {t('admin.login.back')}
         </button>
-          <h1 className={styles.login__title}>Админ-панель</h1>
-          <p className={styles.login__subtitle}>Войдите для доступа к управлению</p>
+          <h1 className={styles.login__title}>{t('admin.login.title')}</h1>
+          <p className={styles.login__subtitle}>{t('admin.login.subtitle')}</p>
 
           <div className={styles.login__field}>
-            <label htmlFor="login" className={styles.login__label}>Логин:</label>
+            <label htmlFor="login" className={styles.login__label}>{t('admin.login.loginLabel')}</label>
             <input
               id="login"
               type="text"
               {...register('login', {
-                required: 'Логин обязателен',
+                required: t('admin.login.loginRequired'),
                 minLength: {
                   value: 3,
-                  message: 'Минимум 3 символа'
+                  message: t('admin.login.loginMinLength')
                 }
               })}
               className={`${styles.login__input} ${errors.login ? styles.login__input_error : ''}`}
@@ -95,15 +97,15 @@ export default function AdminLoginPage() {
           </div>
 
           <div className={styles.login__field}>
-            <label htmlFor="password" className={styles.login__label}>Пароль:</label>
+            <label htmlFor="password" className={styles.login__label}>{t('admin.login.passwordLabel')}</label>
             <input
               id="password"
               type="password"
               {...register('password', {
-                required: 'Пароль обязателен',
+                required: t('admin.login.passwordRequired'),
                 minLength: {
                   value: 6,
-                  message: 'Минимум 6 символов'
+                  message: t('admin.login.passwordMinLength')
                 }
               })}
               className={`${styles.login__input} ${errors.password ? styles.login__input_error : ''}`}
@@ -120,24 +122,24 @@ export default function AdminLoginPage() {
             disabled={isSubmitting || loginMutation.isPending}
             className={styles.login__button}
           >
-            {isSubmitting || loginMutation.isPending ? 'Вход...' : 'Войти'}
+            {isSubmitting || loginMutation.isPending ? t('admin.login.loggingIn') : t('admin.login.signIn')}
           </button>
 
           {loginMutation.error && (
             <div className={styles.login__errorBox}>
-              Ошибка: {(loginMutation.error as any)?.error || 'Ошибка входа'}
+              {t('admin.login.errorPrefix')} {(loginMutation.error as any)?.error || t('admin.login.loginError')}
             </div>
           )}
 
                 <div className={styles.login__guestContainer}>
-          <h2 className={styles.login__guestTitle}>Гостевые параметры</h2>
+          <h2 className={styles.login__guestTitle}>{t('admin.login.guestTitle')}</h2>
           <div className={styles.login__guestInfo}>
             <div className={styles.login__guestCredentials}>
-              <p className={styles.login__guestLabel}>Логин:</p>
+              <p className={styles.login__guestLabel}>{t('admin.login.loginLabel')}</p>
               <p className={styles.login__guestValue}>guest</p>
             </div>
             <div className={styles.login__guestCredentials}>
-              <p className={styles.login__guestLabel}>Пароль:</p>
+              <p className={styles.login__guestLabel}>{t('admin.login.passwordLabel')}</p>
               <p className={styles.login__guestValue}>guestpassword</p>
             </div>
           </div>
@@ -146,7 +148,7 @@ export default function AdminLoginPage() {
             onClick={handleGuestLogin}
             className={styles.login__guestButton}
           >
-            Быстрый вход
+            {t('admin.login.quickLogin')}
           </button>
         </div>
         </form>

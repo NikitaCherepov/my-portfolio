@@ -4,11 +4,14 @@ import { motion, useMotionValue, useAnimationFrame, animate, AnimatePresence } f
 import Image from 'next/image'
 import styles from './page.module.scss'
 import { useInitiateExit } from './hooks/useInitiateExit'
+import { useTranslation, Trans } from 'react-i18next'
 
 export default function MainPage() {
 
   const [hoverSites, setHoverSites] = useState(false);
   const [hoverMusic, setHoverMusic] = useState(false);
+
+  const { t } = useTranslation();
 
   const initiateExit = useInitiateExit();
 
@@ -64,12 +67,12 @@ export default function MainPage() {
   return (
     <div className={styles.container}>
       <h1>
-        Привет!<br />
-        Меня зовут Никита Черепов.<br />
-        Я пишу <em>музыку</em> и занимаюсь <em>разработкой сайтов</em>.<br/>
-        На этом сайте собраны все мои работы.
+        {t('main.hello')}<br />
+        {t('main.intro')}<br />
+        <Trans i18nKey="main.about" components={{ em: <em /> }} /><br/>
+        {t('main.worksLine')}
       </h1>
-      <h2>Выбери, что интересно:</h2>
+      <h2>{t('main.choose')}</h2>
 
       <div className={styles.choices}>
 
@@ -83,7 +86,7 @@ export default function MainPage() {
           <Image
             src='/images/main/allSongs_compressed.webp'
             className={styles.choices__choiceButton__image}
-            alt={'Музыкальные работы'}
+            alt={t('main.musicAlt')}
             width={500}
             height={500}
             priority
@@ -93,7 +96,7 @@ export default function MainPage() {
             {hoverSites ? (
               <>
                 <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__fog}></motion.div>
-                <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__name}>Музыка</motion.div>
+                <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__name}>{t('main.music')}</motion.div>
               </>
             ) : ''}
 
@@ -110,7 +113,7 @@ export default function MainPage() {
           <Image
             src='/images/main/sites.png'
             className={`${styles.choices__choiceButton__image}`}
-            alt={'Модель сайта'}
+            alt={t('main.sitesAlt')}
             width={500}
             height={500}
             priority
@@ -120,7 +123,7 @@ export default function MainPage() {
             {hoverMusic ? (
               <>
                 <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__fog}></motion.div>
-                <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__name}>Сайты</motion.div>
+                <motion.div initial={{opacity:0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.4}} className={styles.choices__choiceButton__name}>{t('main.sites')}</motion.div>
               </>
             ) : ''}
 

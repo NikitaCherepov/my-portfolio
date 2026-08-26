@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import genresService, { Genre, CreateGenreData, UpdateGenreData } from '@/app/services/genresService';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 export function useCreateGenre() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (data: CreateGenreData) => genresService.createGenre(data),
@@ -15,17 +17,18 @@ export function useCreateGenre() {
         return [...oldGenres, newGenre].sort((a, b) => a.name.localeCompare(b.name));
       });
 
-      toast.success('Жанр успешно создан!');
+      toast.success(t('toasts.genreCreated'));
     },
     onError: (error: any) => {
       console.error('Error creating genre:', error);
-      toast.error(error.error || 'Ошибка при создании жанра');
+      toast.error(error.error || t('toasts.genreCreateError'));
     },
   });
 }
 
 export function useUpdateGenre() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateGenreData }) =>
@@ -53,19 +56,20 @@ export function useUpdateGenre() {
       }
 
       console.error('Error updating genre:', error);
-      toast.error(error.error || 'Ошибка при обновлении жанра');
+      toast.error(error.error || t('toasts.genreUpdateError'));
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['genres'] });
     },
     onSuccess: () => {
-      toast.success('Жанр успешно обновлен!');
+      toast.success(t('toasts.genreUpdated'));
     },
   });
 }
 
 export function useDeleteGenre() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (id: string) => genresService.deleteGenre(id),
@@ -89,16 +93,16 @@ export function useDeleteGenre() {
       console.error('Error deleting genre:', error);
 
       if (error.count) {
-        toast.error(`Нельзя удалить жанр. С ним связано ${error.count} музыкальных треков.`);
+        toast.error(t('toasts.cannotDeleteGenre', { count: error.count }));
       } else {
-        toast.error(error.error || 'Ошибка при удалении жанра');
+        toast.error(error.error || t('toasts.genreDeleteError'));
       }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['genres'] });
     },
     onSuccess: () => {
-      toast.success('Жанр успешно удален!');
+      toast.success(t('toasts.genreDeletedHook'));
     },
   });
 }

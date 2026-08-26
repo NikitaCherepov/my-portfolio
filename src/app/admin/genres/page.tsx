@@ -1,19 +1,21 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useGenres } from '@/app/hooks/useGenres';
+import { useTranslation } from 'react-i18next';
 import GenresTable from './components/GenresTable';
 import styles from './admin-genres.module.scss';
 
 export default function AdminGenresPage() {
   const router = useRouter();
   const { data: genres, isLoading, isError, refetch } = useGenres();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <div className={styles.genres}>
         <div className={styles.genres__loading}>
-          <img src='/images/loaders/loader.svg' alt="Загрузка" />
-          <p>Загрузка жанров...</p>
+          <img src='/images/loaders/loader.svg' alt={t('common.loadingAlt')} />
+          <p>{t('admin.genres.loading')}</p>
         </div>
       </div>
     );
@@ -23,7 +25,7 @@ export default function AdminGenresPage() {
     return (
       <div className={styles.genres}>
         <div className={styles.genres__error}>
-          <p>Ошибка при загрузке жанров</p>
+          <p>{t('admin.genres.loadError')}</p>
         </div>
       </div>
     );
@@ -32,12 +34,12 @@ export default function AdminGenresPage() {
   return (
     <div className={styles.genres}>
       <div className={styles.genres__header}>
-        <h1>Управление жанрами</h1>
+        <h1>{t('admin.genres.title')}</h1>
         <button
           onClick={() => router.push('/admin/genres/create')}
           className={styles.genres__addButton}
         >
-          ➕ Добавить жанр
+          {t('admin.genres.add')}
         </button>
       </div>
 
@@ -46,12 +48,12 @@ export default function AdminGenresPage() {
           <GenresTable genres={genres} onRefresh={refetch} />
         ) : (
           <div className={styles.genres__empty}>
-            <p>Жанры не найдены</p>
+            <p>{t('admin.genres.notFound')}</p>
             <button
               onClick={() => router.push('/admin/genres/create')}
               className={styles.genres__addButton}
             >
-              ➕ Создать первый жанр
+              {t('admin.genres.createFirst')}
             </button>
           </div>
         )}

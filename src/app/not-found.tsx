@@ -6,11 +6,14 @@ import {useEffect, useRef} from 'react'
 import styles from './not-found.module.scss'
 import Button from './components/Cards/SiteCard/Button';
 import { useInitiateExit } from './hooks/useInitiateExit';
+import { useTranslation } from 'react-i18next'
 
 
 export default function NotFound() {
 
     const initiateExit = useInitiateExit();
+
+    const { t } = useTranslation();
 
 
     const [scope, animate] = useAnimate();
@@ -85,10 +88,10 @@ export default function NotFound() {
                 <p id="third-number">4</p>
             </div>
             <div className={styles.error}>
-                Страница не найдена
+                {t('notFoundPage.title')}
             </div>
 
-            <Button onClick={() => initiateExit("/")} className={styles.button} background={'white'} text={'На главную'}></Button>
+            <Button onClick={() => initiateExit("/")} className={styles.button} background={'white'} text={t('notFoundPage.home')}></Button>
         </div>
     )
 }

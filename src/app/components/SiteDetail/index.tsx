@@ -7,6 +7,8 @@ import { Pagination, Autoplay } from 'swiper/modules'
 import Button from '../Cards/SiteCard/Button'
 import getEmoji from '@/app/utilities/getEmoji'
 import { format, parseISO, isValid } from 'date-fns'
+import { useTranslation } from 'react-i18next'
+import { pickLocale, pickLocaleArray } from '@/app/utilities/pickLocale'
 import styles from './SiteDetail.module.scss'
 
 // Импортируем стили Swiper
@@ -18,15 +20,19 @@ interface SiteDetailProps {
   siteData: {
     id: string;
     name: string;
+    nameEn?: string | null;
     mainImage: string;
     gallery?: string[];
     description?: string;
+    descriptionEn?: string | null;
     stack?: string[];
     features?: string[];
+    featuresEn?: string[] | null;
     github?: string;
     directLink?: string;
     date: string;
     companyName?: string | null;
+    companyNameEn?: string | null;
     companyUrl?: string | null;
   }
 }
@@ -35,6 +41,12 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
   const swiperRef = useRef<any>(null)
+  const { t, i18n } = useTranslation()
+
+  const displayName = pickLocale(siteData.name, siteData.nameEn, i18n.language)
+  const displayDescription = pickLocale(siteData.description, siteData.descriptionEn, i18n.language)
+  const displayFeatures = pickLocaleArray(siteData.features, siteData.featuresEn, i18n.language)
+  const displayCompanyName = pickLocale(siteData.companyName, siteData.companyNameEn, i18n.language)
 
   // Собираем массив изображений: главная + галерея
   const allImages = [siteData.mainImage, ...(siteData.gallery || [])]
@@ -80,8 +92,8 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
   if (!siteData || !siteData.name) {
     return (
       <div className={styles.error}>
-        <h1>Данные сайта не загружены</h1>
-        <p>Попробуйте обновить страницу</p>
+        <h1>{t('siteDetail.dataNotLoaded')}</h1>
+        <p>{t('siteDetail.tryRefresh')}</p>
       </div>
     )
   }
@@ -97,10 +109,10 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
           >
             <img
               src="/images/icons/arrow.svg"
-              alt="Назад"
+              alt={t('siteDetail.backAlt')}
               className={styles.navigation__backButton__icon}
             />
-            <span>К списку сайтов</span>
+            <span>{t('siteDetail.backToList')}</span>
           </button>
 
           <div className={styles.navigation__date}>
@@ -133,7 +145,7 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                   <SwiperSlide key={index}>
                     <img
                       src={image}
-                      alt={`${siteData.name} - скриншот ${index + 1}`}
+                      alt={t('siteDetail.screenshotAlt', { name: displayName ?? siteData.name, index: index + 1 })}
                       className={styles.gallery__image}
                     />
                   </SwiperSlide>
@@ -149,7 +161,7 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                   >
                     <img
                       src="/images/icons/arrow.svg"
-                      alt="Предыдущее изображение"
+                      alt={t('siteDetail.prevImgAlt')}
                     />
                   </button>
                   <button
@@ -158,7 +170,7 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                   >
                     <img
                       src="/images/icons/arrow.svg"
-                      alt="Следующее изображение"
+                      alt={t('siteDetail.nextImgAlt')}
                     />
                   </button>
                 </>
@@ -167,9 +179,9 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
 
             {/* Описание проекта */}
             <div className={styles.description}>
-              <h2 className={styles.description__title}>О проекте</h2>
+              <h2 className={styles.description__title}>{t('siteDetail.aboutProject')}</h2>
               <div className={styles.description__text}>
-                {siteData.description && siteData.description.split("\n").map((line: string, index: number) => (
+                {displayDescription && displayDescription.split("\n").map((line: string, index: number) => (
                   <p key={index}>
                     {line}
                     {line && <br />}
@@ -177,11 +189,11 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                 ))}
 
                 {/* Особенности проекта интегрированы в описание */}
-                {siteData.features && siteData.features.length > 0 && (
+                {displayFeatures.length > 0 && (
                   <div className={styles.features}>
-                    <h3 className={styles.features__title}>Особенности проекта</h3>
+                    <h3 className={styles.features__title}>{t('siteDetail.projectFeatures')}</h3>
                     <ul className={styles.features__list}>
-                      {siteData.features.map((feature: string, index: number) => (
+                      {displayFeatures.map((feature: string, index: number) => (
                         <li key={index} className={styles.features__item}>
                           {feature}
                         </li>
@@ -197,12 +209,12 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
           <aside className={styles.sidebar}>
             {/* Название проекта */}
             <div className={styles.sidebar__header}>
-              <h1 className={styles.sidebar__title}>{siteData.name}</h1>
+              <h1 className={styles.sidebar__title}>{displayName}</h1>
             </div>
 
             {siteData.companyName && (
               <div className={styles.contribution}>
-                <div className={styles.contribution__label}>Участие в проекте</div>
+                <div className={styles.contribution__label}>{t('siteDetail.participation')}</div>
                 {siteData.companyUrl ? (
                   <a
                     href={siteData.companyUrl}
@@ -210,10 +222,10 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                     rel="noopener noreferrer"
                     className={styles.contribution__company}
                   >
-                    {siteData.companyName}
+                    {displayCompanyName ?? siteData.companyName}
                   </a>
                 ) : (
-                  <div className={styles.contribution__company}>{siteData.companyName}</div>
+                  <div className={styles.contribution__company}>{displayCompanyName ?? siteData.companyName}</div>
                 )}
               </div>
             )}
@@ -233,7 +245,7 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
                 <Button
                   link={siteData.directLink}
                   icon="/images/icons/link.svg"
-                  text="Перейти на сайт"
+                  text={t('siteDetail.goToSite')}
                   background="white"
                   className={styles.actions__button}
                 />
@@ -243,7 +255,7 @@ export default function SiteDetail({ siteData }: SiteDetailProps) {
             {/* Технический стек */}
             {siteData.stack && siteData.stack.length > 0 && (
               <div className={styles.stack}>
-                <h3 className={styles.stack__title}>Технологический стек</h3>
+                <h3 className={styles.stack__title}>{t('siteDetail.techStack')}</h3>
                 <div className={styles.stack__list}>
                   {siteData.stack.map((tech: string, index: number) => (
                     <div key={index} className={styles.stack__item}>

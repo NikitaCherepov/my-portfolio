@@ -7,12 +7,14 @@ import { usePathname } from 'next/navigation'
 import { SortingOption } from '../../store/useExitStore'
 
 import { useHasHydrated } from '@/app/hooks/useHasHydrated'
+import { useTranslation } from 'react-i18next'
 
 
 export default function SortingComponent() {
 
     const [scope, animate] = useAnimate();
     const hasHydrated = useHasHydrated(useSortSitesStore);
+    const { t } = useTranslation();
 
     const [animationOn, setAnimationOn] = useState(false);
 
@@ -24,6 +26,18 @@ export default function SortingComponent() {
     const firstOptionRef = useRef<HTMLDivElement | null>(null);
 
     const {sortBy, setSortBy, sortingOptions, setSortingOptions} = useSortSitesStore();
+
+    // Лейблы сортировки берём из словаря i18n (в сторе только технические type/name)
+    const typeLabels: Record<string, string> = {
+        newest: t('sorting.byDate'),
+        oldest: t('sorting.byDate'),
+        nameFromA: t('sorting.byName'),
+        nameFromZ: t('sorting.byName'),
+        complex: t('sorting.byStack'),
+        easiest: t('sorting.byStack'),
+        genreFromA: t('sorting.byGenre'),
+        genreFromZ: t('sorting.byGenre'),
+    };
 
     const handleChange = (element: SortingOption) => {
 
@@ -111,7 +125,7 @@ export default function SortingComponent() {
         <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.3}} className={styles.container}>
             <div ref={firstOptionRef} style={{opacity: 0}} className={styles.container__option}>
                 <img alt='arrow' className={`${sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
-                <p>{sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey])?.name}</p>
+                <p>{(() => { const el = sortingOptions[pageKey].find((element) => element.type === sortBy[pageKey]); return el ? (typeLabels[el.type] ?? el.name) : ''; })()}</p>
             </div>
 
 
@@ -131,7 +145,7 @@ export default function SortingComponent() {
                     key={object.type} 
                     className={`${styles.container__option} hoverEffect ${object.position === 6 ? 'mb-[13px]' : ''}`}>
                         <img alt='arrow' className={`${object.rotate ? 'rotate-180' : ''}`} src='/images/icons/arrow.svg'></img>
-                        <p>{object.name}</p>
+                        <p>{typeLabels[object.type] ?? object.name}</p>
                     </motion.div>
                 ))}
             </motion.div>

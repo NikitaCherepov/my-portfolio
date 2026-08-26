@@ -40,6 +40,10 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const date = formData.get('date') as string;
     const companyName = (formData.get('companyName') as string || '').trim();
     const companyUrl = (formData.get('companyUrl') as string || '').trim();
+    const nameEn = (formData.get('nameEn') as string || '').trim();
+    const descriptionEn = (formData.get('descriptionEn') as string || '').trim();
+    const featuresEn = JSON.parse(formData.get('featuresEn') as string || '[]');
+    const companyNameEn = (formData.get('companyNameEn') as string || '').trim();
 
     // Получаем файлы
     const mainImageFile = formData.get('mainImage') as File | null;
@@ -57,14 +61,18 @@ export async function PUT(request: NextRequest, { params }: Params) {
     // Подготавливаем данные для обновления
     const updateData: any = {
       name,
+      nameEn: nameEn || null,
       directLink,
       github,
       description,
+      descriptionEn: descriptionEn || null,
       stack,
       features,
+      featuresEn,
       date: new Date(date),
       companyName: companyName || null,
       companyUrl: companyUrl || null,
+      companyNameEn: companyNameEn || null,
     };
 
     // Обрабатываем главное изображение, если оно было загружено

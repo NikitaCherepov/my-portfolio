@@ -35,7 +35,7 @@ export function useSite(id: string) {
     queryKey: ['sites', id],
     queryFn: async () => {
       const sites = await sitesService.getSites();
-      return sites.find(site => site.id === id) || null;
+      return sites.find((site: { id: string }) => site.id === id) || null;
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,

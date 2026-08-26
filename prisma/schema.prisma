@@ -20,16 +20,20 @@ model User {
 model Site {
   id            String    @id @default(cuid())
   name          String
+  nameEn        String?
   mainImage     String
   directLink    String
   github        String    @default("")
   description   String
+  descriptionEn String?
   stack         String[]  // Массив технологий: ["React", "Next.js", "TypeScript"]
   features      String[]  // Массив особенностей: ["Дизайн", "Анимации", "Адаптивность"]
+  featuresEn    String[]  @default([])
   gallery       String[]  // Массив изображений галереи
   date          DateTime
   companyName   String?
   companyUrl    String?
+  companyNameEn String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -38,14 +42,16 @@ model Site {
 
 // Таблица для жанров
 model Genre {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  description String?
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  name          String    @unique
+  nameEn        String?
+  description   String?
+  descriptionEn String?
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  music       Music[]
+  music         Music[]
 
   @@map("genres")
 }
@@ -54,6 +60,7 @@ model Genre {
 model Music {
   id          String    @id @default(cuid())
   name        String
+  nameEn      String?
   mainImage   String
   youtube     String
   spotify     String

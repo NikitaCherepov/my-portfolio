@@ -1,31 +1,25 @@
 import SitesPage from "./sitespage";
+import { getServerLocale } from '@/i18n/server';
+import ru from '@/i18n/locales/ru/translation.json';
+import en from '@/i18n/locales/en/translation.json';
 
-export const metadata = {
-    title: "Веб-разработка",
-    description:
-      "Мои сайты и проекты на React, Next.js и Framer Motion. Делаю удобные и живые интерфейсы.",
-    keywords: [
-      "Никита Черепов",
-      "веб-разработка",
-      "React",
-      "Next.js",
-      "Framer Motion",
-      "Frontend",
-      "UI/UX",
-      "анимации",
-      "портфолио",
-      "создание сайтов",
-    ],
-    openGraph: {
-      title: "Веб-разработка",
-      description:
-        "Мои проекты: React, Next.js, анимации, интерфейсы.",
-    },
-  };
-  
-  
-  
-  
+export async function generateMetadata() {
+    const lang = await getServerLocale();
+    const meta = lang === 'en' ? en.metadata.sites : ru.metadata.sites;
+
+    return {
+        title: meta.title,
+        description: meta.description,
+        keywords: meta.keywords,
+        openGraph: {
+            title: meta.ogTitle,
+            description: meta.ogDescription,
+        },
+    };
+}
+
+
+
 
 export default function Sites() {
     return <SitesPage/>

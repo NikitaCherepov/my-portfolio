@@ -39,7 +39,7 @@ export default function Switcher() {
                 animate={{
                     opacity: view === 'list' ? 0 : 1,
                 }}
-                transition={{type:"string", stiffness: 300, damping: 20}}
+                transition={{type:"spring", stiffness: 300, damping: 20}}
                 style={{opacity: view === 'list' ? 0 : 1}}
             ></motion.img>
             <motion.img 
@@ -47,7 +47,7 @@ export default function Switcher() {
                 animate={{
                     opacity: view === 'grid' ? 0 : 1,
                 }}
-                transition={{type:"string", stiffness: 300, damping: 20}}
+                transition={{type:"spring", stiffness: 300, damping: 20}}
                 style={{opacity: view === 'grid' ? 0 : 1}}
             ></motion.img>
 

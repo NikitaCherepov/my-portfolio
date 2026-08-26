@@ -5,12 +5,15 @@ import styles from './Menu.module.scss'
 import Image from 'next/image'
 
 import {motion} from 'framer-motion'
+import type { Variants } from 'framer-motion';
 
 import {usePathname} from 'next/navigation'
 
 import { useDimensions } from '@/app/hooks/useDimensions'
 
 import { useInitiateExit } from '@/app/hooks/useInitiateExit'
+
+import { useTranslation } from 'react-i18next'
 
 export default function Menu({ isOpen, toggleOpen }: { isOpen: boolean; toggleOpen: () => void }) {
     const containerRef = useRef(null);
@@ -20,8 +23,10 @@ export default function Menu({ isOpen, toggleOpen }: { isOpen: boolean; toggleOp
 
     const pathname = usePathname();
 
+    const { t } = useTranslation();
 
-    const sidebarVariants = {
+
+    const sidebarVariants: Variants = {
         open: (height = 1000) => ({
             // backgroundColor: 'var(--menu-slides-background)',
           clipPath: `circle(${height * 2 + 200}px at 40px 40px)`,
@@ -42,7 +47,7 @@ export default function Menu({ isOpen, toggleOpen }: { isOpen: boolean; toggleOp
           },
         },
     };
-    const buttonVariants = {
+    const buttonVariants: Variants = {
         open: {
             // backgroundColor: "var(--button-light)",
             boxShadow: "inset 4px 4px 4px rgba(0, 0, 0, 0.41)",
@@ -86,21 +91,21 @@ export default function Menu({ isOpen, toggleOpen }: { isOpen: boolean; toggleOp
         className={`${styles.container}`}>
             <motion.div className={`${styles.container__sidebar} dropShadow  ${pathname === '/music' ? styles.container__sidebar_music : ''}`} variants={sidebarVariants}>
                 <button onClick={() =>  initiateExit("/")} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive}  ${pathname === '/music' ? styles.container__sidebar__option_musicPage : ''}`}>
-                    Главная
+                    {t('menu.home')}
                 </button>
                 <button onClick={() => {if (pathname!= '/sites') {toggleOpen(); initiateExit('/sites')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_sites} ${pathname != '/sites' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive} ${pathname === '/music' ? styles.container__sidebar__option_musicPage : ''}`}>
-                    Сайты
+                    {t('menu.sites')}
                 </button>
                 <button onClick={() => {if (pathname !='/music') {toggleOpen(); initiateExit('/music')}}} className={`${styles.container__sidebar__option} ${styles.container__sidebar__option_music} ${pathname != '/music' ? styles.container__sidebar__option_active : styles.container__sidebar__option_disactive} ${pathname === '/music' ? styles.container__sidebar__option_musicPage : ''}`}>
-                    Музыка
+                    {t('menu.music')}
                 </button>
             </motion.div>
             <motion.button style={{background: pathname === '/sites' ? 'var(--button-dark)' : ''}} whileHover={!isOpen? "hoverOpen" : 'hoverClosed'} animate={isOpen ? "open" : "closed"} variants = {buttonVariants} transition={{duration: 0.3}} onClick={() => toggleOpen()} className={styles.container__navButton}>
                                 {pathname === '/music' && (
-                <Image className={styles.container__navButton__background} src={pathname === '/music' ? '/images/menu/menuPhoto.png' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt='Нота меню' width={100} height={100}/>
+                <Image className={styles.container__navButton__background} src={pathname === '/music' ? '/images/menu/menuPhoto.png' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt={t('menu.noteAlt')} width={100} height={100}/>
                                 )}
                 {pathname !== '/music' && (
-                    <Image className={styles.container__navButton__image} src={pathname === '/music' ? '/images/menu/note.svg' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt='Нота меню' width={100} height={100}/>
+                    <Image className={styles.container__navButton__image} src={pathname === '/music' ? '/images/menu/note.svg' : pathname === '/sites' ? '/images/menu/code.svg' : ''} alt={t('menu.noteAlt')} width={100} height={100}/>
                 )}
             </motion.button>
         </motion.nav>

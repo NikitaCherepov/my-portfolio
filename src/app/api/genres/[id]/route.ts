@@ -14,7 +14,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
     const { id } = await params;
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, nameEn, descriptionEn } = body;
 
     // Валидация обязательных полей
     if (!name || name.trim() === '') {
@@ -53,6 +53,8 @@ export async function PUT(request: NextRequest, { params }: Params) {
       data: {
         name: name.trim(),
         description: description?.trim() || null,
+        nameEn: typeof nameEn === 'string' && nameEn.trim() ? nameEn.trim() : null,
+        descriptionEn: typeof descriptionEn === 'string' && descriptionEn.trim() ? descriptionEn.trim() : null,
       },
     });
 

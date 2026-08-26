@@ -17,7 +17,7 @@ export default function MusicCard({object} : MusicCardProps) {
     const [hovering, setHovering] = useState(false);
     const {view} = useViewStore();
 
-    const transitionSettings = { type: "spring", stiffness: 150, damping: 20, };
+    const transitionSettings = { type: "spring", stiffness: 150, damping: 20 } as const;
     const transitionHoverSettings = {duration: 0.2}
 
     const formatDisplayDate = (value: string) => {

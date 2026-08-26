@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import sitesService from '@/app/services/sitesService';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 // Типы для данных сайтов
 export interface Site {
@@ -16,6 +17,10 @@ export interface Site {
   date: string;
   companyName?: string | null;
   companyUrl?: string | null;
+  nameEn?: string | null;
+  descriptionEn?: string | null;
+  featuresEn?: string[] | null;
+  companyNameEn?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,6 +36,10 @@ export interface CreateSiteData {
   date: string;
   companyName?: string;
   companyUrl?: string;
+  nameEn?: string;
+  descriptionEn?: string;
+  featuresEn?: string[];
+  companyNameEn?: string;
   gallery?: File[];
 }
 
@@ -45,12 +54,17 @@ export interface UpdateSiteData {
   date?: string;
   companyName?: string;
   companyUrl?: string;
+  nameEn?: string;
+  descriptionEn?: string;
+  featuresEn?: string[];
+  companyNameEn?: string;
   gallery?: File[];
   removeGallery?: string[];
 }
 
 export function useCreateSite() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (data: CreateSiteData) => sitesService.createSite(data),
@@ -64,17 +78,18 @@ export function useCreateSite() {
         return [newSite, ...oldSites];
       });
 
-      toast.success('Сайт успешно создан!');
+      toast.success(t('toasts.siteCreated'));
     },
     onError: (error: any) => {
       console.error('Error creating site:', error);
-      toast.error(error.error || 'Ошибка при создании сайта');
+      toast.error(error.error || t('toasts.siteCreateError'));
     },
   });
 }
 
 export function useUpdateSite() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateSiteData }) =>
@@ -112,20 +127,21 @@ export function useUpdateSite() {
       }
 
       console.error('Error updating site:', error);
-      toast.error(error.error || 'Ошибка при обновлении сайта');
+      toast.error(error.error || t('toasts.siteUpdateError'));
     },
     onSettled: () => {
       // Всегда перезагружаем данные после завершения
       queryClient.invalidateQueries({ queryKey: ['sites'] });
     },
     onSuccess: () => {
-      toast.success('Сайт успешно обновлен!');
+      toast.success(t('toasts.siteUpdated'));
     },
   });
 }
 
 export function useDeleteSite() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (id: string) => sitesService.deleteSite(id),
@@ -151,14 +167,14 @@ export function useDeleteSite() {
       }
 
       console.error('Error deleting site:', error);
-      toast.error(error.error || 'Ошибка при удалении сайта');
+      toast.error(error.error || t('toasts.siteDeleteError'));
     },
     onSettled: () => {
       // Всегда перезагружаем данные после завершения
       queryClient.invalidateQueries({ queryKey: ['sites'] });
     },
     onSuccess: () => {
-      toast.success('Сайт успешно удален!');
+      toast.success(t('toasts.siteDeleted'));
     },
   });
 }

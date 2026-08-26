@@ -39,6 +39,23 @@ async function ensureParticipationColumns() {
   );
 }
 
+// Колонки английских переводов (i18n). Русский остаётся в базовых колонках.
+async function ensureLocalizationColumns() {
+  const statements = [
+    'ALTER TABLE "sites" ADD COLUMN IF NOT EXISTS "nameEn" TEXT',
+    'ALTER TABLE "sites" ADD COLUMN IF NOT EXISTS "descriptionEn" TEXT',
+    'ALTER TABLE "sites" ADD COLUMN IF NOT EXISTS "companyNameEn" TEXT',
+    "ALTER TABLE \"sites\" ADD COLUMN IF NOT EXISTS \"featuresEn\" TEXT[] DEFAULT '{}'",
+    'ALTER TABLE "genres" ADD COLUMN IF NOT EXISTS "nameEn" TEXT',
+    'ALTER TABLE "genres" ADD COLUMN IF NOT EXISTS "descriptionEn" TEXT',
+    'ALTER TABLE "music" ADD COLUMN IF NOT EXISTS "nameEn" TEXT',
+  ];
+
+  for (const sql of statements) {
+    await prisma.$executeRawUnsafe(sql);
+  }
+}
+
 async function migrateMusicImages() {
   const tracks = await prisma.music.findMany({
     select: { id: true, mainImage: true },
@@ -89,6 +106,7 @@ async function migrateMusicImages() {
 
 try {
   await ensureParticipationColumns();
+  await ensureLocalizationColumns();
   await migrateMusicImages();
 } catch (error) {
   console.error('[startup migration] Failed:', error);

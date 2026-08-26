@@ -40,6 +40,10 @@ export async function POST(request: NextRequest) {
     const date = formData.get('date') as string;
     const companyName = (formData.get('companyName') as string || '').trim();
     const companyUrl = (formData.get('companyUrl') as string || '').trim();
+    const nameEn = (formData.get('nameEn') as string || '').trim();
+    const descriptionEn = (formData.get('descriptionEn') as string || '').trim();
+    const featuresEn = JSON.parse(formData.get('featuresEn') as string || '[]');
+    const companyNameEn = (formData.get('companyNameEn') as string || '').trim();
 
     // Получаем файлы
     const mainImageFile = formData.get('mainImage') as File;
@@ -73,16 +77,20 @@ export async function POST(request: NextRequest) {
     const site = await prisma.site.create({
       data: {
         name,
+        nameEn: nameEn || null,
         mainImage: mainImageData.url,
         directLink,
         github,
         description,
+        descriptionEn: descriptionEn || null,
         stack,
         features,
+        featuresEn,
         gallery: galleryUrls,
         date: new Date(date),
         companyName: companyName || null,
         companyUrl: companyUrl || null,
+        companyNameEn: companyNameEn || null,
       },
     });
 

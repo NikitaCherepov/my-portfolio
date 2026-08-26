@@ -10,6 +10,7 @@ import Header from '../Header'
 import Footer from '../Footer'
 import { Toaster } from 'sonner'
 import Lenis from "@studio-freight/lenis";
+import { useTranslation } from 'react-i18next'
 
 
 export default function PageTransition({children} : {children: React.ReactNode}) {
@@ -17,6 +18,7 @@ export default function PageTransition({children} : {children: React.ReactNode})
       const router = useRouter();
       const {isLeaving, turnOffLeaving, nextPage, setNextPage} = useExitStore();
       const hasHydrated = useHasHydrated(useSortSitesStore);
+      const { t, i18n } = useTranslation();
 
       //Анимации
 
@@ -68,8 +70,8 @@ export default function PageTransition({children} : {children: React.ReactNode})
 
 
       return (
-        <html>
-          
+        <html lang={i18n.language}>
+
           <body data-theme={pathname === "/music" ? "music" : "sites" }>
                               <Toaster
               position="top-right"
@@ -77,7 +79,7 @@ export default function PageTransition({children} : {children: React.ReactNode})
               visibleToasts={10}/>
             {!hasHydrated ? (
               <div className={styles.container}>
-                <img alt='Загрузка' className={styles.container__loader} src='/images/loaders/loader.svg'></img>
+                <img alt={t('common.loadingAlt')} className={styles.container__loader} src='/images/loaders/loader.svg'></img>
               </div>
               ) : (
     

@@ -5,6 +5,8 @@ import { useCreateSite, useUpdateSite, useDeleteSite } from '@/app/hooks/useSite
 import { useRouter } from 'next/navigation';
 import { CreateSiteData, UpdateSiteData } from '@/app/hooks/useSiteMutations';
 import { Site } from '@/app/hooks/useSiteMutations';
+import TranslateButton from '@/app/admin/components/TranslateButton';
+import { useTranslation } from 'react-i18next';
 import styles from './SiteForm.module.scss';
 
 const formatDateInput = (value?: string) => {
@@ -23,18 +25,23 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
     const createSiteMutation = useCreateSite();
     const updateSiteMutation = useUpdateSite();
     const deleteSiteMutation = useDeleteSite();
+    const { t } = useTranslation();
 
     // Интерфейс для данных формы
     interface SiteFormData {
         name: string;
+        nameEn: string;
         directLink: string;
         github: string;
         description: string;
+        descriptionEn: string;
         date: string;
         companyName: string;
         companyUrl: string;
+        companyNameEn: string;
         stack: string[];
         features: string[];
+        featuresEn: string[];
         mainImage: {
             current?: string;
             file?: File;
@@ -51,14 +58,18 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
     // Форма данные
     const [formData, setFormData] = useState<SiteFormData>({
         name: initialData?.name || '',
+        nameEn: initialData?.nameEn || '',
         directLink: initialData?.directLink || '',
         github: initialData?.github || '',
         description: initialData?.description || '',
+        descriptionEn: initialData?.descriptionEn || '',
         date: formatDateInput(initialData?.date),
         companyName: initialData?.companyName || '',
         companyUrl: initialData?.companyUrl || '',
+        companyNameEn: initialData?.companyNameEn || '',
         stack: initialData?.stack || [],
         features: initialData?.features || [],
+        featuresEn: initialData?.featuresEn || [],
         mainImage: {
             current: initialData?.mainImage,
             file: undefined,
@@ -74,6 +85,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
     const [newTag, setNewTag] = useState('');
     const [newFeature, setNewFeature] = useState('');
+    const [featuresEnText, setFeaturesEnText] = useState((initialData?.featuresEn || []).join('\n'));
 
     // Drag&Drop состояния
     const [isMainImageDragging, setIsMainImageDragging] = useState(false);
@@ -186,9 +198,9 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     isChanged: true
                 }
             }));
-            toast.success('Обложка добавлена');
+            toast.success(t('admin.siteForm.coverAdded'));
         } else {
-            toast.error('Пожалуйста, выберите изображение');
+            toast.error(t('admin.siteForm.chooseImage'));
         }
     };
 
@@ -198,7 +210,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
             const totalFiles = formData.gallery.current.length + formData.gallery.files.length + newFiles.length;
 
             if (totalFiles > 10) {
-                toast.error('Максимум 10 фотографий в галерее');
+                toast.error(t('admin.siteForm.maxPhotos'));
                 return;
             }
 
@@ -269,14 +281,17 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         const imageFiles = files.filter(file => file.type.startsWith('image/'));
 
         if (imageFiles.length === 0) {
-            toast.error('Пожалуйста, выберите изображения');
+            toast.error(t('admin.siteForm.chooseImages'));
             return;
         }
 
         const totalFiles = formData.gallery.current.length + formData.gallery.files.length + imageFiles.length;
 
         if (totalFiles > 10) {
-            toast.error(`Максимум 10 фотографий в галерее. Попытка добавить ${imageFiles.length}, доступно ${10 - (formData.gallery.current.length + formData.gallery.files.length)}`);
+            toast.error(t('admin.siteForm.maxPhotosDetailed', {
+                count: imageFiles.length,
+                available: 10 - (formData.gallery.current.length + formData.gallery.files.length)
+            }));
             return;
         }
 
@@ -289,30 +304,30 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
             }
         }));
 
-        toast.success(`Добавлено ${imageFiles.length} изображений в галерею`);
+        toast.success(t('admin.siteForm.imagesAdded', { count: imageFiles.length }));
     };
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Название обязательно';
+            newErrors.name = t('admin.siteForm.nameRequired');
         }
 
         if (!formData.directLink.trim()) {
-            newErrors.directLink = 'Прямая ссылка обязательна';
+            newErrors.directLink = t('admin.siteForm.directLinkRequired');
         }
 
         if (!formData.description.trim()) {
-            newErrors.description = 'Описание обязательно';
+            newErrors.description = t('admin.siteForm.descriptionRequired');
         }
 
         if (mode === 'create' && !formData.mainImage.file) {
-            newErrors.mainImage = 'Обложка обязательна';
+            newErrors.mainImage = t('admin.siteForm.coverRequired');
         }
 
         if (!formData.date) {
-            newErrors.date = 'Дата обязательна';
+            newErrors.date = t('admin.siteForm.dateRequired');
         }
 
         setErrors(newErrors);
@@ -329,19 +344,26 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         try {
             const submitData = {
                 name: formData.name,
+                nameEn: formData.nameEn.trim(),
                 directLink: formData.directLink,
                 github: formData.github,
                 description: formData.description,
+                descriptionEn: formData.descriptionEn.trim(),
                 date: formData.date,
                 companyName: formData.companyName,
                 companyUrl: formData.companyUrl,
+                companyNameEn: formData.companyNameEn.trim(),
                 stack: formData.stack.filter(tag => tag.trim()),
                 features: formData.features.filter(feature => feature.trim()),
+                featuresEn: featuresEnText
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line),
             };
 
             if (mode === 'create') {
                 if (!formData.mainImage.file) {
-                    toast.error('Обложка обязательна');
+                    toast.error(t('admin.siteForm.coverRequired'));
                     return;
                 }
 
@@ -383,7 +405,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         if (!siteId) return;
 
         const confirmDelete = window.confirm(
-            `Вы уверены, что хотите удалить сайт "${formData.name}"?`
+            t('toasts.deleteConfirmSite', { name: formData.name })
         );
 
         if (!confirmDelete) return;
@@ -406,7 +428,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     {/* Main Image Upload */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Обложка <span className={styles.field__required}>*</span>
+                            {t('admin.siteForm.coverLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <div
                             className={`${styles.field__input} ${errors.mainImage ? styles.field__input_error : ''} ${isMainImageDragging ? styles.field__input_dragging : ''}`}
@@ -440,7 +462,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                             {/* Drag&Drop оверлей */}
                             {isMainImageDragging && (
                                 <div className={styles.field__input__dragOverlay}>
-                                    📁 Drop here
+                                    {t('admin.siteForm.dropHere')}
                                 </div>
                             )}
 
@@ -492,9 +514,9 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                                 </div>
                             ) : (
                                 <div>
-                                    <p>📁 Нажмите или перетащите файл</p>
+                                    <p>{t('admin.siteForm.clickOrDrop')}</p>
                                     <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-                                        PNG, JPG, GIF (max. 5MB)
+                                        {t('admin.siteForm.fileFormats')}
                                     </p>
                                 </div>
                             )}
@@ -505,7 +527,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     {/* Gallery Upload */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Галерея (до 10 фото)
+                            {t('admin.siteForm.galleryLabel')}
                         </label>
                         <div
                             className={`${styles.field__input} ${isGalleryDragging ? styles.field__input_dragging : ''}`}
@@ -536,13 +558,13 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                             {/* Drag&Drop оверлей для галереи */}
                             {isGalleryDragging && (
                                 <div className={styles.field__input__dragOverlay}>
-                                    📁 Drop photos here
+                                    {t('admin.siteForm.dropPhotosHere')}
                                 </div>
                             )}
 
-                            <p>📁 Добавить фото в галерею</p>
+                            <p>{t('admin.siteForm.addGalleryPhoto')}</p>
                             <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-                                {formData.gallery.current.length + formData.gallery.files.length}/10 фото
+                                {t('admin.siteForm.photosCount', { count: formData.gallery.current.length + formData.gallery.files.length })}
                             </p>
                         </div>
 
@@ -647,7 +669,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     {/* Name */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Название <span className={styles.field__required}>*</span>
+                            {t('admin.siteForm.nameLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="text"
@@ -655,31 +677,75 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                             value={formData.name}
                             onChange={handleInputChange}
                             className={`${styles.field__input} ${errors.name ? styles.field__input_error : ''}`}
-                            placeholder="Название сайта"
+                            placeholder={t('admin.siteForm.namePlaceholder')}
                         />
                         {errors.name && <div className={styles.field__error}>{errors.name}</div>}
+                    </div>
+
+                    {/* Name EN */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>
+                            {t('admin.siteForm.nameEnLabel')}
+                        </label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                            <input
+                                type="text"
+                                name="nameEn"
+                                value={formData.nameEn}
+                                onChange={handleInputChange}
+                                placeholder={t('admin.siteForm.nameEnPlaceholder')}
+                                className={styles.field__input}
+                                style={{ flex: 1 }}
+                            />
+                            <TranslateButton
+                                source={formData.name}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, nameEn: text }))}
+                            />
+                        </div>
                     </div>
 
                     {/* Description */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Описание <span className={styles.field__required}>*</span>
+                            {t('admin.siteForm.descriptionLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleInputChange}
                             className={`${styles.field__input} ${styles.field__input__textarea} ${errors.description ? styles.field__input_error : ''}`}
-                            placeholder="Описание сайта"
+                            placeholder={t('admin.siteForm.descriptionPlaceholder')}
                             rows={4}
                         />
                         {errors.description && <div className={styles.field__error}>{errors.description}</div>}
                     </div>
 
+                    {/* Description EN */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>
+                            {t('admin.siteForm.descriptionEnLabel')}
+                        </label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                            <textarea
+                                name="descriptionEn"
+                                value={formData.descriptionEn}
+                                onChange={handleInputChange}
+                                className={`${styles.field__input} ${styles.field__input__textarea}`}
+                                placeholder={t('admin.siteForm.descriptionEnPlaceholder')}
+                                rows={4}
+                                style={{ flex: 1 }}
+                            />
+                            <TranslateButton
+                                source={formData.description}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, descriptionEn: text }))}
+                            />
+                        </div>
+                    </div>
+
                     {/* Direct Link */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Прямая ссылка <span className={styles.field__required}>*</span>
+                            {t('admin.siteForm.directLinkLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="url"
@@ -708,7 +774,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     {/* Date */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Дата <span className={styles.field__required}>*</span>
+                            {t('admin.siteForm.dateLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="date"
@@ -722,20 +788,40 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
                     {/* Company Name */}
                     <div className={styles.field}>
-                        <label className={styles.field__label}>Компания (если не ваш проект)</label>
+                        <label className={styles.field__label}>{t('admin.siteForm.companyNameLabel')}</label>
                         <input
                             type="text"
                             name="companyName"
                             value={formData.companyName}
                             onChange={handleInputChange}
                             className={styles.field__input}
-                            placeholder="Название компании или студии"
+                            placeholder={t('admin.siteForm.companyNamePlaceholder')}
                         />
+                    </div>
+
+                    {/* Company Name EN */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>{t('admin.siteForm.companyNameEnLabel')}</label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                            <input
+                                type="text"
+                                name="companyNameEn"
+                                value={formData.companyNameEn}
+                                onChange={handleInputChange}
+                                className={styles.field__input}
+                                placeholder={t('admin.siteForm.companyNameEnPlaceholder')}
+                                style={{ flex: 1 }}
+                            />
+                            <TranslateButton
+                                source={formData.companyName}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, companyNameEn: text }))}
+                            />
+                        </div>
                     </div>
 
                     {/* Company URL */}
                     <div className={styles.field}>
-                        <label className={styles.field__label}>Ссылка на компанию</label>
+                        <label className={styles.field__label}>{t('admin.siteForm.companyUrlLabel')}</label>
                         <input
                             type="url"
                             name="companyUrl"
@@ -748,14 +834,14 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
                     {/* Stack */}
                     <div className={styles.field}>
-                        <label className={styles.field__label}>Стек технологий</label>
+                        <label className={styles.field__label}>{t('admin.siteForm.stackLabel')}</label>
                         <div className={styles.tags}>
                             <div className={styles.tags__input}>
                                 <input
                                     type="text"
                                     value={newTag}
                                     onChange={(e) => setNewTag(e.target.value)}
-                                    placeholder="Добавить технологию"
+                                    placeholder={t('admin.siteForm.addTagPlaceholder')}
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                                     className={styles.field__input}
                                 />
@@ -764,7 +850,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                                     onClick={handleAddTag}
                                     className={styles.tags__add}
                                 >
-                                    Добавить
+                                    {t('admin.siteForm.addButton')}
                                 </button>
                             </div>
                             <div className={styles.tags__list}>
@@ -786,14 +872,14 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
                     {/* Features */}
                     <div className={styles.field}>
-                        <label className={styles.field__label}>Особенности</label>
+                        <label className={styles.field__label}>{t('admin.siteForm.featuresLabel')}</label>
                         <div className={styles.tags}>
                             <div className={styles.tags__input}>
                                 <input
                                     type="text"
                                     value={newFeature}
                                     onChange={(e) => setNewFeature(e.target.value)}
-                                    placeholder="Добавить особенность"
+                                    placeholder={t('admin.siteForm.addFeaturePlaceholder')}
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddFeature())}
                                     className={styles.field__input}
                                 />
@@ -802,7 +888,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                                     onClick={handleAddFeature}
                                     className={styles.tags__add}
                                 >
-                                    Добавить
+                                    {t('admin.siteForm.addButton')}
                                 </button>
                             </div>
                             <div className={styles.tags__list}>
@@ -821,6 +907,21 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                             </div>
                         </div>
                     </div>
+
+                    {/* Features EN */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>{t('admin.siteForm.featuresEnLabel')}</label>
+                        <textarea
+                            value={featuresEnText}
+                            onChange={(e) => setFeaturesEnText(e.target.value)}
+                            className={`${styles.field__input} ${styles.field__input__textarea}`}
+                            placeholder={t('admin.siteForm.addFeatureEnPlaceholder')}
+                            rows={4}
+                        />
+                        <p style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>
+                            {t('admin.siteForm.featuresEnHint')}
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -833,7 +934,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                         disabled={isLoading}
                         className={`${styles.form__button} ${styles.form__button_delete}`}
                     >
-                        {deleteSiteMutation.isPending ? 'Удаление...' : 'Удалить'}
+                        {deleteSiteMutation.isPending ? t('common.deleting') : t('common.delete')}
                     </button>
                 )}
 
@@ -843,7 +944,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     className={`${styles.form__button} ${styles.form__button_cancel}`}
                     disabled={isLoading}
                 >
-                    Отменить
+                    {t('common.cancel')}
                 </button>
 
                 <button
@@ -852,8 +953,8 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     className={`${styles.form__button} ${styles.form__button_submit}`}
                 >
                     {mode === 'create'
-                        ? (createSiteMutation.isPending ? 'Создание...' : 'Добавить')
-                        : (updateSiteMutation.isPending ? 'Сохранение...' : 'Сохранить')
+                        ? (createSiteMutation.isPending ? t('common.creating') : t('admin.siteForm.submitCreate'))
+                        : (updateSiteMutation.isPending ? t('common.saving') : t('common.save'))
                     }
                 </button>
             </div>

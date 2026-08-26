@@ -1,10 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import musicService, { Music, CreateMusicData, UpdateMusicData } from '@/app/services/musicService';
+export type { Music, CreateMusicData, UpdateMusicData };
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 export function useCreateMusic() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (data: CreateMusicData) => musicService.createMusic(data),
@@ -18,17 +21,18 @@ export function useCreateMusic() {
         return [newMusic, ...oldMusic];
       });
 
-      toast.success('Музыкальный трек успешно создан!');
+      toast.success(t('toasts.musicCreated'));
     },
     onError: (error: any) => {
       console.error('Error creating music:', error);
-      toast.error(error.error || 'Ошибка при создании музыкального трека');
+      toast.error(error.error || t('toasts.musicCreateError'));
     },
   });
 }
 
 export function useUpdateMusic() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateMusicData }) =>
@@ -65,20 +69,21 @@ export function useUpdateMusic() {
       }
 
       console.error('Error updating music:', error);
-      toast.error(error.error || 'Ошибка при обновлении музыкального трека');
+      toast.error(error.error || t('toasts.musicUpdateError'));
     },
     onSettled: () => {
       // Всегда перезагружаем данные после завершения
       queryClient.invalidateQueries({ queryKey: ['music'] });
     },
     onSuccess: () => {
-      toast.success('Музыкальный трек успешно обновлен!');
+      toast.success(t('toasts.musicUpdated'));
     },
   });
 }
 
 export function useDeleteMusic() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (id: string) => musicService.deleteMusic(id),
@@ -104,14 +109,14 @@ export function useDeleteMusic() {
       }
 
       console.error('Error deleting music:', error);
-      toast.error(error.error || 'Ошибка при удалении музыкального трека');
+      toast.error(error.error || t('toasts.musicDeleteErrorHook'));
     },
     onSettled: () => {
       // Всегда перезагружаем данные после завершения
       queryClient.invalidateQueries({ queryKey: ['music'] });
     },
     onSuccess: () => {
-      toast.success('Музыкальный трек успешно удален!');
+      toast.success(t('toasts.musicDeletedHook'));
     },
   });
 }

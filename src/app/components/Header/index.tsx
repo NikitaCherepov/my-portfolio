@@ -8,11 +8,14 @@ import { usePathname } from 'next/navigation'
 import { useViewStore } from '@/app/store/useExitStore'
 import {AnimatePresence, motion, useCycle} from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '../LanguageSwitcher'
 
 
 export default function Header() {
     const pathname = usePathname();
     const {view} = useViewStore();
+    const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isMenuOpen, toggleMenuOpen] = useCycle(false, true);
@@ -86,12 +89,12 @@ export default function Header() {
 
     const musicMenuOptions = [
         {
-            name: 'Главная',
+            name: t('header.home'),
             address: '/',
             chosen: true
         },
         {
-            name: 'Моя музыка',
+            name: t('header.music'),
             address: '/music'
         },
         // {
@@ -99,7 +102,7 @@ export default function Header() {
         //     address: '/about'
         // },
         {
-            name: 'Контакты',
+            name: t('header.contacts'),
             address: '/contacts'
         },
     ];
@@ -132,8 +135,9 @@ export default function Header() {
                 )}
             </AnimatePresence>
             {pathname === '/sites' && (
-                <div className={styles.container__switcher}>
+                <div className={styles.container__switcher} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Switcher/>
+                    <LanguageSwitcher/>
                 </div>
             )}
             {pathname === '/sites' && (
@@ -147,6 +151,9 @@ export default function Header() {
             )}
             {pathname === '/music' && (
                 <div className={styles.container__musicMenu}>
+                    <div style={{ alignSelf: 'center', marginRight: '12px' }}>
+                        <LanguageSwitcher/>
+                    </div>
                     {
                         musicMenuOptions.map((object, index) => (
                             <div

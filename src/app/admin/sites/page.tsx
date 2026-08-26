@@ -1,17 +1,19 @@
 'use client';
 import { useSites } from '../../hooks/useSites';
+import { useTranslation } from 'react-i18next';
 import styles from './admin-sites.module.scss';
 import SitesTable from './components/SitesTable';
 
 export default function AdminSitesPage() {
   const { data: sites, isLoading, isError, refetch } = useSites();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <div className={styles.sites}>
         <div className={styles.sites__loading}>
-          <img src='/images/loaders/loader.svg' alt="Загрузка" />
-          <p>Загрузка сайтов...</p>
+          <img src='/images/loaders/loader.svg' alt={t('common.loadingAlt')} />
+          <p>{t('admin.sites.loading')}</p>
         </div>
       </div>
     );
@@ -21,7 +23,7 @@ export default function AdminSitesPage() {
     return (
       <div className={styles.sites}>
         <div className={styles.sites__error}>
-          <p>Ошибка при загрузке сайтов</p>
+          <p>{t('admin.sites.loadError')}</p>
         </div>
       </div>
     );
@@ -30,9 +32,9 @@ export default function AdminSitesPage() {
   return (
     <div className={styles.sites}>
       <div className={styles.sites__header}>
-        <h1>Управление сайтами</h1>
+        <h1>{t('admin.sites.title')}</h1>
         <a href="/admin/sites/create" className={styles.sites__addButton}>
-          Добавить сайт
+          {t('admin.sites.add')}
         </a>
       </div>
 
@@ -41,7 +43,7 @@ export default function AdminSitesPage() {
           <SitesTable sites={sites} onRefresh={refetch} />
         ) : (
           <div className={styles.sites__empty}>
-            <p>Сайты не найдены</p>
+            <p>{t('admin.sites.notFound')}</p>
           </div>
         )}
       </div>

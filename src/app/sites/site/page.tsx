@@ -4,17 +4,19 @@ import { use } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useSite } from '@/app/hooks/useSites'
 import SiteDetail from '@/app/components/SiteDetail'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.scss'
 
 export default function SitePage() {
   const searchParams = useSearchParams()
   const siteId = searchParams.get('id')
+  const { t } = useTranslation()
 
   if (!siteId) {
     return (
       <div className={styles.error}>
-        <h1>Сайт не найден</h1>
-        <p>Отсутствует ID сайта в параметрах URL</p>
+        <h1>{t('sitePage.notFound')}</h1>
+        <p>{t('sitePage.missingId')}</p>
       </div>
     )
   }
@@ -24,16 +26,17 @@ export default function SitePage() {
 
 function SiteDetailWrapper({ siteId }: { siteId: string }) {
   const { data: siteData, isLoading, isError } = useSite(siteId)
+  const { t } = useTranslation()
 
   if (isLoading) {
-    return <div className={styles.loading}>Загрузка...</div>
+    return <div className={styles.loading}>{t('sitePage.loading')}</div>
   }
 
   if (isError || !siteData) {
     return (
       <div className={styles.error}>
-        <h1>Сайт не найден</h1>
-        <p>Не удалось загрузить данные сайта</p>
+        <h1>{t('sitePage.notFound')}</h1>
+        <p>{t('sitePage.loadError')}</p>
       </div>
     )
   }

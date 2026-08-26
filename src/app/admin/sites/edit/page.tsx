@@ -1,10 +1,12 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { useSite } from '@/app/hooks/useSites';
 import SiteForm from '../components/SiteForm';
 import styles from '../admin-sites.module.scss';
 
 export default function EditSitePage() {
+    const { t } = useTranslation();
     const searchParams = useSearchParams();
     const siteId = searchParams.get('id');
 
@@ -14,8 +16,8 @@ export default function EditSitePage() {
         return (
             <div className={styles.sites}>
                 <div className={styles.sites__loading}>
-                    <img src='/images/loaders/loader.svg' alt="Загрузка" />
-                    <p>Загрузка данных сайта...</p>
+                    <img src='/images/loaders/loader.svg' alt={t('common.loadingAlt')} />
+                    <p>{t('admin.sites.editLoading')}</p>
                 </div>
             </div>
         );
@@ -25,7 +27,7 @@ export default function EditSitePage() {
         return (
             <div className={styles.sites}>
                 <div className={styles.sites__error}>
-                    <p>Ошибка при загрузке сайта или сайт не найден</p>
+                    <p>{t('admin.sites.editError')}</p>
                 </div>
             </div>
         );
@@ -34,7 +36,7 @@ export default function EditSitePage() {
     return (
         <div className={styles.sites}>
             <div className={styles.sites__header}>
-                <h1>Редактирование сайта</h1>
+                <h1>{t('admin.sites.editTitle')}</h1>
             </div>
 
             <div className={styles.sites__content}>

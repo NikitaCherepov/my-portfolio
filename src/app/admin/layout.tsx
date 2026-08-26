@@ -2,6 +2,7 @@
 import { useAuth } from '../hooks/useAuth';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './admin.module.scss';
 import AdminHeader from './components/AdminHeader';
 
@@ -13,6 +14,7 @@ export default function AdminLayout({
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!pathname.includes('login') && !isLoading && !isAuthenticated) {
@@ -24,7 +26,7 @@ export default function AdminLayout({
     return (
       <div className={`mainContainer ${styles.admin}`}>
         <div className={styles.admin__loading}>
-          Проверка доступа...
+          {t('admin.checkingAccess')}
         </div>
       </div>
     );

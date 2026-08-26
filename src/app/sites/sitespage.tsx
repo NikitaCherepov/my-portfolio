@@ -14,9 +14,11 @@ import SortingComponentForList from "../components/SortingComponentForList"
 import Button from "../components/Cards/SiteCard/Button"
 import { SiteWork } from '../store/useExitStore'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 
 export default function SitesPage() {
+    const { t, i18n } = useTranslation();
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
     // const [maxHeight, setMaxHeight] = useState(0);
@@ -109,8 +111,8 @@ export default function SitesPage() {
         sites: {
             newest: (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
             oldest: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-            nameFromA: (a, b) => b.name.localeCompare(a.name, 'ru'),
-            nameFromZ: (a, b) => a.name.localeCompare(b.name, 'ru'),
+            nameFromA: (a, b) => b.name.localeCompare(a.name, i18n.language),
+            nameFromZ: (a, b) => a.name.localeCompare(b.name, i18n.language),
             complex: (a, b) => b.stack.length - a.stack.length,
             easiest: (a, b) => a.stack.length - b.stack.length,
         },
@@ -226,10 +228,10 @@ export default function SitesPage() {
             </motion.div>
             
             
-            <Button onClick={() => router.push('/admin')} background={'#AFAFAF'} className={styles.adminPanel} text={'Админ-панель'}/>
+            <Button onClick={() => router.push('/admin')} background={'#AFAFAF'} className={styles.adminPanel} text={t('sitesPage.adminPanel')}/>
 
             {/* <Button onClick={() => toggleModal(sites?.find((el: any) => el.name === 'Портфолио')?.id || null)} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/> */}
-            <Button onClick={() => router.push('/sites/site?id=cmhs79ftu0002uck0p5j2qm8k')} background={'#AFAFAF'} className={styles.about} text={'О сайте'}/>
+            <Button onClick={() => router.push('/sites/site?id=cmhs79ftu0002uck0p5j2qm8k')} background={'#AFAFAF'} className={styles.about} text={t('sitesPage.aboutSite')}/>
 
 
 

@@ -4,7 +4,9 @@ import Cookies from 'js-cookie';
 export interface Genre {
   id: string;
   name: string;
+  nameEn?: string | null;
   description: string | null;
+  descriptionEn?: string | null;
   order: number;
   createdAt: string;
   updatedAt: string;
@@ -12,12 +14,16 @@ export interface Genre {
 
 export interface CreateGenreData {
   name: string;
+  nameEn?: string;
   description?: string;
+  descriptionEn?: string;
 }
 
 export interface UpdateGenreData {
   name?: string;
+  nameEn?: string;
   description?: string;
+  descriptionEn?: string;
 }
 
 export interface GenreOrder {

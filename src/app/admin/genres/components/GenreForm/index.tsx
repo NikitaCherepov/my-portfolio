@@ -4,6 +4,8 @@ import { toast } from 'sonner';
 import { useCreateGenre, useUpdateGenre } from '@/app/hooks/useGenreMutations';
 import { useRouter } from 'next/navigation';
 import { Genre } from '@/app/services/genresService';
+import { useTranslation } from 'react-i18next';
+import TranslateButton from '@/app/admin/components/TranslateButton';
 import styles from './GenreForm.module.scss';
 
 interface GenreFormProps {
@@ -16,17 +18,22 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
     const router = useRouter();
     const createGenreMutation = useCreateGenre();
     const updateGenreMutation = useUpdateGenre();
+    const { t } = useTranslation();
 
     // Интерфейс для данных формы
     interface GenreFormData {
         name: string;
         description: string;
+        nameEn: string;
+        descriptionEn: string;
     }
 
     // Форма данные
     const [formData, setFormData] = useState<GenreFormData>({
         name: initialData?.name || '',
         description: initialData?.description || '',
+        nameEn: initialData?.nameEn || '',
+        descriptionEn: initialData?.descriptionEn || '',
     });
 
     // Ошибки валидации
@@ -54,7 +61,7 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
         const newErrors: Partial<GenreFormData> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Название жанра обязательно';
+            newErrors.name = t('admin.genreForm.nameRequired');
         }
 
         setErrors(newErrors);
@@ -66,7 +73,7 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
         e.preventDefault();
 
         if (!validateForm()) {
-            toast.error('Пожалуйста, исправьте ошибки в форме');
+            toast.error(t('admin.genreForm.fixErrors'));
             return;
         }
 
@@ -74,11 +81,13 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
             if (mode === 'create') {
                 await createGenreMutation.mutateAsync({
                     name: formData.name.trim(),
-                    description: formData.description.trim() || null,
+                    description: formData.description.trim() || undefined,
+                    nameEn: formData.nameEn.trim() || undefined,
+                    descriptionEn: formData.descriptionEn.trim() || undefined,
                 });
             } else {
                 if (!genreId) {
-                    toast.error('ID жанра не указан');
+                    toast.error(t('admin.genreForm.idMissing'));
                     return;
                 }
 
@@ -86,7 +95,9 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
                     id: genreId,
                     data: {
                         name: formData.name.trim(),
-                        description: formData.description.trim() || null,
+                        description: formData.description.trim() || undefined,
+                        nameEn: formData.nameEn.trim() || undefined,
+                        descriptionEn: formData.descriptionEn.trim() || undefined,
                     }
                 });
             }
@@ -95,7 +106,7 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
             router.push('/admin/genres');
         } catch (error: any) {
             console.error('Error saving genre:', error);
-            toast.error(error.error || `Ошибка при ${mode === 'create' ? 'создании' : 'обновлении'} жанра`);
+            toast.error(error.error || (mode === 'create' ? t('admin.genreForm.createError') : t('admin.genreForm.updateError')));
         }
     };
 
@@ -113,14 +124,14 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
                 <div className={styles.form__left}>
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Название жанра <span className={styles.field__required}>*</span>
+                            {t('admin.genreForm.nameLabel')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            placeholder="Введите название жанра"
+                            placeholder={t('admin.genreForm.namePlaceholder')}
                             className={`${styles.field__input} ${errors.name ? styles.field__input_error : ''}`}
                             disabled={isSubmitting}
                         />
@@ -131,17 +142,62 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
 
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Описание
+                            {t('admin.genreForm.nameEnLabel')}
+                        </label>
+                        <div style={{display: 'flex', gap: '8px', alignItems: 'flex-start'}}>
+                            <input
+                                type="text"
+                                name="nameEn"
+                                value={formData.nameEn}
+                                onChange={handleInputChange}
+                                placeholder={t('admin.genreForm.nameEnPlaceholder')}
+                                className={`${styles.field__input} ${errors.name ? styles.field__input_error : ''}`}
+                                style={{flex: 1}}
+                                disabled={isSubmitting}
+                            />
+                            <TranslateButton
+                                source={formData.name}
+                                disabled={isSubmitting}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, nameEn: text }))}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>
+                            {t('admin.genreForm.descriptionLabel')}
                         </label>
                         <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleInputChange}
-                            placeholder="Введите описание жанра (необязательно)"
+                            placeholder={t('admin.genreForm.descriptionPlaceholder')}
                             className={`${styles.field__input} ${styles.field__input_textarea}`}
                             rows={4}
                             disabled={isSubmitting}
                         />
+                    </div>
+
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>
+                            {t('admin.genreForm.descriptionEnLabel')}
+                        </label>
+                        <textarea
+                            name="descriptionEn"
+                            value={formData.descriptionEn}
+                            onChange={handleInputChange}
+                            placeholder={t('admin.genreForm.descriptionEnPlaceholder')}
+                            className={`${styles.field__input} ${styles.field__input_textarea}`}
+                            rows={4}
+                            disabled={isSubmitting}
+                        />
+                        <div style={{marginTop: '8px'}}>
+                            <TranslateButton
+                                source={formData.description}
+                                disabled={isSubmitting}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, descriptionEn: text }))}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -149,11 +205,11 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
                     {/* Здесь можно добавить дополнительную информацию или превью */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Предпросмотр
+                            {t('admin.genreForm.preview')}
                         </label>
                         <div className={styles.preview}>
-                            <h3>{formData.name || 'Название жанра'}</h3>
-                            <p>{formData.description || 'Описание жанра'}</p>
+                            <h3>{formData.name || t('admin.genreForm.previewName')}</h3>
+                            <p>{formData.description || t('admin.genreForm.previewDescription')}</p>
                         </div>
                     </div>
                 </div>
@@ -166,14 +222,14 @@ export default function GenreForm({ mode, initialData, genreId }: GenreFormProps
                     className={`${styles.form__button} ${styles.form__button_cancel}`}
                     disabled={isSubmitting}
                 >
-                    Отмена
+                    {t('common.cancel')}
                 </button>
                 <button
                     type="submit"
                     className={`${styles.form__button} ${styles.form__button_submit}`}
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? 'Сохранение...' : mode === 'create' ? 'Создать жанр' : 'Сохранить изменения'}
+                    {isSubmitting ? t('common.saving') : t('common.save')}
                 </button>
             </div>
         </form>

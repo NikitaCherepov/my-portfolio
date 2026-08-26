@@ -1,0 +1,27 @@
+// Кнопка перевода — в стиле вторичных кнопок форм админки
+// (как form__button-cancel / field__input из GenreForm/SiteForm)
+.button {
+    padding: 12px 16px;
+    border: 1px solid var(--button-darkest);
+    border-radius: var(--default-border-radius-small);
+    background: var(--button-dark);
+    color: var(--header-name-color);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+
+    &:hover:not(:disabled) {
+        background: var(--button-darkest);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+}

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     await requireAuth(request);
 
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, nameEn, descriptionEn } = body;
 
     if (!name || name.trim() === '') {
       return NextResponse.json(
@@ -51,6 +51,8 @@ export async function POST(request: NextRequest) {
       data: {
         name: name.trim(),
         description: description?.trim() || null,
+        nameEn: typeof nameEn === 'string' && nameEn.trim() ? nameEn.trim() : null,
+        descriptionEn: typeof descriptionEn === 'string' && descriptionEn.trim() ? descriptionEn.trim() : null,
       },
     });
 

@@ -35,6 +35,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
     // Получаем данные из формы
     const name = formData.get('name') as string;
+    const nameEn = formData.get('nameEn') as string | null;
     const genreId = formData.get('genreId') as string;
     const youtube = formData.get('youtube') as string || '';
     const spotify = formData.get('spotify') as string || '';
@@ -70,6 +71,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     // Подготавливаем данные для обновления
     const updateData: any = {
       name,
+      nameEn: nameEn && nameEn.trim() ? nameEn.trim() : null,
       youtube,
       spotify,
       vkmusic,

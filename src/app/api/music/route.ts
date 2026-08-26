@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
 
     // Получаем данные из формы
     const name = formData.get('name') as string;
+    const nameEn = formData.get('nameEn') as string || '';
     const genreId = formData.get('genreId') as string;
     const youtube = formData.get('youtube') as string || '';
     const spotify = formData.get('spotify') as string || '';
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
     const music = await prisma.music.create({
       data: {
         name,
+        nameEn: nameEn.trim() || null,
         mainImage: mainImageData.url,
         youtube,
         spotify,

@@ -1,61 +1,63 @@
 'use client';
 import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import styles from './admin-catalog.module.scss';
 
 export default function AdminCatalogPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <div className={styles.catalog}>
       <div className={styles.catalog__header}>
         <div className={styles.catalog__userInfo}>
-          <h2>Управление каталогом</h2>
-          <p>Добро пожаловать, {user?.name || user?.login}!</p>
+          <h2>{t('admin.catalog.manageCatalog')}</h2>
+          <p>{t('admin.catalog.welcome', { name: user?.name || user?.login || '' })}</p>
         </div>
       </div>
 
       <div className={styles.catalog__cards}>
         <div className={styles.catalog__card}>
-          <h3>Управление сайтами</h3>
-          <p>Добавление, редактирование и удаление сайтов</p>
+          <h3>{t('admin.catalog.sitesTitle')}</h3>
+          <p>{t('admin.catalog.sitesDesc')}</p>
           <button onClick={() => router.push('/admin/sites')} className={styles.catalog__cardButton}>
-            Управление сайтами
+            {t('admin.catalog.sitesTitle')}
           </button>
         </div>
 
         <div className={styles.catalog__card}>
-          <h3>Управление музыкой</h3>
-          <p>Добавление, редактирование и удаление музыкальных треков</p>
+          <h3>{t('admin.catalog.musicTitle')}</h3>
+          <p>{t('admin.catalog.musicDesc')}</p>
           <button onClick={() => router.push('/admin/music')} className={styles.catalog__cardButton}>
-            Управление музыкой
+            {t('admin.catalog.musicTitle')}
           </button>
         </div>
 
         <div className={styles.catalog__card}>
-          <h3>Управление жанрами</h3>
-          <p>Добавление и редактирование музыкальных жанров</p>
+          <h3>{t('admin.catalog.genresTitle')}</h3>
+          <p>{t('admin.catalog.genresDesc')}</p>
           <button onClick={() => router.push('/admin/genres')} className={styles.catalog__cardButton}>
-            Управление жанрами
+            {t('admin.catalog.genresTitle')}
           </button>
         </div>
       </div>
 
       <div className={styles.catalog__stats}>
-        <h3 className={styles.catalog__statsTitle}>Статистика</h3>
+        <h3 className={styles.catalog__statsTitle}>{t('admin.catalog.stats')}</h3>
         <div className={styles.catalog__statsGrid}>
           <div className={`${styles.catalog__statItem} ${styles.catalog__statItem_sites}`}>
             <h4>0</h4>
-            <p>Сайтов</p>
+            <p>{t('admin.catalog.sitesCount')}</p>
           </div>
           <div className={`${styles.catalog__statItem} ${styles.catalog__statItem_music}`}>
             <h4>0</h4>
-            <p>Музыкальных треков</p>
+            <p>{t('admin.catalog.tracksCount')}</p>
           </div>
           <div className={`${styles.catalog__statItem} ${styles.catalog__statItem_genres}`}>
             <h4>0</h4>
-            <p>Жанров</p>
+            <p>{t('admin.catalog.genresCount')}</p>
           </div>
         </div>
       </div>

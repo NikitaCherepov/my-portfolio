@@ -3,6 +3,7 @@ import { useSortSitesStore } from '@/app/store/useExitStore'
 import { usePathname } from 'next/navigation';
 import {motion} from 'framer-motion'
 import { SortingOption } from '@/app/store/useExitStore';
+import { useTranslation } from 'react-i18next'
 
 interface elementSort {
     label: string,
@@ -13,6 +14,7 @@ interface elementSort {
 export default function SortingComponentForList() {
     const {sortBy, setSortBy, sortingOptions, setSortingOptions} = useSortSitesStore();
     const pathname = usePathname();
+    const { t } = useTranslation();
 
     const pageKey = pathname.slice(1) as "sites" | "music";
 
@@ -66,34 +68,34 @@ export default function SortingComponentForList() {
     const sortingGroups = {
         sites: [
             {
-                label: "Название",
+                label: t('sorting.name'),
                 ascending: "nameFromA",
                 descending: "nameFromZ"
             },
             {
-                label: "Стек",
+                label: t('sorting.stack'),
                 descending: "complex",
                 ascending: "easiest"
             },
             {
-                label: "Дата",
+                label: t('sorting.date'),
                 ascending: "newest",
                 descending: "oldest"
             }
         ],
         music: [
             {
-                label: "Название",
+                label: t('sorting.name'),
                 descending: "nameFromA",
                 ascending: "nameFromZ"
             },
             {
-                label: "Жанр",
+                label: t('sorting.genre'),
                 descending: "genreFromA",
                 ascending: "genreFromZ"
             },
             {
-                label: "Дата выхода",
+                label: t('sorting.releaseDate'),
                 ascending: "newest",
                 descending: "oldest"
             }

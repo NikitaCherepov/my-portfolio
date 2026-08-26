@@ -6,6 +6,7 @@ import {useState, useEffect, useRef} from 'react'
 import {motion, AnimatePresence} from 'framer-motion'
 import { usePlayerStateStore, usePlayerStore } from '@/app/store/useExitStore'
 import { useHasHydrated } from '@/app/hooks/useHasHydrated'
+import { useTranslation } from 'react-i18next'
 
 interface DraggableProps {
   soundHovering: boolean;
@@ -183,6 +184,7 @@ function MobileMusicPlayer({
 }: MobileMusicPlayerProps) {
   const { name, audio, duration, currentTime, isPlaying, play, pause } = usePlayerStateStore();
   const { volume, setVolume } = usePlayerStore();
+  const { t } = useTranslation();
 
   const [hoverTime, setHoverTime] = useState(0);
   const [onTimelineHovering, setOnTimelineHovering] = useState(false);
@@ -216,7 +218,7 @@ function MobileMusicPlayer({
           <div className={styles.container__mobileHeader}>
             <div className={`${styles.buttons} ${styles.buttons_mobile}`}>
               <img
-                alt='Скрыть'
+                alt={t('player.hideAlt')}
                 onClick={() => setShow()}
                 className={`${styles.container__buttons__minimize} ${styles.buttons_mobile}`}
                 src='/images/icons/MusicPlayer/minimize.svg'
@@ -226,12 +228,12 @@ function MobileMusicPlayer({
 
           <div className={styles.container__mobileContent}>
             <div className={styles.container__mobileTrackInfo}>
-              <p className={styles.name}>{name || 'Не выбрано'}</p>
+              <p className={styles.name}>{name || t('player.notSelected')}</p>
             </div>
 
             <div className={`${styles.container__musicControl} ${styles.musicControl_mobile}`}>
               <img
-                alt='Управление состоянием проигрывателя'
+                alt={t('player.playControlAlt')}
                 onClick={() => playMusic()}
                 className={`${styles.container__musicControl__play} ${styles.musicControl_mobile}`}
                 src={duration === currentTime ? '/images/icons/MusicPlayer/play.svg' : isPlaying ? '/images/icons/MusicPlayer/pause.svg' : '/images/icons/MusicPlayer/play.svg'}
@@ -273,7 +275,7 @@ function MobileMusicPlayer({
               </motion.div>
 
               <motion.div onHoverStart={() => setSoundHovering(true)} onHoverEnd={() => setSoundHovering(false)} className={`${styles.sound} ${styles.sound_mobile}`}>
-                <img alt='Регулировка звука' src={'/images/icons/MusicPlayer/sound.svg'} />
+                <img alt={t('player.soundAlt')} src={'/images/icons/MusicPlayer/sound.svg'} />
                 <AnimatePresence>
                   {soundHovering ? (
                     <motion.div initial={{opacity: 0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.2}} className={styles.sound__edit}>
@@ -293,6 +295,7 @@ function MobileMusicPlayer({
 function Draggable({soundHovering, setSoundHovering, hovering, setHovering, position, onDragging, show, setShow}: DraggableProps) {
   const {name, audio, duration, currentTime, isPlaying, play, pause } = usePlayerStateStore();
   const {volume, setVolume} = usePlayerStore();
+  const { t } = useTranslation();
 
   const [hoverTime, setHoverTime] = useState(0);
   const [onTimelineHovering, setOnTimelineHovering] = useState(false);
@@ -329,11 +332,11 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
         
         ref={setNodeRef} style={style}  className={`${styles.container} dropShadow ${onDragging ? 'hoverEffect' : ''}`}>
           <div className={styles.container__buttons}>
-            <img alt='Нажмите, чтобы тянуть' style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/MusicPlayer/move.svg'></img>
+            <img alt={t('player.dragAlt')} style={{cursor: onDragging ? 'grabbing' : 'grab'}} {...listeners} {...attributes} className={styles.container__buttons__move} src='/images/icons/MusicPlayer/move.svg'></img>
             {<AnimatePresence>
               {
                 show || (!show && hovering) ? (
-                  <motion.img alt='Показать/спрятать' initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.3}} onClick={() => {
+                  <motion.img alt={t('player.toggleAlt')} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.3}} onClick={() => {
                     
                     setClosing(true);
                     setShow();
@@ -346,10 +349,10 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
             </AnimatePresence>}
           </div>
             
-          <p className={`${styles.container__name}`}>{name || 'Не выбрано'}</p>
+          <p className={`${styles.container__name}`}>{name || t('player.notSelected')}</p>
 
           <div className={styles.container__musicControl}>
-            <img alt='Управление состоянием проигрывателя' onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/MusicPlayer/play.svg' : isPlaying ? '/images/icons/MusicPlayer/pause.svg' : '/images/icons/MusicPlayer/play.svg'}/>
+            <img alt={t('player.playControlAlt')} onClick={() => playMusic()} className={styles.container__musicControl__play} src={duration === currentTime ? '/images/icons/MusicPlayer/play.svg' : isPlaying ? '/images/icons/MusicPlayer/pause.svg' : '/images/icons/MusicPlayer/play.svg'}/>
 
             <motion.div onMouseMove={(e) => {
               
@@ -395,7 +398,7 @@ function Draggable({soundHovering, setSoundHovering, hovering, setHovering, posi
             </motion.div>
 
             <motion.div onHoverStart={() => setSoundHovering(true)} onHoverEnd={() => setSoundHovering(false)} className={styles.sound}>
-                <img alt='Регулировка звука' src={'/images/icons/MusicPlayer/sound.svg'} />
+                <img alt={t('player.soundAlt')} src={'/images/icons/MusicPlayer/sound.svg'} />
                 <AnimatePresence>
                     {soundHovering ? (
                         <motion.div initial={{opacity: 0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.2}} className={styles.sound__edit}>

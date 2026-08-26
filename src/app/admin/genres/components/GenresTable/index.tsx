@@ -1,11 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import genresService from '../../../../services/genresService';
 import { Genre, GenreOrder } from '../../../../services/genresService';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import {
   DndContext,
   closestCenter,
@@ -31,12 +32,13 @@ interface GenresTableProps {
 
 export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
     const router = useRouter();
+    const { t } = useTranslation();
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [genresList, setGenresList] = useState<Genre[]>(genres);
     const [isReordering, setIsReordering] = useState(false);
 
     // Обновляем локальный стейт когда genres извне меняется
-    useState(() => {
+    useEffect(() => {
         setGenresList(genres);
     }, [genres]);
 
@@ -71,7 +73,7 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
             onRefresh(); // Перезагружаем данные с сервера
         } catch (error: any) {
             console.error('Error updating genres order:', error);
-            toast.error(error.error || 'Ошибка при обновлении порядка жанров');
+            toast.error(error.error || t('admin.genres.reorderError'));
             // Возвращаем старый порядок при ошибке
             setGenresList(genres);
         } finally {
@@ -81,7 +83,7 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
 
     const handleDelete = async (id: string, name: string) => {
         const confirmDelete = window.confirm(
-            `Вы уверены, что хотите удалить жанр "${name}"?`
+            t('toasts.deleteConfirmGenre', { name })
         );
 
         if (!confirmDelete) return;
@@ -89,15 +91,15 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
         try {
             setDeletingId(id);
             await genresService.deleteGenre(id);
-            toast.success('Жанр успешно удален');
+            toast.success(t('toasts.genreDeleted'));
             onRefresh();
         } catch (error: any) {
             console.error('Error deleting genre:', error);
 
             if (error.count) {
-                toast.error(`Нельзя удалить жанр. С ним связано ${error.count} музыкальных треков.`);
+                toast.error(t('toasts.cannotDeleteGenre', { count: error.count }));
             } else {
-                toast.error(error.error || 'Ошибка при удалении жанра');
+                toast.error(error.error || t('toasts.genreDeleteError'));
             }
         } finally {
             setDeletingId(null);
@@ -109,19 +111,19 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
             const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
 
             if (isNaN(date.getTime())) {
-                return typeof dateString === 'string' ? dateString : 'Невалидная дата';
+                return typeof dateString === 'string' ? dateString : t('common.invalidDate');
             }
 
             return format(date, 'dd.MM.yyyy', { locale: ru });
         } catch {
-            return typeof dateString === 'string' ? dateString : 'Ошибка даты';
+            return typeof dateString === 'string' ? dateString : t('common.dateError');
         }
     };
 
     if (!genresList || genresList.length === 0) {
         return (
             <div className={styles.table__empty}>
-                <p>Жанры не найдены</p>
+                <p>{t('admin.genres.notFound')}</p>
             </div>
         );
     }
@@ -130,7 +132,7 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
         <div className={styles.table}>
             {isReordering && (
                 <div className={styles.reorderingBanner}>
-                    Обновление порядка жанров...
+                    {t('admin.genres.reordering')}
                 </div>
             )}
             <DndContext
@@ -142,10 +144,10 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
                     <table className={styles.table__wrapper}>
                         <thead className={styles.table__header}>
                             <tr>
-                                <th>Название</th>
-                                <th>Описание</th>
-                                <th>Дата создания</th>
-                                <th>Действия</th>
+                                <th>{t('common.name')}</th>
+                                <th>{t('admin.genres.colDescription')}</th>
+                                <th>{t('admin.genres.colCreatedAt')}</th>
+                                <th>{t('common.actions')}</th>
                                 <th></th> {/* Для drag handle */}
                             </tr>
                         </thead>
@@ -170,14 +172,14 @@ export default function GenresTable({ genres, onRefresh }: GenresTableProps) {
                                                 onClick={() => router.push(`/admin/genres/edit/${genre.id}`)}
                                                 className={`${styles.table__button} ${styles.table__button_edit}`}
                                             >
-                                                ✏️ Редактировать
+                                                {t('admin.genres.edit')}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(genre.id, genre.name)}
                                                 disabled={deletingId === genre.id}
                                                 className={`${styles.table__button} ${styles.table__button_delete}`}
                                             >
-                                                {deletingId === genre.id ? 'Удаление...' : '🗑 Удалить'}
+                                                {deletingId === genre.id ? t('common.deleting') : t('common.delete')}
                                             </button>
                                         </td>
                                     </SortableRow>

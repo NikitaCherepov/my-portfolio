@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import musicService, { Music } from '../../../../services/musicService';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import styles from './MusicTable.module.scss';
 
 interface MusicTableProps {
@@ -13,10 +14,11 @@ interface MusicTableProps {
 
 export default function MusicTable({ music, onRefresh }: MusicTableProps) {
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const handleDelete = async (id: string, name: string) => {
         const confirmDelete = window.confirm(
-            `Вы уверены, что хотите удалить трек "${name}"?`
+            t('toasts.deleteConfirmTrack', { name })
         );
 
         if (!confirmDelete) return;
@@ -24,11 +26,11 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
         try {
             setDeletingId(id);
             await musicService.deleteMusic(id);
-            toast.success('Трек успешно удален');
+            toast.success(t('toasts.trackDeleted'));
             onRefresh();
         } catch (error: any) {
             console.error('Error deleting music:', error);
-            toast.error(error.error || 'Ошибка при удалении трека');
+            toast.error(error.error || t('toasts.musicDeleteErrorHook'));
         } finally {
             setDeletingId(null);
         }
@@ -41,13 +43,13 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
 
             // Проверка на валидность даты
             if (isNaN(date.getTime())) {
-                return typeof dateString === 'string' ? dateString : 'Невалидная дата';
+                return typeof dateString === 'string' ? dateString : t('common.invalidDate');
             }
 
             // Используем date-fns для форматирования с русской локализацией
             return format(date, 'dd.MM.yyyy', { locale: ru });
         } catch {
-            return typeof dateString === 'string' ? dateString : 'Ошибка даты';
+            return typeof dateString === 'string' ? dateString : t('common.dateError');
         }
     };
 
@@ -59,7 +61,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
     if (!music || music.length === 0) {
         return (
             <div className={styles.table__empty}>
-                <p>Музыкальные треки не найдены</p>
+                <p>{t('admin.music.notFound')}</p>
             </div>
         );
     }
@@ -70,13 +72,13 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
                 <table className={styles.table__wrapper}>
                     <thead className={styles.table__header}>
                         <tr>
-                            <th>Обложка</th>
-                            <th>Название</th>
-                            <th>Жанр</th>
+                            <th>{t('admin.music.colCover')}</th>
+                            <th>{t('common.name')}</th>
+                            <th>{t('admin.genres.colGenre')}</th>
                             <th>YouTube</th>
                             <th>Spotify</th>
-                            <th>Дата</th>
-                            <th>Действия</th>
+                            <th>{t('common.date')}</th>
+                            <th>{t('common.actions')}</th>
                         </tr>
                     </thead>
                     <tbody className={styles.table__body}>
@@ -133,7 +135,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
                                         href={`/admin/music/edit?id=${track.id}`}
                                         className={`${styles.table__button} ${styles.table__button_edit}`}
                                     >
-                                        ✏️ Изменить
+                                        {t('admin.music.edit')}
                                     </a>
                                     {track.preview && (
                                         <a
@@ -142,7 +144,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
                                             rel="noopener noreferrer"
                                             className={`${styles.table__button} ${styles.table__button_preview}`}
                                         >
-                                            🎧 Превью
+                                            {t('admin.music.preview')}
                                         </a>
                                     )}
                                     <button
@@ -150,7 +152,7 @@ export default function MusicTable({ music, onRefresh }: MusicTableProps) {
                                         disabled={deletingId === track.id}
                                         className={`${styles.table__button} ${styles.table__button_delete}`}
                                     >
-                                        {deletingId === track.id ? 'Удаление...' : '🗑 Удалить'}
+                                        {deletingId === track.id ? t('common.deleting') : t('common.delete')}
                                     </button>
                                 </td>
                             </tr>

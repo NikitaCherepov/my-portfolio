@@ -11,6 +11,8 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import type { Swiper as SwiperType } from 'swiper';
+import { useTranslation } from 'react-i18next'
+import { pickLocale } from '@/app/utilities/pickLocale'
 
 interface MusicCardProps {
     music: Music[];
@@ -27,6 +29,11 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
     const prevRef = useRef<HTMLDivElement | null>(null);
     const nextRef = useRef<HTMLDivElement | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
+
+    const { i18n } = useTranslation();
+    const displayGenreName = pickLocale(genre.name, genre.nameEn, i18n.language) ?? '';
+    const displayGenreDescription = pickLocale(genre.description, genre.descriptionEn, i18n.language);
+    const currentTrackName = pickLocale(currentMusicCard?.name, currentMusicCard?.nameEn, i18n.language) ?? '';
 
     // Определение мобильных устройств
     useEffect(() => {
@@ -99,7 +106,7 @@ export default function MusicCard({music, genre, index} : MusicCardProps) {
     const handlePlayPause = () => {
         if (!currentMusicCard?.preview) return;
 
-        if (currentMusicCard.name) setName(currentMusicCard.name);
+        if (currentMusicCard.name) setName(pickLocale(currentMusicCard.name, currentMusicCard.nameEn, i18n.language) ?? currentMusicCard.name);
 
         if (currentSrc !== currentMusicCard.preview) {
             if (!showPlayer) setShowPlayer();
@@ -151,7 +158,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
           <motion.img
             key={currentMusicCard?.id}
             src={currentMusicCard?.mainImage}
-            alt={currentMusicCard?.name}
+            alt={currentTrackName}
             className={styles.container__backgroundImage}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -187,7 +194,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
               >
                 <motion.img
                   src={currentMusicCard?.mainImage}
-                  alt={currentMusicCard?.name}
+                  alt={currentTrackName}
                   className={styles.container__head__albumContainer__cover}
                 />
                 <AnimatePresence>
@@ -347,10 +354,10 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
 
           <div className={styles.container__head__genreInfo}>
             <h2 className={styles.container__head__genreInfo__header}>
-              {genre.name}
+              {displayGenreName}
             </h2>
             <p className={styles.container__head__genreInfo__description}>
-              {genre.description}
+              {displayGenreDescription}
             </p>
           </div>
         </div>
@@ -383,7 +390,7 @@ const isNextDisabled = currentIdx === -1 || currentIdx >= music.length - 1;
               <SwiperSlide key={track.id} className={styles.allMusicSlide}>
                 <img
                   src={track.mainImage}
-                  alt={track.name}
+                  alt={pickLocale(track.name, track.nameEn, i18n.language) ?? track.name}
                   className={`${styles.allMusicCover} ${
                     track.id === currentMusicCard?.id ? styles.active : ""
                   }`}

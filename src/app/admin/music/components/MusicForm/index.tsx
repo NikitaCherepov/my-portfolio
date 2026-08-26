@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useGenres } from '@/app/hooks/useGenres';
 import { CreateMusicData, UpdateMusicData, Music } from '@/app/hooks/useMusicMutations';
 import AudioTrimmer from '@/app/components/AudioTrimmer';
+import TranslateButton from '@/app/admin/components/TranslateButton';
+import { useTranslation } from 'react-i18next';
 import styles from './MusicForm.module.scss';
 
 const formatDateInput = (value?: string) => {
@@ -25,10 +27,12 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
     const updateMusicMutation = useUpdateMusic();
     const deleteMusicMutation = useDeleteMusic();
     const { data: genres } = useGenres();
+    const { t } = useTranslation();
 
     // Интерфейс для данных формы
     interface MusicFormData {
         name: string;
+        nameEn: string;
         genreId: string;
         youtube: string;
         spotify: string;
@@ -52,6 +56,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
     // Форма данные
     const [formData, setFormData] = useState<MusicFormData>({
         name: initialData?.name || '',
+        nameEn: initialData?.nameEn || '',
         genreId: initialData?.genreId || '',
         youtube: initialData?.youtube || '',
         spotify: initialData?.spotify || '',
@@ -174,7 +179,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
             if (file.type.startsWith('image/')) {
                 handleMainImageFileSelect(file);
             } else {
-                toast.error('Можно загружать только изображения');
+                toast.error(t('admin.musicForm.imagesOnly'));
             }
         }
     };
@@ -194,19 +199,19 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         const newErrors: Record<string, string> = {};
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Название обязательно';
+            newErrors.name = t('admin.musicForm.nameRequired');
         }
 
         if (!formData.genreId) {
-            newErrors.genreId = 'Жанр обязателен';
+            newErrors.genreId = t('admin.musicForm.genreRequired');
         }
 
         if (mode === 'create' && !formData.mainImage.file) {
-            newErrors.mainImage = 'Обложка обязательна';
+            newErrors.mainImage = t('admin.musicForm.coverRequired');
         }
 
         if (!formData.date) {
-            newErrors.date = 'Дата обязательна';
+            newErrors.date = t('admin.musicForm.dateRequired');
         }
 
         setErrors(newErrors);
@@ -223,6 +228,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         try {
             const submitData = {
                 name: formData.name,
+                nameEn: formData.nameEn,
                 genreId: formData.genreId,
                 youtube: formData.youtube,
                 spotify: formData.spotify,
@@ -233,7 +239,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
 
             if (mode === 'create') {
                 if (!formData.mainImage.file) {
-                    toast.error('Обложка обязательна');
+                    toast.error(t('admin.musicForm.coverRequired'));
                     return;
                 }
 
@@ -285,7 +291,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
         if (!musicId) return;
 
         const confirmDelete = window.confirm(
-            `Вы уверены, что хотите удалить трек "${formData.name}"?`
+            t('toasts.deleteConfirmTrack', { name: formData.name })
         );
 
         if (!confirmDelete) return;
@@ -308,7 +314,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Main Image Upload */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Обложка <span className={styles.field__required}>*</span>
+                            {t('admin.musicForm.cover')} <span className={styles.field__required}>*</span>
                         </label>
                         <div
                             className={`${styles.field__input} ${errors.mainImage ? styles.field__input_error : ''} ${isMainImageDragging ? styles.field__input_dragging : ''}`}
@@ -328,7 +334,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                                 <div style={{ position: 'relative' }}>
                                     <img
                                         src={formData.mainImage.file ? URL.createObjectURL(formData.mainImage.file) : formData.mainImage.current}
-                                        alt="Обложка"
+                                        alt={t('admin.musicForm.cover')}
                                         style={{
                                             maxWidth: '100%',
                                             maxHeight: '200px',
@@ -362,7 +368,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                                 </div>
                             ) : (
                                 <div>
-                                    <div>📁 Перетащите обложку сюда или кликните для выбора</div>
+                                    <div>{t('admin.musicForm.dropCover')}</div>
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -382,7 +388,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                                             cursor: 'pointer'
                                         }}
                                     >
-                                        Выбрать файл
+                                        {t('admin.musicForm.chooseFile')}
                                     </label>
                                 </div>
                             )}
@@ -393,7 +399,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Genre */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Жанр <span className={styles.field__required}>*</span>
+                            {t('admin.musicForm.genre')} <span className={styles.field__required}>*</span>
                         </label>
                         <select
                             name="genreId"
@@ -401,7 +407,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                             onChange={handleGenreChange}
                             className={`${styles.field__input} ${errors.genreId ? styles.field__input_error : ''}`}
                         >
-                            <option value="">Выберите жанр</option>
+                            <option value="">{t('admin.musicForm.chooseGenre')}</option>
                             {genres?.map((genre) => (
                                 <option key={genre.id} value={genre.id}>
                                     {genre.name}
@@ -414,7 +420,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Date */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Дата релиза <span className={styles.field__required}>*</span>
+                            {t('admin.musicForm.releaseDate')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="date"
@@ -432,23 +438,45 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Name */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Название трека <span className={styles.field__required}>*</span>
+                            {t('admin.musicForm.trackName')} <span className={styles.field__required}>*</span>
                         </label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            placeholder="Название трека"
+                            placeholder={t('admin.musicForm.trackName')}
                             className={`${styles.field__input} ${errors.name ? styles.field__input_error : ''}`}
                         />
                         {errors.name && <div className={styles.field__error}>{errors.name}</div>}
                     </div>
 
+                    {/* Name EN */}
+                    <div className={styles.field}>
+                        <label className={styles.field__label}>
+                            {t('admin.musicForm.trackNameEn')}
+                        </label>
+                        <div style={{display: 'flex', gap: '8px', alignItems: 'flex-start'}}>
+                            <input
+                                type="text"
+                                name="nameEn"
+                                value={formData.nameEn}
+                                onChange={handleInputChange}
+                                placeholder={t('admin.musicForm.trackNameEn')}
+                                className={styles.field__input}
+                                style={{flex: 1}}
+                            />
+                            <TranslateButton
+                                source={formData.name}
+                                onTranslated={(text) => setFormData(prev => ({ ...prev, nameEn: text }))}
+                            />
+                        </div>
+                    </div>
+
                     {/* YouTube */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            YouTube ссылка
+                            {t('admin.musicForm.youtubeLink')}
                         </label>
                         <input
                             type="url"
@@ -463,7 +491,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Spotify */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Spotify ссылка
+                            {t('admin.musicForm.spotifyLink')}
                         </label>
                         <input
                             type="url"
@@ -478,7 +506,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* VK Music */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            VK Музыка ссылка
+                            {t('admin.musicForm.vkLink')}
                         </label>
                         <input
                             type="url"
@@ -493,7 +521,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Yandex Music */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Yandex Музыка ссылка
+                            {t('admin.musicForm.yandexLink')}
                         </label>
                         <input
                             type="url"
@@ -508,7 +536,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     {/* Preview */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>
-                            Превью (аудио файл)
+                            {t('admin.musicForm.preview')}
                         </label>
 
                         {/* Переключатель режима */}
@@ -518,14 +546,14 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                                 className={`${styles.field__toggle__option} ${formData.preview.mode === 'file' ? styles.field__toggle__option_active : ''}`}
                                 onClick={() => handlePreviewModeChange('file')}
                             >
-                                Загрузить файл
+                                {t('admin.musicForm.uploadFile')}
                             </button>
                             <button
                                 type="button"
                                 className={`${styles.field__toggle__option} ${formData.preview.mode === 'url' ? styles.field__toggle__option_active : ''}`}
                                 onClick={() => handlePreviewModeChange('url')}
                             >
-                                Ввести URL
+                                {t('admin.musicForm.enterUrl')}
                             </button>
                         </div>
 
@@ -566,7 +594,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     className={`${styles.form__button} ${styles.form__button_cancel}`}
                     disabled={isLoading}
                 >
-                    Отмена
+                    {t('common.cancel')}
                 </button>
 
                 {mode === 'edit' && (
@@ -576,7 +604,7 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                         className={`${styles.form__button} ${styles.form__button_delete}`}
                         disabled={isLoading}
                     >
-                        {deleteMusicMutation.isPending ? 'Удаление...' : 'Удалить'}
+                        {deleteMusicMutation.isPending ? t('common.deleting') : t('common.delete')}
                     </button>
                 )}
 
@@ -586,9 +614,9 @@ export default function MusicForm({ mode, initialData, musicId }: MusicFormProps
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        mode === 'create' ? 'Создание...' : 'Сохранение...'
+                        mode === 'create' ? t('common.creating') : t('common.saving')
                     ) : (
-                        mode === 'create' ? 'Создать трек' : 'Сохранить изменения'
+                        mode === 'create' ? t('admin.musicForm.createTrack') : t('common.save')
                     )}
                 </button>
             </div>

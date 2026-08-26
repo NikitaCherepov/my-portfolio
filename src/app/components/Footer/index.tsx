@@ -1,19 +1,22 @@
+'use client'
 import styles from './Footer.module.scss'
 import Button from '../Cards/SiteCard/Button'
 import {motion} from 'framer-motion'
 import { usePathname } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 export default function Header() {
     const pathname = usePathname();
+    const { t } = useTranslation();
     return (
         <motion.div layout={false} className={styles.container}>
 
             <div className={styles.links}>
-                <p className={styles.links__header}>Контакты</p>
+                <p className={styles.links__header}>{t('footer.contacts')}</p>
                 <div className={`${styles.links__buttons} ${styles.links__buttons_desktop}`}>
                     <Button link='mailto:mkxvk@yandex.ru' size='small' icon={'/images/icons/email.svg'} text={'E-mail'}/>
-                    <Button link={'https://t.me/hoursen'} size='small' icon={'/images/icons/tg.svg'} text={'чат'}/>
-                    <Button link='https://vk.com/nikita_cherepov' size='small' icon={'/images/icons/vk.svg'} text={'лс'}/>
+                    <Button link={'https://t.me/hoursen'} size='small' icon={'/images/icons/tg.svg'} text={t('footer.chat')}/>
+                    <Button link='https://vk.com/nikita_cherepov' size='small' icon={'/images/icons/vk.svg'} text={t('footer.dm')}/>
                 </div>
 
                 <div className={`${styles.links__buttons} ${styles.links__buttons_mobile}`}>
@@ -24,15 +27,15 @@ export default function Header() {
             </div>
 
             <div className={styles.name}>
-                © 2025 Nikita Cherepov | {pathname === '/sites' ? "Сайты" : 'Музыка'}
+                © 2025 Nikita Cherepov | {pathname === '/sites' ? t('footer.sites') : t('footer.music')}
             </div>
 
             <div className={styles.links}>
-                <p className={styles.links__header}>Соцсети</p>
+                <p className={styles.links__header}>{t('footer.social')}</p>
                 <div className={`${styles.links__buttons} ${styles.links__buttons_desktop}`}>
-                    <Button link='https://www.youtube.com/@nikitacherepov' size='small' icon={'/images/icons/yt.svg'} text={'канал'}/>
-                    <Button link='https://t.me/+7JUAL4jfnTUzMjBi' size='small' icon={'/images/icons/tg.svg'} text={'канал'}/>
-                    <Button link='https://vk.com/hitchhikersimagination' size='small' icon={'/images/icons/vk.svg'} text={'группа'}/>
+                    <Button link='https://www.youtube.com/@nikitacherepov' size='small' icon={'/images/icons/yt.svg'} text={t('footer.channel')}/>
+                    <Button link='https://t.me/+7JUAL4jfnTUzMjBi' size='small' icon={'/images/icons/tg.svg'} text={t('footer.channel')}/>
+                    <Button link='https://vk.com/hitchhikersimagination' size='small' icon={'/images/icons/vk.svg'} text={t('footer.group')}/>
                 </div>
 
                 <div className={`${styles.links__buttons} ${styles.links__buttons_mobile}`}>

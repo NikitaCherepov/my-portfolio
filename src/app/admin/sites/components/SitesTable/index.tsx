@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import sitesService from '../../../../services/sitesService';
 import { SiteWork } from '../../../../store/useExitStore';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import styles from './SitesTable.module.scss';
 
 interface SitesTableProps {
@@ -13,10 +14,11 @@ interface SitesTableProps {
 
 export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const handleDelete = async (id: string, name: string) => {
         const confirmDelete = window.confirm(
-            `Вы уверены, что хотите удалить сайт "${name}"?`
+            t('toasts.deleteConfirmSite', { name })
         );
 
         if (!confirmDelete) return;
@@ -24,11 +26,11 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
         try {
             setDeletingId(id);
             await sitesService.deleteSite(id);
-            toast.success('Сайт успешно удален');
+            toast.success(t('toasts.siteDeleted'));
             onRefresh();
         } catch (error: any) {
             console.error('Error deleting site:', error);
-            toast.error(error.error || 'Ошибка при удалении сайта');
+            toast.error(error.error || t('toasts.siteDeleteError'));
         } finally {
             setDeletingId(null);
         }
@@ -41,13 +43,13 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
 
             // Проверка на валидность даты
             if (isNaN(date.getTime())) {
-                return typeof dateString === 'string' ? dateString : 'Невалидная дата';
+                return typeof dateString === 'string' ? dateString : t('common.invalidDate');
             }
 
             // Используем date-fns для форматирования
             return format(date, 'dd.MM.yyyy');
         } catch {
-            return typeof dateString === 'string' ? dateString : 'Ошибка даты';
+            return typeof dateString === 'string' ? dateString : t('common.dateError');
         }
     };
 
@@ -61,12 +63,12 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
                 <table className={styles.table__wrapper}>
                     <thead className={styles.table__header}>
                         <tr>
-                            <th>Название</th>
-                            <th>Прямая ссылка</th>
+                            <th>{t('common.name')}</th>
+                            <th>{t('admin.sites.colDirectLink')}</th>
                             <th>GitHub</th>
-                            <th>Стек</th>
-                            <th>Дата</th>
-                            <th>Действия</th>
+                            <th>{t('admin.sites.colStack')}</th>
+                            <th>{t('common.date')}</th>
+                            <th>{t('common.actions')}</th>
                         </tr>
                     </thead>
                     <tbody className={styles.table__body}>
@@ -112,7 +114,7 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
                                         href={`/admin/sites/edit?id=${site.id}`}
                                         className={`${styles.table__button} ${styles.table__button_edit}`}
                                     >
-                                        ✏️ Подробнее
+                                        {t('admin.sites.details')}
                                     </a>
                                     <a
                                         href={site.directLink}
@@ -120,14 +122,14 @@ export default function SitesTable({ sites, onRefresh }: SitesTableProps) {
                                         rel="noopener noreferrer"
                                         className={`${styles.table__button} ${styles.table__button_view}`}
                                     >
-                                        🡢 Просмотр
+                                        {t('admin.sites.view')}
                                     </a>
                                     <button
                                         onClick={() => handleDelete(site.id, site.name)}
                                         disabled={deletingId === site.id}
                                         className={`${styles.table__button} ${styles.table__button_delete}`}
                                     >
-                                        {deletingId === site.id ? 'Удаление...' : '🗑 Удалить'}
+                                        {deletingId === site.id ? t('common.deleting') : t('common.delete')}
                                     </button>
                                 </td>
                             </tr>

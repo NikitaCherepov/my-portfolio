@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { trimAudioFile, formatTime } from '@/utils/audioUpload';
+import { useTranslation } from 'react-i18next';
 import styles from './AudioTrimmer.module.scss';
 
 interface AudioTrimmerProps {
@@ -10,6 +11,7 @@ interface AudioTrimmerProps {
 }
 
 export default function AudioTrimmer({ value, onChange, disabled = false }: AudioTrimmerProps) {
+  const { t } = useTranslation();
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [audioUrl, setAudioUrl] = useState<string>(value || '');
   const [isDragging, setIsDragging] = useState(false);
@@ -181,7 +183,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
       stopPlayback();
     } catch (error) {
       console.error('Error trimming audio:', error);
-      alert('Ошибка при обрезке аудио');
+      alert(t('audioTrimmer.error'));
     } finally {
       setIsTrimming(false);
     }
@@ -227,7 +229,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                 disabled={!audioFile || duration === 0}
                 className={styles.audioTrimmer__playButton}
               >
-                {isPlaying ? '⏸ Пауза' : '▶️ Воспроизвести фрагмент'}
+                {isPlaying ? t('audioTrimmer.pause') : t('audioTrimmer.play')}
               </button>
 
               <span className={styles.audioTrimmer__time}>
@@ -240,7 +242,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                   onClick={() => fileInputRef.current?.click()}
                   className={styles.audioTrimmer__changeButton}
                 >
-                  📁 Заменить файл
+                  {t('audioTrimmer.replaceFile')}
                 </button>
               )}
             </div>
@@ -248,7 +250,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
             {duration > 0 && (
               <div className={styles.audioTrimmer__trimControls}>
                 <div className={styles.audioTrimmer__slider}>
-                  <label>Начало: {formatTime(startTime)}</label>
+                  <label>{t('audioTrimmer.start')} {formatTime(startTime)}</label>
                   <input
                     type="range"
                     min="0"
@@ -261,7 +263,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                 </div>
 
                 <div className={styles.audioTrimmer__slider}>
-                  <label>Конец: {formatTime(endTime)}</label>
+                  <label>{t('audioTrimmer.end')} {formatTime(endTime)}</label>
                   <input
                     type="range"
                     min="0"
@@ -280,7 +282,7 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                     disabled={disabled || isTrimming || startTime >= endTime || endTime === 0 || !audioFile}
                     className={styles.audioTrimmer__trimButton}
                   >
-                    {isTrimming ? 'Обрезка...' : '✂️ Обрезать'}
+                    {isTrimming ? t('audioTrimmer.trimming') : t('audioTrimmer.trim')}
                   </button>
 
                   {audioFile && startTime !== 0 && (
@@ -290,13 +292,13 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
                       disabled={disabled || isTrimming}
                       className={styles.audioTrimmer__resetButton}
                     >
-                      ↺ Сбросить
+                      {t('audioTrimmer.reset')}
                     </button>
                   )}
                 </div>
 
                 <div className={styles.audioTrimmer__info}>
-                  Длительность фрагмента: {formatTime(Math.max(0, endTime - startTime))}
+                  {t('audioTrimmer.fragmentDuration')} {formatTime(Math.max(0, endTime - startTime))}
                 </div>
               </div>
             )}
@@ -313,10 +315,10 @@ export default function AudioTrimmer({ value, onChange, disabled = false }: Audi
             <div className={styles.audioTrimmer__dropZoneContent}>
               <div className={styles.audioTrimmer__dropZoneIcon}>🎵</div>
               <div className={styles.audioTrimmer__dropZoneText}>
-                Перетащите аудиофайл сюда или кликните для выбора
+                {t('audioTrimmer.dropHere')}
               </div>
               <div className={styles.audioTrimmer__dropZoneHint}>
-                Поддерживаются MP3, WAV, OGG, M4A (до 50MB)
+                {t('audioTrimmer.formats')}
               </div>
             </div>
           </div>
