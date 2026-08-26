@@ -9,7 +9,6 @@ import { useViewStore } from '@/app/store/useExitStore'
 import {AnimatePresence, motion, useCycle} from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import LanguageSwitcher from '../LanguageSwitcher'
 
 
 export default function Header() {
@@ -135,9 +134,8 @@ export default function Header() {
                 )}
             </AnimatePresence>
             {pathname === '/sites' && (
-                <div className={styles.container__switcher} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className={styles.container__switcher}>
                     <Switcher/>
-                    <LanguageSwitcher/>
                 </div>
             )}
             {pathname === '/sites' && (
@@ -151,9 +149,6 @@ export default function Header() {
             )}
             {pathname === '/music' && (
                 <div className={styles.container__musicMenu}>
-                    <div style={{ alignSelf: 'center', marginRight: '12px' }}>
-                        <LanguageSwitcher/>
-                    </div>
                     {
                         musicMenuOptions.map((object, index) => (
                             <div

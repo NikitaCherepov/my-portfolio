@@ -4,6 +4,7 @@ import { motion, useMotionValue, useAnimationFrame, animate, AnimatePresence } f
 import Image from 'next/image'
 import styles from './page.module.scss'
 import { useInitiateExit } from './hooks/useInitiateExit'
+import LanguageSwitcher from './components/LanguageSwitcher'
 import { useTranslation, Trans } from 'react-i18next'
 
 export default function MainPage() {
@@ -72,6 +73,9 @@ export default function MainPage() {
         <Trans i18nKey="main.about" components={{ em: <em /> }} /><br/>
         {t('main.worksLine')}
       </h1>
+
+      <LanguageSwitcher />
+
       <h2>{t('main.choose')}</h2>
 
       <div className={styles.choices}>
