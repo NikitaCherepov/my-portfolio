@@ -85,7 +85,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
 
     const [newTag, setNewTag] = useState('');
     const [newFeature, setNewFeature] = useState('');
-    const [featuresEnText, setFeaturesEnText] = useState((initialData?.featuresEn || []).join('\n'));
+    const [newFeatureEn, setNewFeatureEn] = useState('');
 
     // Drag&Drop состояния
     const [isMainImageDragging, setIsMainImageDragging] = useState(false);
@@ -133,6 +133,23 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
         setFormData(prev => ({
             ...prev,
             features: prev.features.filter(feature => feature !== featureToRemove)
+        }));
+    };
+
+    const handleAddFeatureEn = () => {
+        if (newFeatureEn.trim() && !formData.featuresEn.includes(newFeatureEn.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                featuresEn: [...prev.featuresEn, newFeatureEn.trim()]
+            }));
+            setNewFeatureEn('');
+        }
+    };
+
+    const handleRemoveFeatureEn = (featureToRemove: string) => {
+        setFormData(prev => ({
+            ...prev,
+            featuresEn: prev.featuresEn.filter(feature => feature !== featureToRemove)
         }));
     };
 
@@ -355,10 +372,7 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                 companyNameEn: formData.companyNameEn.trim(),
                 stack: formData.stack.filter(tag => tag.trim()),
                 features: formData.features.filter(feature => feature.trim()),
-                featuresEn: featuresEnText
-                    .split('\n')
-                    .map(line => line.trim())
-                    .filter(line => line),
+                featuresEn: formData.featuresEn.filter(feature => feature.trim()),
             };
 
             if (mode === 'create') {
@@ -911,16 +925,52 @@ export default function SiteForm({ mode, initialData, siteId }: SiteFormProps) {
                     {/* Features EN */}
                     <div className={styles.field}>
                         <label className={styles.field__label}>{t('admin.siteForm.featuresEnLabel')}</label>
-                        <textarea
-                            value={featuresEnText}
-                            onChange={(e) => setFeaturesEnText(e.target.value)}
-                            className={`${styles.field__input} ${styles.field__input__textarea}`}
-                            placeholder={t('admin.siteForm.addFeatureEnPlaceholder')}
-                            rows={4}
-                        />
-                        <p style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>
-                            {t('admin.siteForm.featuresEnHint')}
-                        </p>
+                        <div className={styles.tags}>
+                            <div className={styles.tags__input}>
+                                <input
+                                    type="text"
+                                    value={newFeatureEn}
+                                    onChange={(e) => setNewFeatureEn(e.target.value)}
+                                    placeholder={t('admin.siteForm.addFeatureEnPlaceholder')}
+                                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddFeatureEn())}
+                                    className={styles.field__input}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleAddFeatureEn}
+                                    className={styles.tags__add}
+                                >
+                                    {t('admin.siteForm.addButton')}
+                                </button>
+                            </div>
+                            <div style={{ marginTop: '8px' }}>
+                                <TranslateButton
+                                    source={formData.features.join('\n')}
+                                    onTranslated={(text) => setFormData(prev => ({
+                                        ...prev,
+                                        featuresEn: text
+                                            .split('\n')
+                                            .map(line => line.trim().replace(/^[-*•]\s*/, ''))
+                                            .filter(line => line),
+                                    }))}
+                                    disabled={formData.features.length === 0}
+                                />
+                            </div>
+                            <div className={styles.tags__list}>
+                                {formData.featuresEn.map((feature, index) => (
+                                    <span key={index} className={styles.tags__tag}>
+                                        {feature}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveFeatureEn(feature)}
+                                            className={styles.tags__remove}
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
