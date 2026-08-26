@@ -15,6 +15,25 @@ export interface UploadedFile {
   url: string;
 }
 
+function shouldConvertToWebp(file: File | Blob): boolean {
+  const mimeType = file.type.toLowerCase();
+  const originalName = ((file as File).name || '').toLowerCase();
+
+  if (
+    mimeType === 'image/gif' ||
+    mimeType === 'image/webp' ||
+    /\.(?:gif|webp)$/.test(originalName)
+  ) {
+    return false;
+  }
+
+  if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
+    return true;
+  }
+
+  return /\.(?:jpe?g|png)$/.test(originalName);
+}
+
 /**
  * Сохраняет загруженный файл и возвращает информацию о нем
  */
@@ -182,5 +201,30 @@ export async function saveOptimizedImage(file: File | Blob, subfolder = ''): Pro
   } catch (error) {
     console.error('saveOptimizedImage error', error);
     throw new Error('Failed to optimize and save image');
+  }
+}
+
+/**
+ * Saves a site image without breaking animated assets. JPEG and PNG uploads
+ * are resized and converted to WebP; GIF and existing WebP files stay intact.
+ */
+export async function saveSiteImage(file: File | Blob, subfolder = ''): Promise<UploadedFile> {
+  if (shouldConvertToWebp(file)) {
+    return saveOptimizedImage(file, subfolder);
+  }
+
+  return saveUploadedFile(file, subfolder);
+}
+
+export async function saveMultipleSiteImages(
+  files: File[] | Blob[],
+  subfolder = ''
+): Promise<string[]> {
+  try {
+    const uploaded = await Promise.all(files.map(file => saveSiteImage(file, subfolder)));
+    return uploaded.map(file => file.url);
+  } catch (error) {
+    console.error('Error saving multiple site images:', error);
+    throw new Error('Failed to save site images');
   }
 }

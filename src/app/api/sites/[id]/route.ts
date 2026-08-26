@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
-import { saveUploadedFile, saveMultipleFiles, validateImageFile, validateMultipleFiles } from '@/utils/fileUpload';
+import { saveSiteImage, saveMultipleSiteImages, validateImageFile, validateMultipleFiles } from '@/utils/fileUpload';
 
 const prisma = new PrismaClient();
 
@@ -78,7 +78,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     // Обрабатываем главное изображение, если оно было загружено
     if (mainImageFile && mainImageFile.size > 0) {
       validateImageFile(mainImageFile);
-      const mainImageData = await saveUploadedFile(mainImageFile, 'main');
+      const mainImageData = await saveSiteImage(mainImageFile, 'main');
       updateData.mainImage = mainImageData.url;
     }
 
@@ -93,7 +93,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     // Добавляем новые изображения в галерею
     if (galleryFiles.length > 0 && galleryFiles[0].size > 0) {
       validateMultipleFiles(galleryFiles);
-      const newGalleryUrls = await saveMultipleFiles(galleryFiles, 'gallery');
+      const newGalleryUrls = await saveMultipleSiteImages(galleryFiles, 'gallery');
       currentGallery = [...currentGallery, ...newGalleryUrls];
     }
 

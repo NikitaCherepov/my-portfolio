@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/utils/auth';
-import { saveUploadedFile, saveMultipleFiles, validateImageFile, validateMultipleFiles } from '@/utils/fileUpload';
+import { saveSiteImage, saveMultipleSiteImages, validateImageFile, validateMultipleFiles } from '@/utils/fileUpload';
 
 const prisma = new PrismaClient();
 
@@ -65,12 +65,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Сохраняем главное изображение
-    const mainImageData = await saveUploadedFile(mainImageFile, 'main');
+    const mainImageData = await saveSiteImage(mainImageFile, 'main');
 
     // Сохраняем изображения галереи
     let galleryUrls: string[] = [];
     if (galleryFiles.length > 0) {
-      galleryUrls = await saveMultipleFiles(galleryFiles, 'gallery');
+      galleryUrls = await saveMultipleSiteImages(galleryFiles, 'gallery');
     }
 
     // Создаем сайт в базе данных

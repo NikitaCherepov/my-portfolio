@@ -1,4 +1,4 @@
-import { access, unlink } from 'node:fs/promises';
+import { access, mkdir, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import sharp from 'sharp';
@@ -10,15 +10,22 @@ const uploadRoot = process.env.PORTFOLIO_UPLOAD_DIR || '/var/www/uploadsportfoli
 function resolvePublicFile(url) {
   if (!url || !url.startsWith('/') || url.includes('..')) return null;
 
-  if (url.startsWith('/uploads/sites/')) {
-    return path.join(uploadRoot, url.slice('/uploads/sites/'.length));
+  const pathname = url.split(/[?#]/, 1)[0];
+
+  if (pathname.startsWith('/uploads/sites/')) {
+    return path.join(uploadRoot, pathname.slice('/uploads/sites/'.length));
   }
 
-  return path.join(projectRoot, 'public', url.slice(1));
+  return path.join(projectRoot, 'public', pathname.slice(1));
 }
 
 function toWebpUrl(url) {
-  return url.replace(/\.[^./?]+$/, '.webp');
+  const suffixIndex = url.search(/[?#]/);
+  const pathname = suffixIndex === -1 ? url : url.slice(0, suffixIndex);
+  const suffix = suffixIndex === -1 ? '' : url.slice(suffixIndex);
+
+  if (!/\.(?:jpe?g|png)$/i.test(pathname)) return null;
+  return `${pathname.replace(/\.(?:jpe?g|png)$/i, '.webp')}${suffix}`;
 }
 
 async function exists(filePath) {
@@ -56,58 +63,140 @@ async function ensureLocalizationColumns() {
   }
 }
 
+async function convertJpegOrPng(url) {
+  const nextUrl = toWebpUrl(url);
+  if (!nextUrl) return null;
+
+  const sourcePath = resolvePublicFile(url);
+  const targetPath = resolvePublicFile(nextUrl);
+  if (!sourcePath || !targetPath) return null;
+
+  if (!(await exists(sourcePath))) {
+    if (await exists(targetPath)) {
+      return { nextUrl, sourcePath: null };
+    }
+
+    console.warn(`[startup migration] Image not found: ${url}`);
+    return null;
+  }
+
+  const metadata = await sharp(sourcePath).metadata();
+  if (metadata.format !== 'jpeg' && metadata.format !== 'png') {
+    console.warn(`[startup migration] Skipping non-JPEG/PNG image: ${url}`);
+    return null;
+  }
+
+  await mkdir(path.dirname(targetPath), { recursive: true });
+  await sharp(sourcePath)
+    .rotate()
+    .resize({
+      width: 1200,
+      height: 1200,
+      fit: 'inside',
+      withoutEnlargement: true,
+    })
+    .webp({ quality: 78, effort: 4 })
+    .toFile(targetPath);
+
+  return { nextUrl, sourcePath };
+}
+
+async function getConversion(cache, url) {
+  if (cache.has(url)) return cache.get(url);
+
+  const result = await convertJpegOrPng(url);
+  cache.set(url, result);
+  return result;
+}
+
+async function removeConvertedSources(cache) {
+  const sourcePaths = new Set(
+    [...cache.values()]
+      .map(result => result?.sourcePath)
+      .filter(Boolean)
+  );
+
+  for (const sourcePath of sourcePaths) {
+    await unlink(sourcePath).catch((error) => {
+      console.warn(`[startup migration] Could not remove ${sourcePath}:`, error);
+    });
+  }
+}
+
 async function migrateMusicImages() {
   const tracks = await prisma.music.findMany({
     select: { id: true, mainImage: true },
   });
 
   let converted = 0;
+  const conversions = new Map();
 
   for (const track of tracks) {
-    if (!track.mainImage || /\.webp(?:\?|$)/i.test(track.mainImage)) continue;
+    if (!track.mainImage) continue;
 
-    const sourcePath = resolvePublicFile(track.mainImage);
-    if (!sourcePath || !(await exists(sourcePath))) {
-      console.warn(`[startup migration] Image not found: ${track.mainImage}`);
-      continue;
-    }
-
-    const nextUrl = toWebpUrl(track.mainImage);
-    const targetPath = resolvePublicFile(nextUrl);
-    if (!targetPath) continue;
-
-    await sharp(sourcePath)
-      .rotate()
-      .resize({
-        width: 1200,
-        height: 1200,
-        fit: 'inside',
-        withoutEnlargement: true,
-      })
-      .webp({ quality: 78, effort: 4 })
-      .toFile(targetPath);
+    const result = await getConversion(conversions, track.mainImage);
+    if (!result) continue;
 
     await prisma.music.update({
       where: { id: track.id },
-      data: { mainImage: nextUrl },
+      data: { mainImage: result.nextUrl },
     });
-
-    if (sourcePath !== targetPath) {
-      await unlink(sourcePath).catch((error) => {
-        console.warn(`[startup migration] Could not remove ${sourcePath}:`, error);
-      });
-    }
 
     converted += 1;
   }
 
+  await removeConvertedSources(conversions);
+
   console.log(`[startup migration] Music images converted: ${converted}`);
+}
+
+async function migrateSiteImages() {
+  const sites = await prisma.site.findMany({
+    select: { id: true, mainImage: true, gallery: true },
+  });
+
+  const conversions = new Map();
+  let updatedSites = 0;
+
+  for (const site of sites) {
+    const mainResult = site.mainImage
+      ? await getConversion(conversions, site.mainImage)
+      : null;
+
+    const gallery = [];
+    let galleryChanged = false;
+    for (const url of site.gallery || []) {
+      const result = await getConversion(conversions, url);
+      gallery.push(result?.nextUrl || url);
+      galleryChanged ||= Boolean(result);
+    }
+
+    if (!mainResult && !galleryChanged) continue;
+
+    await prisma.site.update({
+      where: { id: site.id },
+      data: {
+        ...(mainResult ? { mainImage: mainResult.nextUrl } : {}),
+        ...(galleryChanged ? { gallery } : {}),
+      },
+    });
+
+    updatedSites += 1;
+  }
+
+  await removeConvertedSources(conversions);
+
+  const convertedFiles = [...conversions.values()].filter(Boolean).length;
+  console.log(
+    `[startup migration] Site images converted: ${convertedFiles}; sites updated: ${updatedSites}`
+  );
 }
 
 try {
   await ensureParticipationColumns();
   await ensureLocalizationColumns();
   await migrateMusicImages();
+  await migrateSiteImages();
 } catch (error) {
   console.error('[startup migration] Failed:', error);
   process.exitCode = 1;

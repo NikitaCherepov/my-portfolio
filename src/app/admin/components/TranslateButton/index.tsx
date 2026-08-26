@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
 import styles from './TranslateButton.module.scss';
 
@@ -25,9 +26,14 @@ export default function TranslateButton({ source, onTranslated, from = 'ru', to 
 
         setIsLoading(true);
         try {
+            const token = Cookies.get('token');
+
             const response = await fetch('/api/admin/translate', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({ text, from, to }),
             });
 
